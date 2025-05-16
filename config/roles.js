@@ -1,0 +1,21 @@
+const ADMIN_ROLE = '1338215159289610330';
+const BOT_ROLE = '1369311261413867573';
+const TRUSTED_ROLE = '1343215068254568458';
+const VERIFIED_ROLE = '1338216499445371062';
+const DUEL_ROLE = '1368236287865262172';
+const SPY_ROLE = '1338970627750760568';
+const ROLE_TIERS = [
+    SPY_ROLE,           // Tier 1 (Lowest)
+    VERIFIED_ROLE,      // Tier 2
+    TRUSTED_ROLE        // Tier 3 (Highest)
+];
+
+module.exports = {
+    ADMIN_ROLE,
+    BOT_ROLE,
+    TRUSTED_ROLE,
+    VERIFIED_ROLE,
+    DUEL_ROLE,
+    SPY_ROLE,
+    ROLE_TIERS
+};
