@@ -23,9 +23,15 @@ module.exports = async (message) => {
 
     // Attempt to remove the role
     try {
+        // Remove the muted role
         await mentioned.roles.remove(MUTED_ROLE);
-        message.channel.send(`🔊 ${mentioned} has been unmuted.`);
 
+        // Disconnect from voice
+        if (mentioned.voice.channel) {
+            await mentioned.voice.disconnect();
+        }
+
+        message.channel.send(`🔊 ${mentioned} has been unmuted.`);
         log.action('UNMUTE', `✅ ${mentioned.user.tag} was unmuted by ${message.author.tag}.`);
     } catch (error) {
         log.error(`❌ Failed to unmute ${mentioned.user.tag}:`, error);

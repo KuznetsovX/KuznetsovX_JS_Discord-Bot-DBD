@@ -1,5 +1,5 @@
 const ban = require('../commands/ban-user');
-const clean = require('../commands/clear-messages');
+const clear = require('../commands/clear-messages');
 const demote = require('../commands/demote-user');
 const kick = require('../commands/kick-user');
 const mute = require('../commands/mute-user');
@@ -17,7 +17,7 @@ module.exports = (client) => {
         const command = args[0];
 
         if (command === '!ban') return await ban(message);
-        if (command === '!clear' || command === '!clean' || command === '!delete') return await clean(message);
+        if (command === '!clear' || command === '!clean' || command === '!delete') return await clear(message);
         if (command === '!demote') return await demote(message);
         if (command === '!kick') return await kick(message);
         if (command === '!mute') return await mute(message);

@@ -23,7 +23,7 @@ function getFormattedDate() {
 // Function to log commands to a text file
 function logCommand(commandName, userTag) {
     const { date, timestamp } = getFormattedDate();  // Get the formatted date and timestamp
-    const logFileName = `command-log-${date}.txt`;  // Create a log file name based on the date
+    const logFileName = `command-log-${date}.log`;  // Create a log file name based on the date
     const logFilePath = path.join(__dirname, '../data/', logFileName);  // Set the log file path
 
     const logLine = `[${timestamp}] ${userTag} used command: ${commandName}\n`;  // Format the log entry
