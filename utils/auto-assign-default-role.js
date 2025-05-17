@@ -2,20 +2,24 @@ const { SPY_ROLE, ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
 const log = require('./log');
 
 async function assignDefaultRole(guild) {
+    // Fetch the "Foreign Spy" role
     const spyRole = guild.roles.cache.get(SPY_ROLE);
     if (!spyRole) {
         log.error('AUTO ASSIGN DEFAULT ROLE', `"Foreign Spy" role not found.`);
         return;
     }
 
+    // Fetch all members
     await guild.members.fetch();
 
     guild.members.cache.forEach(member => {
-        if (member.user.bot) return;
-        if (member.roles.cache.has(ADMIN_ROLE)) return;
+        // Skip bots and admins
+        if (member.user.bot || member.roles.cache.has(ADMIN_ROLE)) return;
 
+        // Check if the member has a tier role
         const hasTierRole = ROLE_TIERS.some(roleId => member.roles.cache.has(roleId));
 
+        // If no tier role, assign the "Foreign Spy" role
         if (!hasTierRole) {
             member.roles.add(spyRole)
                 .then(() => {

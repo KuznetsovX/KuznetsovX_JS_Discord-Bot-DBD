@@ -2,17 +2,19 @@ const { DUEL_ROLE, ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
 
 module.exports = async (message) => {
+    // Determine the target user (mentioned user or message author)
     const target = message.mentions.members.first() || message.member;
     const targetTag = target.user.tag;
     const authorTag = message.author.tag;
 
+    // Get the "1v1 ME, BOT?" role from the guild
     const role = message.guild.roles.cache.get(DUEL_ROLE);
     if (!role) {
         log.action('TOGGLE DUELIST ROLE', `❌ "1v1 ME, BOT?" role not found.`);
         return message.reply('❌ Could not find the "1v1 ME, BOT?" role.');
     }
 
-    // If the user is an admin and mentioned someone else, allow them to assign/remove the duelist role
+    // Admins can assign/remove the duelist role for anyone, as long as one user is mentioned
     if (message.member.roles.cache.has(ADMIN_ROLE) && message.mentions.members.size === 1) {
         await toggleRole(target, message, authorTag, targetTag);
         return;
@@ -24,7 +26,7 @@ module.exports = async (message) => {
         return;
     }
 
-    // If the user is neither an admin nor trying to toggle their own role, send an error
+    // If the user is neither an admin nor toggling their own role, send an error
     message.reply('❌ You can only toggle your own duelist role unless you are an admin.');
 };
 
