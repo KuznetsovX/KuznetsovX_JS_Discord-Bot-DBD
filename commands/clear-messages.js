@@ -2,59 +2,63 @@ const { ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
 
 module.exports = async (message) => {
-    // Ensure the user has the required role to use the command
     if (!message.member.roles.cache.has(ADMIN_ROLE)) {
-        log.action('CLEAR MESSAGES', `❌ ${message.author.tag} tried to use !clean without permission.`);
+        log.action('CLEAR MESSAGES', `❌ ${message.author.tag} tried to use !clear without permission.`);
         return message.reply('❌ You do not have permission to use this command.');
     }
 
-    const args = message.content.split(' '); // Split the message to get the number of messages to delete
-    const amount = args[1]; // Get the second argument which indicates how many messages to delete
+    const args = message.content.trim().split(/\s+/);
+    const amount = args[1];
 
-    // Validate if the amount is provided and is either a number or 'all'
     if (!amount || (isNaN(amount) && amount !== 'all')) {
         log.action('CLEAR MESSAGES', `❌ Invalid amount provided by ${message.author.tag}.`);
-        return message.reply('❌ Please specify the number of messages to delete or use "all" to delete all messages.');
+        return message.reply('❌ Please specify the number of messages to delete (1–100) or use "all".');
     }
 
-    // If 'all' is specified, delete messages in bulk until there are no more
     if (amount === 'all') {
         try {
-            log.action('CLEAR MESSAGES', `🧹 ${message.author.tag} is deleting all messages.`);
+            log.action('CLEAR MESSAGES', `🧹 ${message.author.tag} is deleting all recent messages.`);
 
             while (true) {
-                const messages = await message.channel.messages.fetch({ limit: 100 }); // Fetch 100 messages at a time
-                if (messages.size === 0) break; // Exit if no messages are left
-                await message.channel.bulkDelete(messages); // Delete the fetched messages in bulk
-                log.action('CLEAR MESSAGES', `✅ Deleted ${messages.size} messages.`);
+                const fetched = await message.channel.messages.fetch({ limit: 100 });
+                if (fetched.size === 0) break;
+
+                const deletable = fetched.filter(m => Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
+                if (deletable.size === 0) break;
+
+                await message.channel.bulkDelete(deletable, true);
+                log.action('CLEAR MESSAGES', `✅ Bulk deleted ${deletable.size} messages.`);
             }
 
-            message.channel.send('🧹 All messages have been deleted.');
-            log.action('CLEAR MESSAGES', `✅ All messages deleted by ${message.author.tag}.`);
+            message.channel.send('🧹 Finished deleting all **recent** messages (under 14 days).');
+            log.action('CLEAR MESSAGES', `✅ All recent messages deleted by ${message.author.tag}.`);
         } catch (error) {
-            log.error(`❌ Error deleting all messages by ${message.author.tag}`, error);
-            message.reply('❌ Something went wrong while trying to delete the messages.');
+            log.error(`❌ Error during !clean all by ${message.author.tag}`, error);
+            message.reply('❌ Something went wrong while trying to delete messages.');
         }
         return;
     }
 
-    // If a specific number of messages is provided, ensure it's valid
     const deleteAmount = parseInt(amount);
     if (deleteAmount > 100 || deleteAmount <= 0) {
-        log.action('CLEAR MESSAGES', `❌ Invalid delete amount ${deleteAmount} provided by ${message.author.tag}.`);
+        log.action('CLEAR MESSAGES', `❌ Invalid delete amount ${deleteAmount} by ${message.author.tag}.`);
         return message.reply('❌ You can only delete between 1 and 100 messages at a time.');
     }
 
     try {
-        log.action('CLEAR MESSAGES', `🧹 ${message.author.tag} is deleting ${deleteAmount} messages.`);
+        const fetched = await message.channel.messages.fetch({ limit: deleteAmount });
+        const deletable = fetched.filter(m => Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
 
-        // Fetch the number of messages specified by the user
-        const messagesToDelete = await message.channel.messages.fetch({ limit: deleteAmount });
-        await message.channel.bulkDelete(messagesToDelete); // Delete the fetched messages
-        message.channel.send(`🧹 Deleted ${deleteAmount} messages.`);
-        log.action('CLEAR MESSAGES', `✅ ${deleteAmount} messages deleted by ${message.author.tag}.`);
+        await message.channel.bulkDelete(deletable, true);
+        log.action('CLEAR MESSAGES', `✅ Deleted ${deletable.size} of ${fetched.size} requested messages.`);
+
+        if (deletable.size < fetched.size) {
+            message.channel.send(`⚠️ Only deleted ${deletable.size} messages — some were too old.`);
+        } else {
+            message.channel.send(`🧹 Deleted ${deletable.size} messages.`);
+        }
     } catch (error) {
-        log.error(`❌ Error deleting ${deleteAmount} messages by ${message.author.tag}`, error);
-        message.reply('❌ Something went wrong while trying to delete the messages.');
+        log.error(`❌ Error deleting ${amount} messages by ${message.author.tag}`, error);
+        message.reply('❌ Something went wrong while trying to delete messages.');
     }
 };

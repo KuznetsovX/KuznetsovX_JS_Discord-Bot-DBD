@@ -1,5 +1,6 @@
 const ban = require('../commands/ban-user');
 const clear = require('../commands/clear-messages');
+const clearold = require('../commands/clear-old-messages');
 const demote = require('../commands/demote-user');
 const kick = require('../commands/kick-user');
 const mute = require('../commands/mute-user');
@@ -18,10 +19,11 @@ module.exports = (client) => {
 
         if (command === '!ban') return await ban(message);
         if (command === '!clear' || command === '!clean' || command === '!delete') return await clear(message);
-        if (command === '!demote') return await demote(message);
+        if (command === '!clearold' || command === '!cleanold' || command === '!deleteold') return await clearold(message);
+        if (command === '!demote' || command === '!rankdown') return await demote(message);
         if (command === '!kick') return await kick(message);
         if (command === '!mute') return await mute(message);
-        if (command === '!promote') return await promote(message);
+        if (command === '!promote' || command === '!rankup') return await promote(message);
         if (command === '!avatar' || command === '!icon') return await showAvatar(message);
         if (command === '!info' || command === '!userinfo') return await showUserInfo(message);
         if (command === '!duelist') return await duelist(message);
