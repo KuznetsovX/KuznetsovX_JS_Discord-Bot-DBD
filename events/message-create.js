@@ -4,6 +4,7 @@ const clearold = require('../commands/clear-old-messages');
 const demote = require('../commands/demote-user');
 const kick = require('../commands/kick-user');
 const mute = require('../commands/mute-user');
+const post = require('../commands/post-message');
 const promote = require('../commands/promote-user');
 const showAvatar = require('../commands/show-user-avatar');
 const showUserInfo = require('../commands/show-user-info');
@@ -23,6 +24,7 @@ module.exports = (client) => {
         if (command === '!demote' || command === '!rankdown') return await demote(message);
         if (command === '!kick') return await kick(message);
         if (command === '!mute') return await mute(message);
+        if (command === '!post') return await post(message);
         if (command === '!promote' || command === '!rankup') return await promote(message);
         if (command === '!avatar' || command === '!icon') return await showAvatar(message);
         if (command === '!info' || command === '!userinfo') return await showUserInfo(message);
