@@ -1,6 +1,6 @@
 const { SPY_ROLE, ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
 const log = require('./log');
-const updateUserInDB = require('./update-user-db');
+const updateUserInDB = require('../utils/update-user-db');
 
 async function assignDefaultRole(guild) {
     // Fetch the "Foreign Spy" role

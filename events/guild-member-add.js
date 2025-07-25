@@ -1,6 +1,6 @@
 const { SPY_ROLE } = require('../config/roles');
 const log = require('../utils/log');
-const updateUserInDB = require('./update-user-db');
+const updateUserInDB = require('../utils/update-user-db');
 
 module.exports = async (member) => {
     const role = member.guild.roles.cache.get(SPY_ROLE);

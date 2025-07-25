@@ -1,6 +1,6 @@
 const { ROLE_TIERS } = require('../config/roles');
 const log = require('./log');
-const updateUserInDB = require('./update-user-db');
+const updateUserInDB = require('../utils/update-user-db');
 
 /**
  * Function to remove lower-tier roles and keep only the highest one for each member
