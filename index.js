@@ -1,9 +1,9 @@
 require('dotenv').config({ path: './data/bot-token.env' });
 const { Client, GatewayIntentBits } = require('discord.js');
-const guildMemberAdd = require('./events/guild-member-add');
-const ready = require('./events/ready');
-const messageCreate = require('./events/message-create');
 const { syncDatabase, syncMembersToDB } = require('./db');
+const ready = require('./events/ready');
+const guildMemberAdd = require('./events/guild-member-add');
+const messageCreate = require('./events/message-create');
 
 const client = new Client({
     intents: [
