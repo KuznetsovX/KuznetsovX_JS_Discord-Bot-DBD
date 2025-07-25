@@ -10,25 +10,21 @@ async function syncDatabase() {
 }
 
 async function syncMembersToDB(guild) {
-    try {
-        await guild.members.fetch(); // Ensure full member cache
+    const members = await guild.members.fetch();
 
-        for (const [memberId, member] of guild.members.cache) {
-            await User.findOrCreate({
-                where: { userId: memberId },
-                defaults: {
-                    username: member.user.tag,
-                    roles: member.roles.cache
-                        .filter(role => role.name !== '@everyone')
-                        .map(role => role.name)
-                        .join(', '),
-                },
-            });
-        }
+    for (const member of members.values()) {
+        const roleNames = member.roles.cache
+            .filter(role => role.name !== '@everyone')
+            .map(role => role.name)
+            .join(', ');
 
-        console.log(`✅ Synced ${guild.memberCount} members to the database.`);
-    } catch (error) {
-        console.error('❌ Error syncing existing members:', error);
+        console.log(`🔄 Syncing ${member.user.tag} with roles: ${roleNames}`);
+
+        await User.upsert({
+            userId: member.id,
+            username: member.user.tag,
+            roles: roleNames
+        });
     }
 }
 

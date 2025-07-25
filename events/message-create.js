@@ -7,6 +7,7 @@ const listUsers = require('../commands/list-users');
 const muteUser = require('../commands/mute-user');
 const postMessage = require('../commands/post-message');
 const promoteUser = require('../commands/promote-user');
+const resyncDatabase = require('../commands/resync-database');
 const showUserAvatar = require('../commands/show-user-avatar');
 const showUserInfo = require('../commands/show-user-info');
 const toggleDuelistRole = require('../commands/toggle-duelist-role');
@@ -28,6 +29,7 @@ module.exports = (client) => {
         if (command === '!mute') return await muteUser(message);
         if (command === '!post') return await postMessage(message);
         if (command === '!promote' || command === '!rankup') return await promoteUser(message);
+        if (command === '!resyncdb' || command === '!resyncdatabase') return await resyncDatabase(message);
         if (command === '!avatar' || command === '!icon') return await showUserAvatar(message);
         if (command === '!info' || command === '!userinfo') return await showUserInfo(message);
         if (command === '!duelist') return await toggleDuelistRole(message);
