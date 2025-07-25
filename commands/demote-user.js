@@ -1,5 +1,6 @@
 const { ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
+const updateUserInDB = require('../utils/update-user-db');
 
 module.exports = async (message) => {
     const authorTag = message.author.tag;
@@ -43,6 +44,7 @@ module.exports = async (message) => {
 
         await message.channel.send(`🔽 Demoted ${mentioned} to tier ${currentTierIndex}.`);
         log.action('DEMOTE', `✅ ${mentioned.user.tag} was demoted from tier ${currentTierIndex + 1} to tier ${currentTierIndex} by ${authorTag}.`);
+        await updateUserInDB(mentioned);
     } catch (error) {
         log.error(`❌ Error demoting ${mentioned.user.tag}:`, error);
         await message.reply('❌ Something went wrong while demoting the user.');

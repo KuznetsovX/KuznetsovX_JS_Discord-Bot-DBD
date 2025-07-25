@@ -1,6 +1,6 @@
 const { SPY_ROLE } = require('../config/roles');
 const log = require('../utils/log');
-const { syncMembersToDB } = require('../db');
+const updateUserInDB = require('./update-user-db');
 
 module.exports = async (member) => {
     const role = member.guild.roles.cache.get(SPY_ROLE);
@@ -16,8 +16,7 @@ module.exports = async (member) => {
         log.action('GUILD MEMBER ADD', `✅ Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
 
         // Sync the new member with the database
-        const guild = member.guild;
-        await syncMembersToDB(guild);
+        await updateUserInDB(member);
 
         log.action('GUILD MEMBER ADD', `✅ Refreshed database with member ${member.user.tag}.`);
     } catch (error) {

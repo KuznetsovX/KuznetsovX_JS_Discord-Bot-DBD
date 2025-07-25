@@ -1,6 +1,7 @@
 const { ADMIN_ROLE, MUTED_ROLE } = require('../config/roles');
 const { TEMPORARY_VOICE_CHANNEL } = require('../config/channels');
 const log = require('../utils/log');
+const updateUserInDB = require('../utils/update-user-db');
 
 module.exports = async (message) => {
     // Check if the command author has the admin role
@@ -58,6 +59,7 @@ module.exports = async (message) => {
         // Final feedback and logging
         message.channel.send(`🔇 ${mentioned} has been muted.`);
         log.action('MUTE', `✅ ${mentioned.user.tag} was muted by ${message.author.tag}.`);
+        await updateUserInDB(mentioned);
     } catch (error) {
         log.error(`❌ Failed to mute/move ${mentioned.user.tag}:`, error);
         message.reply('❌ Failed to mute the user.');

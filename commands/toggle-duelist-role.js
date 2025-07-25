@@ -1,5 +1,6 @@
 const { DUEL_ROLE, ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
+const updateUserInDB = require('../utils/update-user-db');
 
 module.exports = async (message) => {
     // Determine the target user (mentioned user or message author)
@@ -38,11 +39,13 @@ async function toggleRole(target, message, authorTag, targetTag) {
             await target.roles.remove(DUEL_ROLE);
             await message.channel.send(`🚫 ${target} is no longer available for duel.`);
             log.action('TOGGLE DUELIST ROLE', `🔄 ${targetTag} had the duelist role removed by ${authorTag}`);
+            await updateUserInDB(target);
         } else {
             // User doesn't have the role — add it
             await target.roles.add(DUEL_ROLE);
             await message.channel.send(`⚔️ ${target} is ready to duel!`);
             log.action('TOGGLE DUELIST ROLE', `🔄 ${targetTag} was given the duelist role by ${authorTag}`);
+            await updateUserInDB(target);
         }
     } catch (error) {
         log.error(`❌ Error toggling duelist role for ${targetTag}:`, error);

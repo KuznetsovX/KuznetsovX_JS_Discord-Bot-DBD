@@ -24,7 +24,7 @@ module.exports = (client) => {
         if (command === '!clearold' || command === '!cleanold' || command === '!deleteold') return await clearOldMessages(message);
         if (command === '!demote' || command === '!rankdown') return await demoteUser(message);
         if (command === '!kick') return await kickUser(message);
-        if (command === 'list' || command === '!listusers') return await listUsers(message);
+        if (command === '!list' || command === '!listusers') return await listUsers(message);
         if (command === '!mute') return await muteUser(message);
         if (command === '!post') return await postMessage(message);
         if (command === '!promote' || command === '!rankup') return await promoteUser(message);

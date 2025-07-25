@@ -1,5 +1,6 @@
 const { ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
+const updateUserInDB = require('../utils/update-user-db');
 
 module.exports = async (message) => {
     const authorTag = message.author.tag;
@@ -42,6 +43,7 @@ module.exports = async (message) => {
         await mentioned.roles.add(newRoleId);
         await message.channel.send(`🔼 Promoted ${mentioned} to tier ${currentTierIndex + 2}.`);
         log.action('PROMOTE', `✅ ${mentioned.user.tag} was promoted from tier ${currentTierIndex + 1} to tier ${currentTierIndex + 2} by ${authorTag}.`);
+        await updateUserInDB(mentioned);
     } catch (error) {
         log.error(`❌ Error promoting ${mentioned.user.tag}:`, error);
         await message.reply('❌ Something went wrong while promoting the user.');
