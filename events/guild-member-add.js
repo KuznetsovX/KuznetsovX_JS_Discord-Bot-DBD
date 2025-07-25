@@ -1,7 +1,8 @@
 const { SPY_ROLE } = require('../config/roles');
 const log = require('../utils/log');
+const { syncMembersToDB } = require('../db');
 
-module.exports = (member) => {
+module.exports = async (member) => {
     const role = member.guild.roles.cache.get(SPY_ROLE);
 
     if (!role) {
@@ -9,11 +10,17 @@ module.exports = (member) => {
         return;
     }
 
-    member.roles.add(role)
-        .then(() => {
-            log.action('GUILD MEMBER ADD', `✅ Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
-        })
-        .catch((error) => {
-            log.error(`❌ Error assigning "Foreign Spy" role to ${member.user.tag}:`, error);
-        });
+    try {
+        // Add the "Foreign Spy" role to the new member
+        await member.roles.add(role);
+        log.action('GUILD MEMBER ADD', `✅ Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
+
+        // Sync the new member with the database
+        const guild = member.guild;
+        await syncMembersToDB(guild);
+
+        log.action('GUILD MEMBER ADD', `✅ Refreshed database with member ${member.user.tag}.`);
+    } catch (error) {
+        log.error(`❌ Error processing member join for ${member.user.tag}:`, error);
+    }
 };

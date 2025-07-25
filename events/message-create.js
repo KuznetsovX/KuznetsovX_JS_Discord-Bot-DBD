@@ -1,15 +1,16 @@
-const ban = require('../commands/ban-user');
-const clear = require('../commands/clear-messages');
-const clearold = require('../commands/clear-old-messages');
-const demote = require('../commands/demote-user');
-const kick = require('../commands/kick-user');
-const mute = require('../commands/mute-user');
-const post = require('../commands/post-message');
-const promote = require('../commands/promote-user');
-const showAvatar = require('../commands/show-user-avatar');
+const banUser = require('../commands/ban-user');
+const clearMessages = require('../commands/clear-messages');
+const clearOldMessages = require('../commands/clear-old-messages');
+const demoteUser = require('../commands/demote-user');
+const kickUser = require('../commands/kick-user');
+const listUsers = require('../commands/list-users');
+const muteUser = require('../commands/mute-user');
+const postMessage = require('../commands/post-message');
+const promoteUser = require('../commands/promote-user');
+const showUserAvatar = require('../commands/show-user-avatar');
 const showUserInfo = require('../commands/show-user-info');
-const duelist = require('../commands/toggle-duelist-role');
-const unmute = require('../commands/unmute-user');
+const toggleDuelistRole = require('../commands/toggle-duelist-role');
+const unmuteUser = require('../commands/unmute-user');
 
 module.exports = (client) => {
     client.on('messageCreate', async (message) => {
@@ -18,17 +19,18 @@ module.exports = (client) => {
         const args = message.content.trim().split(/ +/);
         const command = args[0];
 
-        if (command === '!ban') return await ban(message);
-        if (command === '!clear' || command === '!clean' || command === '!delete') return await clear(message);
-        if (command === '!clearold' || command === '!cleanold' || command === '!deleteold') return await clearold(message);
-        if (command === '!demote' || command === '!rankdown') return await demote(message);
-        if (command === '!kick') return await kick(message);
-        if (command === '!mute') return await mute(message);
-        if (command === '!post') return await post(message);
-        if (command === '!promote' || command === '!rankup') return await promote(message);
-        if (command === '!avatar' || command === '!icon') return await showAvatar(message);
+        if (command === '!ban') return await banUser(message);
+        if (command === '!clear' || command === '!clean' || command === '!delete') return await clearMessages(message);
+        if (command === '!clearold' || command === '!cleanold' || command === '!deleteold') return await clearOldMessages(message);
+        if (command === '!demote' || command === '!rankdown') return await demoteUser(message);
+        if (command === '!kick') return await kickUser(message);
+        if (command === '!listusers') return await listUsers(message);
+        if (command === '!mute') return await muteUser(message);
+        if (command === '!post') return await postMessage(message);
+        if (command === '!promote' || command === '!rankup') return await promoteUser(message);
+        if (command === '!avatar' || command === '!icon') return await showUserAvatar(message);
         if (command === '!info' || command === '!userinfo') return await showUserInfo(message);
-        if (command === '!duelist') return await duelist(message);
-        if (command === '!unmute') return await unmute(message);
+        if (command === '!duelist') return await toggleDuelistRole(message);
+        if (command === '!unmute') return await unmuteUser(message);
     });
 };

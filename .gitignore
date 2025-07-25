@@ -25,3 +25,6 @@ info.md
 assets/dbd-exe_bg-uncut.png
 assets/dbd-exe_bg.png
 assets/dbd-exe_icon.png
+
+# DB
+*.sqlite
