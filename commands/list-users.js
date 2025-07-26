@@ -2,42 +2,44 @@ const { ADMIN_ROLE } = require('../config/roles');
 const log = require('../utils/log');
 const { User } = require('../data/user-model');
 
-module.exports = async (message) => {
-    const authorTag = message.author.tag;
+module.exports = {
+    run: async (message) => {
+        const authorTag = message.author.tag;
 
-    if (!message.member.roles.cache.has(ADMIN_ROLE)) {
-        log.action('LIST-USERS', `❌ ${authorTag} tried to use !list-users without permission.`);
-        return message.reply('❌ You do not have permission to use this command.');
-    }
-
-    try {
-        const users = await User.findAll();
-
-        if (!users.length) {
-            log.action('LIST-USERS', `ℹ️ ${authorTag} ran !list-users — no users in database.`);
-            return message.channel.send('📭 No users found in the database.');
+        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+            log.action('LIST-USERS', `❌ ${authorTag} tried to use !list-users without permission.`);
+            return message.reply('❌ You do not have permission to use this command.');
         }
 
-        const entries = users.map(u => `${u.username} (${u.userId}) — ${u.roles}`);
+        try {
+            const users = await User.findAll();
 
-        // Split into message-safe chunks
-        let chunk = '';
-        for (const entry of entries) {
-            if ((chunk + entry + '\n').length > 1900) {
-                await message.channel.send(`\`\`\`\n${chunk}\n\`\`\``);
-                chunk = '';
+            if (!users.length) {
+                log.action('LIST-USERS', `ℹ️ ${authorTag} ran !list-users — no users in database.`);
+                return message.channel.send('📭 No users found in the database.');
             }
-            chunk += entry + '\n';
-        }
 
-        // Send the last chunk if any
-        if (chunk.length > 0) {
-            await message.channel.send(`\`\`\`\n${chunk}\n\`\`\``);
-        }
+            const entries = users.map(u => `${u.username} (${u.userId}) — ${u.roles}`);
 
-        log.action('LIST-USERS', `✅ ${authorTag} listed ${users.length} users.`);
-    } catch (error) {
-        log.error(`❌ Error in !list-users by ${authorTag}:`, error);
-        await message.reply('❌ Something went wrong while listing users.');
+            // Split into message-safe chunks
+            let chunk = '';
+            for (const entry of entries) {
+                if ((chunk + entry + '\n').length > 1900) {
+                    await message.channel.send(`\`\`\`\n${chunk}\n\`\`\``);
+                    chunk = '';
+                }
+                chunk += entry + '\n';
+            }
+
+            // Send the last chunk if any
+            if (chunk.length > 0) {
+                await message.channel.send(`\`\`\`\n${chunk}\n\`\`\``);
+            }
+
+            log.action('LIST-USERS', `✅ ${authorTag} listed ${users.length} users.`);
+        } catch (error) {
+            log.error(`❌ Error in !list-users by ${authorTag}:`, error);
+            await message.reply('❌ Something went wrong while listing users.');
+        }
     }
 };
