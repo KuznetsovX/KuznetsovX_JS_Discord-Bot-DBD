@@ -1,6 +1,6 @@
 const { ADMIN_ROLE } = require('../config/roles');
-const log = require('../utils/log');
 const { User } = require('../data/user-model');
+const log = require('../utils/log');
 
 module.exports = {
     run: async (message) => {

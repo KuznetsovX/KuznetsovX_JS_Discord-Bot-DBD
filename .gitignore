@@ -1,3 +1,14 @@
+# VS Code settings
+.vscode/
+
+# Environment variables
+.env
+*.env
+
+# DB
+*.sqlite
+*.sqlite-journal
+
 # Node modules
 node_modules/
 
@@ -6,25 +17,6 @@ logs/
 *.log
 npm-debug.log*
 
-# Environment variables
-.env
-*.env
-
-# OS-specific
-.DS_Store
-Thumbs.db
-
-# VS Code settings (optional)
-.vscode/
-
 # Other
-redirect.html
 info.md
-
-# Bot's pfp
-assets/dbd-exe_bg-uncut.png
-assets/dbd-exe_bg.png
-assets/dbd-exe_icon.png
-
-# DB
-*.sqlite
+redirect.html

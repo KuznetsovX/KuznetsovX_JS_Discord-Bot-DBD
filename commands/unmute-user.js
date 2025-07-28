@@ -1,5 +1,5 @@
-const { ADMIN_ROLE, MUTED_ROLE } = require('../config/roles');
 const { TEMPORARY_VOICE_CHANNEL } = require('../config/channels');
+const { ADMIN_ROLE, MUTED_ROLE } = require('../config/roles');
 const log = require('../utils/log');
 const updateUserInDB = require('../utils/update-user-db');
 
