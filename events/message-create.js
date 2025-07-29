@@ -1,4 +1,3 @@
-const path = require('path');
 const commandConfig = require('../config/commands');
 
 const aliasMap = new Map();

@@ -9,7 +9,7 @@ async function updateUserInDB(member) {
 
     const rolesString = member.roles.cache
         .filter(role => role.name !== '@everyone')
-        .map(role => role.name)
+        .map(role => `${role.name} (${role.id})`)
         .join(', ');
 
     try {

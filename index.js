@@ -1,9 +1,9 @@
 require('dotenv').config({ path: './data/bot-token.env' });
 const { Client, GatewayIntentBits } = require('discord.js');
-const { syncDatabase, syncMembersToDB } = require('./db');
-const ready = require('./events/ready');
+const { syncDatabase } = require('./db');
 const guildMemberAdd = require('./events/guild-member-add');
 const messageCreate = require('./events/message-create');
+const ready = require('./events/ready');
 
 const client = new Client({
     intents: [
@@ -17,25 +17,18 @@ const client = new Client({
 // Sync the database
 syncDatabase();
 
-// Call the ready event handler
+// Handle ready
 client.once('ready', async () => {
     await ready(client);
-
-    const guild = client.guilds.cache.first();
-
-    if (!guild) {
-        return console.error('❌ Bot is not in any guilds.');
-    }
-
-    await syncMembersToDB(guild);
 });
 
-// Call the guild-member-add event handler
+// Handle new member joins
 client.on('guildMemberAdd', async (member) => {
     await guildMemberAdd(member);
 });
 
-// Call the message-create event handler
+// Handle incoming messages
 messageCreate(client);
 
+// Login to Discord
 client.login(process.env.DISCORD_BOT_TOKEN);
