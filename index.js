@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './data/bot-token.env' });
+require('dotenv').config({ path: './data/.env' });
 const { Client, GatewayIntentBits } = require('discord.js');
 const { syncDatabase } = require('./db');
 const guildMemberAdd = require('./events/guild-member-add');

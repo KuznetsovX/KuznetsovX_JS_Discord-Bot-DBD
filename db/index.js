@@ -28,7 +28,25 @@ async function syncMembersToDB(guild) {
     }
 }
 
+async function getUserRoles(userId) {
+    try {
+        const user = await User.findOne({ where: { userId } });
+        if (!user || !user.roles) return [];
+
+        const roles = user.roles.split(', ').map(entry => {
+            const match = entry.match(/\((\d+)\)$/);
+            return match ? match[1] : null;
+        }).filter(Boolean);
+
+        return roles;
+    } catch (error) {
+        console.error('❌ Failed to get user roles:', error);
+        return [];
+    }
+}
+
 module.exports = {
     syncDatabase,
-    syncMembersToDB
+    syncMembersToDB,
+    getUserRoles
 };

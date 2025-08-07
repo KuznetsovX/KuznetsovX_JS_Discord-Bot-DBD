@@ -2,6 +2,7 @@ const { ADMIN_BOT_CHANNEL } = require('../config/channels');
 const { syncMembersToDB } = require('../db');
 const autoAssignDefaultRole = require('../utils/auto-assign-default-role');
 const autoManageTierRoles = require('../utils/auto-manage-tier-roles');
+const restoreRolesFromDatabase = require('../utils/auto-restore-roles');
 const log = require('../utils/log');
 
 module.exports = async (client) => {
@@ -17,11 +18,13 @@ module.exports = async (client) => {
         channel.send('🔥 DBD.exe is now online!');
     }
 
+    // Restore roles from the database before assigning default roles
+    await restoreRolesFromDatabase(guild);
+
     // Assign default role to all users without a tier role
     await autoAssignDefaultRole(guild);
 
-    // Ensure full member cache, then manage tier roles
-    await guild.members.fetch();
+    // Manage tier roles after the default role assignment
     for (const member of guild.members.cache.values()) {
         if (!member.user.bot) {
             await autoManageTierRoles(member);
