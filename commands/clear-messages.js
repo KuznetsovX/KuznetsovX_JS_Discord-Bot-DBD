@@ -20,22 +20,44 @@ module.exports = {
             try {
                 log.action('CLEAR MESSAGES', `🧹 ${message.author.tag} is deleting all recent messages.`);
 
+                // Send a status message (won't be deleted)
+                const statusMsg = await message.channel.send('🧹 Starting cleanup of recent messages...');
+
+                let totalDeleted = 0;
+
                 while (true) {
                     const fetched = await message.channel.messages.fetch({ limit: 100 });
-                    if (fetched.size === 0) break;
 
-                    const deletable = fetched.filter(m => Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
+                    // Remove status message
+                    const deletable = fetched.filter(m =>
+                        m.id !== statusMsg.id &&
+                        Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000
+                    );
+
+                    // Skip if empty
                     if (deletable.size === 0) break;
 
-                    await message.channel.bulkDelete(deletable, true);
-                    log.action('CLEAR MESSAGES', `✅ Bulk deleted ${deletable.size} messages.`);
+                    try {
+                        const deleted = await message.channel.bulkDelete(deletable, true);
+                        totalDeleted += deleted.size;
+                        log.action('CLEAR MESSAGES', `✅ Bulk deleted ${deleted.size} messages.`);
+                    } catch (bulkError) {
+                        // If something failed, skip this batch
+                        log.error('❌ Error during bulk delete:', bulkError);
+                        break;
+                    }
                 }
 
-                message.channel.send('🧹 Finished deleting all **recent** messages (under 14 days).');
-                log.action('CLEAR MESSAGES', `✅ All recent messages deleted by ${message.author.tag}.`);
+                // Edit status message to show completion
+                await statusMsg.edit(`🧹 Finished deleting **${totalDeleted}** recent messages (under 14 days).`);
+                log.action('CLEAR MESSAGES', `✅ Total ${totalDeleted} messages deleted by ${message.author.tag}.`);
             } catch (error) {
                 log.error(`❌ Error during !clean all by ${message.author.tag}`, error);
-                message.reply('❌ Something went wrong while trying to delete messages.');
+                try {
+                    await message.channel.send('❌ Something went wrong while trying to delete messages.');
+                } catch (sendError) {
+                    log.error('❌ Failed to send error message to channel.', sendError);
+                }
             }
             return;
         }
