@@ -1,86 +1,132 @@
+const roles = require('./roles');
+
 module.exports = {
+    addRole: {
+        file: '../commands/add-role',
+        label: 'Add Role',
+        description: 'Adds a role to a user.',
+        aliases: ['!addrole', '!give'],
+        usage: '!addrole @user @role',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
+    },
     banUser: {
-        aliases: ['!ban'],
         file: '../commands/ban-user',
+        label: 'Ban User',
         description: 'Bans a user from the server.',
-        usage: '!ban @user OR !ban <userID>'
+        aliases: ['!ban'],
+        usage: '!ban @user OR !ban <userID>',
+        permissions: [roles.ADMIN_ROLE]
     },
     clearMessages: {
-        aliases: ['!clear', '!clean', '!delete'],
         file: '../commands/clear-messages',
+        label: 'Clear Messages',
         description: 'Clears recent messages (under 14 days).',
-        usage: '!clear <amount>'
+        aliases: ['!clear', '!clean', '!delete'],
+        usage: '!clear <amount>',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     clearOldMessages: {
-        aliases: ['!clearold', '!cleanold', '!deleteold'],
         file: '../commands/clear-old-messages',
+        label: 'Clear Old Messages',
         description: 'Clears old messages (above 14 days).',
-        usage: '!clearold <amount>'
+        aliases: ['!clearold', '!cleanold', '!deleteold'],
+        usage: '!clearold <amount>',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     demoteUser: {
-        aliases: ['!demote', '!rankdown'],
         file: '../commands/demote-user',
-        description: 'Demotes a user to a lower rank or role.',
-        usage: '!demote @user'
+        label: 'Demote User',
+        description: 'Demotes a user to a lower rank.',
+        aliases: ['!demote', '!rankdown'],
+        usage: '!demote @user',
+        permissions: [roles.ADMIN_ROLE]
     },
     kickUser: {
-        aliases: ['!kick'],
         file: '../commands/kick-user',
+        label: 'Kick User',
         description: 'Kicks a user from the server.',
-        usage: '!kick @user'
+        aliases: ['!kick'],
+        usage: '!kick @user',
+        permissions: [roles.ADMIN_ROLE]
     },
     listUsers: {
-        aliases: ['!listusers', '!list'],
         file: '../commands/list-users',
+        label: 'List Users',
         description: 'Lists all users in the server, their IDs and roles.',
-        usage: '!list'
+        aliases: ['!listusers', '!list'],
+        usage: '!listusers',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     muteUser: {
-        aliases: ['!mute'],
         file: '../commands/mute-user',
+        label: 'Mute User',
         description: 'Mutes a user, text and voice chat are disabled for them.',
-        usage: '!mute @user'
+        aliases: ['!mute'],
+        usage: '!mute @user',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     postMessage: {
-        aliases: ['!post'],
         file: '../commands/post-message',
+        label: 'Post Message',
         description: 'Posts a message to the specified channel.',
-        usage: '!post #channel <text>'
+        aliases: ['!post'],
+        usage: '!post #channel <text>',
+        permissions: [roles.ADMIN_ROLE]
     },
     promoteUser: {
-        aliases: ['!promote', '!rankup'],
         file: '../commands/promote-user',
-        description: 'Promotes a user to a higher rank or role.',
-        usage: '!promote @user'
+        label: 'Promote User',
+        description: 'Promotes a user to a higher rank.',
+        aliases: ['!promote', '!rankup'],
+        usage: '!promote @user',
+        permissions: [roles.ADMIN_ROLE]
+    },
+    removeRole: {
+        file: '../commands/remove-role',
+        label: 'Remove Role',
+        description: 'Removes a role from a user.',
+        aliases: ['!removerole', '!take'],
+        usage: '!removerole @user @role',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     resyncDatabase: {
-        aliases: ['!resyncdb', '!resyncdatabase'],
         file: '../commands/resync-database',
+        label: 'Resync Database',
         description: 'Manually resyncs the database with the current server data.',
-        usage: '!resyncdb'
+        aliases: ['!resyncdb', '!resyncdatabase'],
+        usage: '!resyncdb',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     },
     showUserAvatar: {
-        aliases: ['!avatar', '!icon'],
         file: '../commands/show-user-avatar',
+        label: 'Show User Avatar',
         description: 'Shows the avatar of a user.',
-        usage: '!avatar OR !avatar @user'
+        aliases: ['!avatar', '!icon'],
+        usage: '!avatar OR !avatar @user',
+        permissions: []
     },
     showUserInfo: {
-        aliases: ['!info', '!userinfo'],
         file: '../commands/show-user-info',
+        label: 'Show User Info',
         description: 'Shows detailed information about a user.',
-        usage: '!info OR !info @user'
+        aliases: ['!info', '!userinfo'],
+        usage: '!info OR !info @user',
+        permissions: []
     },
     toggleDuelistRole: {
-        aliases: ['!duelist'],
         file: '../commands/toggle-duelist-role',
+        label: 'Toggle Duelist Role',
         description: 'Toggles the duelist role for a user.',
-        usage: '!duelist OR !duelist @user'
+        aliases: ['!duelist'],
+        usage: '!duelist',
+        permissions: []
     },
     unmuteUser: {
-        aliases: ['!unmute'],
         file: '../commands/unmute-user',
+        label: 'Unmute User',
         description: 'Unmutes a previously muted user.',
-        usage: '!unmute @user'
+        aliases: ['!unmute'],
+        usage: '!unmute @user',
+        permissions: [roles.ADMIN_ROLE, roles.MODERATOR_ROLE]
     }
 };
