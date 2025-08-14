@@ -1,12 +1,12 @@
-const { ROLE_TIERS } = require('../config/roles');
-const log = require('./log');
-const updateUserInDB = require('../utils/update-user-db');
+import { ROLE_TIERS } from '../config/roles.js';
+import log from './log.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
 /**
  * Function to remove lower-tier roles and keep only the highest one for each member
- * @param {Discord.GuildMember} member - The member whose roles are to be checked
+ * @param {import('discord.js').GuildMember} member - The member whose roles are to be checked
  */
-async function manageTierRoles(member) {
+export default async function manageTierRoles(member) {
     try {
         // Get the member's roles that are part of the tierable roles
         const memberRoles = member.roles.cache.filter(role => ROLE_TIERS.includes(role.id));
@@ -29,5 +29,3 @@ async function manageTierRoles(member) {
         log.error('AUTO MANAGE TIER ROLES', `Failed to manage tier roles for ${member.user.tag}: ${error}`);
     }
 }
-
-module.exports = manageTierRoles;

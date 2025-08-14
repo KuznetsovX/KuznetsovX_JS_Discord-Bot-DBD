@@ -1,7 +1,7 @@
-const { ADMIN_ROLE } = require('../config/roles');
-const log = require('../utils/log');
+import { ADMIN_ROLE } from '../config/roles.js';
+import log from '../utils/log.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         if (!message.member.roles.cache.has(ADMIN_ROLE)) {
             log.action('CLEAR OLD', `❌ ${message.author.tag} tried to use !clearold without permission.`);
@@ -45,11 +45,15 @@ module.exports = {
                         deleted++;
                         await new Promise(r => setTimeout(r, 500)); // 500ms delay between deletes
                     } catch (e) {
-
+                        log.error('❌ Failed to delete old message:', e);
+                    }
+                    if (limit !== Infinity && deleted >= limit) {
+                        fetchMore = false;
+                        break;
                     }
                 }
 
-                lastId = messages.last().id;
+                lastId = messages.last()?.id;
 
                 if (amount !== 'all' && deleted >= parseInt(amount)) {
                     fetchMore = false;

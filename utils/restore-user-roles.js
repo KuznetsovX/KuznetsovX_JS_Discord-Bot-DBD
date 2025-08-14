@@ -1,9 +1,14 @@
-const { getUserRoles } = require('../db');
-const { ADMIN_ROLE, BOT_ROLE } = require('../config/roles');
-const updateUserInDB = require('../utils/update-user-db');
-const log = require('./log');
+import { getUserRoles } from '../db/index.js';
+import { ADMIN_ROLE, BOT_ROLE } from '../config/roles.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
+import log from './log.js';
 
-async function restoreUserRoles(member) {
+/**
+ * Restores a user's roles from the database
+ * @param {GuildMember} member - The Discord guild member
+ * @returns {Promise<boolean>}
+ */
+export async function restoreUserRoles(member) {
     const storedRoleIDs = await getUserRoles(member.id);
     if (!storedRoleIDs.length) return false;
 
@@ -36,5 +41,3 @@ async function restoreUserRoles(member) {
         return false;
     }
 }
-
-module.exports = { restoreUserRoles };

@@ -1,9 +1,11 @@
-require('dotenv').config({ path: './data/.env' });
-const { Client, GatewayIntentBits } = require('discord.js');
-const { syncDatabase } = require('./db');
-const guildMemberAdd = require('./events/guild-member-add');
-const messageCreate = require('./events/message-create');
-const ready = require('./events/ready');
+import dotenv from 'dotenv';
+dotenv.config({ path: './data/.env' });
+
+import { Client, GatewayIntentBits } from 'discord.js';
+import { syncDatabase } from './db/index.js';
+import guildMemberAdd from './events/guild-member-add.js';
+import messageCreate from './events/message-create.js';
+import ready from './events/ready.js';
 
 const client = new Client({
     intents: [

@@ -1,8 +1,8 @@
-const { ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
-const log = require('../utils/log');
-const updateUserInDB = require('../utils/update-user-db');
+import { ROLE_TIERS, ADMIN_ROLE } from '../config/roles.js';
+import log from '../utils/log.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         const authorTag = message.author.tag;
 

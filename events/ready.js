@@ -1,16 +1,17 @@
-const { ADMIN_BOT_CHANNEL } = require('../config/channels');
-const { syncMembersToDB } = require('../db');
-const autoAssignDefaultRole = require('../utils/auto-assign-default-role');
-const autoManageTierRoles = require('../utils/auto-manage-tier-roles');
-const restoreRolesFromDatabase = require('../utils/auto-restore-roles');
-const log = require('../utils/log');
+import { ADMIN_BOT_CHANNEL } from '../config/channels.js';
+import { syncMembersToDB } from '../db/index.js';
+import autoAssignDefaultRole from '../utils/auto-assign-default-role.js';
+import autoManageTierRoles from '../utils/auto-manage-tier-roles.js';
+import restoreRolesFromDatabase from '../utils/auto-restore-roles.js';
+import log from '../utils/log.js';
 
-module.exports = async (client) => {
+export default async function ready(client) {
     log.action('READY', `🤖 Logged in as ${client.user.tag}`);
 
     const guild = client.guilds.cache.first();
     if (!guild) {
-        return console.error('❌ Bot is not in any guilds.');
+        console.error('❌ Bot is not in any guilds.');
+        return;
     }
 
     const channel = client.channels.cache.get(ADMIN_BOT_CHANNEL);
@@ -33,4 +34,4 @@ module.exports = async (client) => {
 
     // Sync all current members into DB
     await syncMembersToDB(guild);
-};
+}

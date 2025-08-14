@@ -1,7 +1,7 @@
-const { ADMIN_ROLE } = require('../config/roles');
-const log = require('../utils/log');
+import { ADMIN_ROLE } from '../config/roles.js';
+import log from '../utils/log.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         // Ensure the user has the required role to use the command
         if (!message.member.roles.cache.has(ADMIN_ROLE)) {

@@ -1,8 +1,13 @@
-const { createCanvas, loadImage } = require('canvas');
-const { AttachmentBuilder } = require('discord.js');
-const path = require('path');
+import { createCanvas, loadImage } from 'canvas';
+import { AttachmentBuilder } from 'discord.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = async function generateWelcomeCard(member) {
+// __dirname replacement for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default async function generateWelcomeCard(member) {
     const width = 800;
     const height = 300;
 

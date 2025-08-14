@@ -1,6 +1,6 @@
-const log = require('../utils/log');
+import log from '../utils/log.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         // Determine the target user (mentioned user or message author)
         const target = message.mentions.users.first() || message.author;

@@ -1,10 +1,10 @@
-const { MAIN_TEXT_CHANNEL } = require('../config/channels');
-const { SPY_ROLE } = require('../config/roles');
-const { User } = require('../data/user-model');
-const generateWelcomeCard = require('../utils/generate-welcome-card');
-const log = require('../utils/log');
-const { restoreUserRoles } = require('../utils/restore-user-roles');
-const updateUserInDB = require('../utils/update-user-db');
+import { MAIN_TEXT_CHANNEL } from '../config/channels.js';
+import { SPY_ROLE } from '../config/roles.js';
+import { User } from '../data/user-model.js';
+import generateWelcomeCard from '../utils/generate-welcome-card.js';
+import log from '../utils/log.js';
+import { restoreUserRoles } from '../utils/restore-user-roles.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
 const assignDefaultRole = async (member) => {
     const role = member.guild.roles.cache.get(SPY_ROLE);
@@ -64,7 +64,7 @@ const sendWelcomeImage = async (member) => {
     }
 };
 
-module.exports = async (member) => {
+export default async function guildMemberAdd(member) {
     const rolesRestored = await restoreRoles(member);
     if (!rolesRestored) {
         const defaultAssigned = await assignDefaultRole(member);

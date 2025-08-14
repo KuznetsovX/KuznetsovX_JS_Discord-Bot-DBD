@@ -1,8 +1,12 @@
-const { SPY_ROLE, ROLE_TIERS, ADMIN_ROLE } = require('../config/roles');
-const log = require('./log');
-const updateUserInDB = require('../utils/update-user-db');
+import { SPY_ROLE, ROLE_TIERS, ADMIN_ROLE } from '../config/roles.js';
+import log from './log.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
-async function assignDefaultRole(guild) {
+/**
+ * Assigns the "Foreign Spy" role to members who do not have a tier role.
+ * @param {import('discord.js').Guild} guild
+ */
+export default async function assignDefaultRole(guild) {
     // Fetch the "Foreign Spy" role
     const spyRole = guild.roles.cache.get(SPY_ROLE);
     if (!spyRole) {
@@ -33,5 +37,3 @@ async function assignDefaultRole(guild) {
         }
     });
 }
-
-module.exports = assignDefaultRole;

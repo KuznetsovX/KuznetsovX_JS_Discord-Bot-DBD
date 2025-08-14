@@ -1,10 +1,11 @@
-const commandConfig = require('../config/commands');
+import commandConfig from '../config/commands.js';
 
 const aliasMap = new Map();
 
 for (const key in commandConfig) {
     const config = commandConfig[key];
-    const handler = require(config.file);
+    const handlerModule = await import(config.file);
+    const handler = handlerModule.default || handlerModule;
 
     for (const alias of config.aliases) {
         aliasMap.set(alias.toLowerCase(), {
@@ -14,7 +15,7 @@ for (const key in commandConfig) {
     }
 }
 
-module.exports = (client) => {
+export default function messageCreate(client) {
     client.on('messageCreate', async (message) => {
         if (message.author.bot) return;
 

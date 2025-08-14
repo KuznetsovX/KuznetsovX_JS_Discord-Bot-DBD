@@ -1,7 +1,7 @@
-const { EmbedBuilder } = require('discord.js');
-const log = require('../utils/log');
+import { EmbedBuilder } from 'discord.js';
+import log from '../utils/log.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         // Determine the target user (mentioned user or message author)
         const target = message.mentions.members.first() || message.member;

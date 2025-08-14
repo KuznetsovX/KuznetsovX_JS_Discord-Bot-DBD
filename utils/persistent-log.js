@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// __dirname replacement for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Function to get the current date and formatted timestamp
 function getFormattedDate() {
@@ -21,7 +26,7 @@ function getFormattedDate() {
 }
 
 // Function to log commands to a text file
-function logCommand(commandName, userTag) {
+export function logCommand(commandName, userTag) {
     const { date, timestamp } = getFormattedDate();  // Get the formatted date and timestamp
     const logFileName = `command-log-${date}.log`;  // Create a log file name based on the date
     const logFilePath = path.join(__dirname, '../data/', logFileName);  // Set the log file path
@@ -35,5 +40,3 @@ function logCommand(commandName, userTag) {
         }
     });
 }
-
-module.exports = logCommand;

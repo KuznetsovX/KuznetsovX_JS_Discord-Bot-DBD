@@ -1,6 +1,6 @@
-const { sequelize, User } = require('../data/user-model');
+import { sequelize, User } from '../data/user-model.js';
 
-async function syncDatabase() {
+export async function syncDatabase() {
     try {
         await sequelize.sync();
         console.log('✅ Database synced successfully.');
@@ -9,7 +9,7 @@ async function syncDatabase() {
     }
 }
 
-async function syncMembersToDB(guild) {
+export async function syncMembersToDB(guild) {
     const members = await guild.members.fetch();
 
     for (const member of members.values()) {
@@ -28,7 +28,7 @@ async function syncMembersToDB(guild) {
     }
 }
 
-async function getUserRoles(userId) {
+export async function getUserRoles(userId) {
     try {
         const user = await User.findOne({ where: { userId } });
         if (!user || !user.roles) return [];
@@ -44,9 +44,3 @@ async function getUserRoles(userId) {
         return [];
     }
 }
-
-module.exports = {
-    syncDatabase,
-    syncMembersToDB,
-    getUserRoles
-};

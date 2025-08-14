@@ -1,9 +1,9 @@
-const { TEMPORARY_VOICE_CHANNEL } = require('../config/channels');
-const { ADMIN_ROLE, MUTED_ROLE } = require('../config/roles');
-const log = require('../utils/log');
-const updateUserInDB = require('../utils/update-user-db');
+import { TEMPORARY_VOICE_CHANNEL } from '../config/channels.js';
+import { ADMIN_ROLE, MUTED_ROLE } from '../config/roles.js';
+import log from '../utils/log.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         // Check if the command author has the admin role
         if (!message.member.roles.cache.has(ADMIN_ROLE)) {

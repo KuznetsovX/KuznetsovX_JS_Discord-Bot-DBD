@@ -31,4 +31,4 @@ const log = {
     }
 };
 
-module.exports = log;
+export default log;

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+import { Sequelize, DataTypes } from 'sequelize';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -6,7 +6,7 @@ const sequelize = new Sequelize({
     logging: false,
 });
 
-const User = sequelize.define('User', {
+export const User = sequelize.define('User', {
     userId: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -22,7 +22,4 @@ const User = sequelize.define('User', {
     },
 });
 
-module.exports = {
-    User,
-    sequelize,
-};
+export { sequelize };

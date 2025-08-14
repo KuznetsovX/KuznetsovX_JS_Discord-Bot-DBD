@@ -1,8 +1,8 @@
-const { DUEL_ROLE, ADMIN_ROLE } = require('../config/roles');
-const log = require('../utils/log');
-const updateUserInDB = require('../utils/update-user-db');
+import { DUEL_ROLE, ADMIN_ROLE } from '../config/roles.js';
+import log from '../utils/log.js';
+import { updateUserInDB } from '../utils/update-user-db.js';
 
-module.exports = {
+export default {
     run: async (message) => {
         // Determine the target user (mentioned user or message author)
         const target = message.mentions.members.first() || message.member;

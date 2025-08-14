@@ -1,8 +1,12 @@
-const log = require('./log');
-const { getUserRoles } = require('../db'); // uses your existing DB function
-const { ADMIN_ROLE } = require('../config/roles');
+import log from './log.js';
+import { getUserRoles } from '../db/index.js';
+import { ADMIN_ROLE } from '../config/roles.js';
 
-async function restoreRolesFromDatabase(guild) {
+/**
+ * Restores roles for all members in a guild from the database.
+ * @param {import('discord.js').Guild} guild
+ */
+export default async function restoreRolesFromDatabase(guild) {
     await guild.members.fetch();
 
     guild.members.cache.forEach(async (member) => {
@@ -36,5 +40,3 @@ async function restoreRolesFromDatabase(guild) {
         }
     });
 }
-
-module.exports = restoreRolesFromDatabase;
