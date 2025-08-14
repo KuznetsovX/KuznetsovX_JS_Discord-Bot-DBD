@@ -1,5 +1,6 @@
 const ADMIN_ROLE = '1338215159289610330'; // ⚕️ 'For The People' user ⚕️
 const BOT_ROLE = '1369311261413867573'; // 🐦‍⬛ DBD.exe 🐦‍⬛
+const MODERATOR_ROLE = '1405236224901517332'; // ⚠️ U-ban Evader ⚠️
 const MUTED_ROLE = '1373260386979283004'; // 🔇 Muted 🔇
 const TRUSTED_ROLE = '1343215068254568458'; // 🔥 Fast vaulting from any angle 🔥
 const VERIFIED_ROLE = '1338216499445371062'; // ⚡ Do yens pls ⚡
@@ -15,10 +16,11 @@ const ROLE_TIERS = [
 module.exports = {
     ADMIN_ROLE,
     BOT_ROLE,
+    MODERATOR_ROLE,
+    MUTED_ROLE,
     TRUSTED_ROLE,
     VERIFIED_ROLE,
     DUEL_ROLE,
     SPY_ROLE,
-    MUTED_ROLE,
     ROLE_TIERS
 };
