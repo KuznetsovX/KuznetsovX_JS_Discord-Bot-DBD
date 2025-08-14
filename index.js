@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: './data/.env' });
+dotenv.config();
 
 import { Client, GatewayIntentBits } from 'discord.js';
 import { syncDatabase } from './db/index.js';
