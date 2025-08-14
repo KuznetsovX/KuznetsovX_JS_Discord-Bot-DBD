@@ -1,6 +1,6 @@
 import { MAIN_TEXT_CHANNEL } from '../config/channels.js';
 import { SPY_ROLE } from '../config/roles.js';
-import { User } from '../data/user-model.js';
+import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/log.js';
 import { restoreUserRoles } from '../utils/restore-user-roles.js';

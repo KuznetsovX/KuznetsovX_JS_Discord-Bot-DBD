@@ -1,4 +1,4 @@
-import { sequelize, User } from '../data/user-model.js';
+import { sequelize, User } from './user-model.js';
 
 export async function syncDatabase() {
     try {

@@ -1,5 +1,5 @@
 import { ADMIN_ROLE } from '../config/roles.js';
-import { User } from '../data/user-model.js';
+import { User } from '../db/user-model.js';
 import log from '../utils/log.js';
 
 export default {
