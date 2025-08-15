@@ -1,7 +1,7 @@
 import { TEMPORARY_VOICE_CHANNEL } from '../../config/channels.js';
 import { ADMIN_ROLE, MUTED_ROLE } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
-import { updateUserInDB } from '../../utils/db/update-user-db.js';
+import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
 export default {
     run: async (message) => {

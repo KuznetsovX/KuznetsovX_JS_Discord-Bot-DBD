@@ -1,4 +1,4 @@
-import { User } from '../../db/user-model.js';
+import { User } from '../user-model.js';
 
 /**
  * Updates a single user's roles and username in the database

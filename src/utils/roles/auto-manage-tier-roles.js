@@ -1,6 +1,6 @@
 import { ROLE_TIERS } from '../../config/roles.js';
 import log from '../logging/log.js';
-import { updateUserInDB } from '../db/update-user-db.js';
+import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
 /**
  * Function to remove lower-tier roles and keep only the highest one for each member

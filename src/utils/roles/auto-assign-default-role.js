@@ -1,5 +1,5 @@
 import { SPY_ROLE, ROLE_TIERS, ADMIN_ROLE } from '../../config/roles.js';
-import { updateUserInDB } from '../db/update-user-db.js';
+import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import log from '../logging/log.js';
 
 /**

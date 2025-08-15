@@ -1,6 +1,6 @@
 import { getUserRoles } from '../../db/index.js';
 import { ADMIN_ROLE, BOT_ROLE } from '../../config/roles.js';
-import { updateUserInDB } from '../db/update-user-db.js';
+import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import log from '../logging/log.js';
 
 /**

@@ -1,6 +1,6 @@
 import { ADMIN_ROLE, ROLE_TIERS } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
-import { updateUserInDB } from '../../utils/db/update-user-db.js';
+import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
 
 export default {

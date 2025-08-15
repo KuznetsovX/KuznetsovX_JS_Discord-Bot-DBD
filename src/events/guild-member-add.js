@@ -4,7 +4,7 @@ import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
 import { restoreUserRoles } from '../utils/roles/restore-user-roles.js';
-import { updateUserInDB } from '../utils/db/update-user-db.js';
+import { updateUserInDB } from '../db/utils/update-user-db.js';
 
 const assignDefaultRole = async (member) => {
     const role = member.guild.roles.cache.get(SPY_ROLE);
