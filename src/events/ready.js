@@ -1,4 +1,4 @@
-import { ADMIN_BOT_CHANNEL } from '../config/channels.js';
+import { CHANNELS } from '../config/channels.js';
 import { syncMembersToDB } from '../db/index.js';
 import autoAssignDefaultRole from '../utils/roles/auto-assign-default-role.js';
 import autoManageTierRoles from '../utils/roles/auto-manage-tier-roles.js';
@@ -14,7 +14,7 @@ export default async function ready(client) {
         return;
     }
 
-    const channel = client.channels.cache.get(ADMIN_BOT_CHANNEL);
+    const channel = client.channels.cache.get(CHANNELS.ADMIN.BOT);
     if (channel) {
         channel.send('🔥 DBD.exe is now online!');
     }

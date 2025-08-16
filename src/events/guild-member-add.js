@@ -1,4 +1,4 @@
-import { MAIN_TEXT_CHANNEL } from '../config/channels.js';
+import { CHANNELS } from '../config/channels.js';
 import { SPY_ROLE } from '../config/roles.js';
 import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
@@ -45,7 +45,7 @@ const syncUser = async (member) => {
 };
 
 const sendWelcomeImage = async (member) => {
-    const channel = member.guild.channels.cache.get(MAIN_TEXT_CHANNEL);
+    const channel = member.guild.channels.cache.get(CHANNELS.MAIN.TEXT);
 
     if (!channel) {
         log.error('❌ Main text channel not found.');

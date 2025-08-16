@@ -1,4 +1,4 @@
-import { TEMPORARY_VOICE_CHANNEL } from '../../config/channels.js';
+import { CHANNELS } from '../../config/channels.js';
 import { ADMIN_ROLE, MUTED_ROLE } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
@@ -32,11 +32,11 @@ export default {
             // If the user is in a voice channel, move them to TEMP then back
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {
-                const tempChannel = message.guild.channels.cache.get(TEMPORARY_VOICE_CHANNEL);
+                const tempChannel = message.guild.channels.cache.get(CHANNELS.TEMPORARY.VOICE);
 
                 // Validate that the temporary channel exists and is a voice channel
                 if (!tempChannel?.isVoiceBased?.()) {
-                    log.error(`❌ TEMPORARY_VOICE_CHANNEL ID ${TEMPORARY_VOICE_CHANNEL} is invalid or not a voice channel.`);
+                    log.error(`❌ TEMPORARY_VOICE_CHANNEL ID ${CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`);
                 } else {
                     // Move to temp channel
                     await mentioned.voice.setChannel(tempChannel);
