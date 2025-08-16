@@ -1,5 +1,5 @@
 import { CHANNELS } from '../config/channels.js';
-import { SPY_ROLE } from '../config/roles.js';
+import { ROLES } from '../config/roles.js';
 import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
@@ -7,7 +7,7 @@ import { restoreUserRoles } from '../utils/roles/restore-user-roles.js';
 import { updateUserInDB } from '../db/utils/update-user-db.js';
 
 const assignDefaultRole = async (member) => {
-    const role = member.guild.roles.cache.get(SPY_ROLE);
+    const role = member.guild.roles.cache.get(ROLES.SPY);
 
     if (!role) {
         log.error(`❌ "Foreign Spy" role not found for ${member.user.tag}.`);

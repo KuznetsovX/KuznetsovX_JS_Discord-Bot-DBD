@@ -1,4 +1,4 @@
-import { ROLE_TIERS, ADMIN_ROLE } from '../../config/roles.js';
+import { ROLES, ROLE_TIERS } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
@@ -7,7 +7,7 @@ export default {
         const authorTag = message.author.tag;
 
         // Ensure the user has the required role to use the command
-        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
             log.action('PROMOTE USER', `❌ ${authorTag} tried to use !promote without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }

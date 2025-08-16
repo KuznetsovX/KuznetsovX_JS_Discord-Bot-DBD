@@ -1,4 +1,4 @@
-import { ADMIN_ROLE } from '../../config/roles.js';
+import { ROLES } from '../../config/roles.js';
 import { User } from '../../db/user-model.js';
 import log from '../../utils/logging/log.js';
 
@@ -6,7 +6,7 @@ export default {
     run: async (message) => {
         const authorTag = message.author.tag;
 
-        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
             log.action('LIST USERS', `❌ ${authorTag} tried to use !list-users without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }

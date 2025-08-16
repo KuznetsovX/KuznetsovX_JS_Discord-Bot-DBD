@@ -1,6 +1,6 @@
 import log from '../logging/log.js';
 import { getUserRoles } from '../../db/index.js';
-import { ADMIN_ROLE } from '../../config/roles.js';
+import { ROLES } from '../../config/roles.js';
 
 /**
  * Restores roles for all members in a guild from the database.
@@ -11,7 +11,7 @@ export default async function restoreRolesFromDatabase(guild) {
 
     guild.members.cache.forEach(async (member) => {
         // Skip bots and admins
-        if (member.user.bot || member.roles.cache.has(ADMIN_ROLE)) return;
+        if (member.user.bot || member.roles.cache.has(ROLES.ADMIN)) return;
 
         // Count roles excluding @everyone
         const userRoles = member.roles.cache.filter(role => role.id !== guild.id);

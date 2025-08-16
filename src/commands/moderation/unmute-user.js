@@ -1,12 +1,12 @@
 import { CHANNELS } from '../../config/channels.js';
-import { ADMIN_ROLE, MUTED_ROLE } from '../../config/roles.js';
+import { ROLES } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
 export default {
     run: async (message) => {
         // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
             log.action('UNMUTE USER', `❌ ${message.author.tag} tried to use !unmute without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
@@ -19,14 +19,14 @@ export default {
         }
 
         // Check if the user is actually muted
-        if (!mentioned.roles.cache.has(MUTED_ROLE)) {
+        if (!mentioned.roles.cache.has(ROLES.MUTED)) {
             log.action('UNMUTE USER', `⚠️ ${message.author.tag} tried to unmute ${mentioned.user.tag}, but they were not muted.`);
             return message.reply('❌ This user is not muted.');
         }
 
         try {
             // Remove the muted role
-            await mentioned.roles.remove(MUTED_ROLE);
+            await mentioned.roles.remove(ROLES.MUTED);
             await updateUserInDB(mentioned);
 
             // If the user is in a voice channel, move them to TEMP then back

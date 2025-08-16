@@ -1,4 +1,4 @@
-import { ADMIN_ROLE } from '../../config/roles.js';
+import { ROLES } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 
 export default {
@@ -6,7 +6,7 @@ export default {
         const authorTag = message.author.tag;
 
         // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
             log.action('POST MESSAGE', `❌ ${authorTag} tried to use !post without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }

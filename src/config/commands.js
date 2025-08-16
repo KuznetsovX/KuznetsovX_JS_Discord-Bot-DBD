@@ -1,7 +1,4 @@
-import {
-    ADMIN_ROLE,
-    MODERATOR_ROLE
-} from './roles.js';
+import { ROLES } from './roles.js';
 
 const commandConfig = {
     info: {
@@ -11,7 +8,7 @@ const commandConfig = {
             description: 'Lists all users in the server, their IDs and roles.',
             aliases: ['!listusers', '!list'],
             usage: '!listusers',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         showUserAvatar: {
             file: '../commands/info/show-user-avatar.js',
@@ -37,7 +34,7 @@ const commandConfig = {
             description: 'Bans a user from the server.',
             aliases: ['!ban'],
             usage: '!ban @user OR !ban <userID>',
-            permissions: [ADMIN_ROLE]
+            permissions: [ROLES.ADMIN]
         },
         kickUser: {
             file: '../commands/moderation/kick-user.js',
@@ -45,7 +42,7 @@ const commandConfig = {
             description: 'Kicks a user from the server.',
             aliases: ['!kick'],
             usage: '!kick @user',
-            permissions: [ADMIN_ROLE]
+            permissions: [ROLES.ADMIN]
         },
         muteUser: {
             file: '../commands/moderation/mute-user.js',
@@ -53,7 +50,7 @@ const commandConfig = {
             description: 'Mutes a user, text and voice chat are disabled for them.',
             aliases: ['!mute'],
             usage: '!mute @user',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         unmuteUser: {
             file: '../commands/moderation/unmute-user.js',
@@ -61,7 +58,7 @@ const commandConfig = {
             description: 'Unmutes a previously muted user.',
             aliases: ['!unmute'],
             usage: '!unmute @user',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
     },
     roles: {
@@ -71,7 +68,7 @@ const commandConfig = {
             description: 'Adds a role to a user.',
             aliases: ['!addrole', '!give'],
             usage: '!addrole @user @role',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         demoteUser: {
             file: '../commands/roles/demote-user.js',
@@ -79,7 +76,7 @@ const commandConfig = {
             description: 'Demotes a user to a lower rank.',
             aliases: ['!demote', '!rankdown'],
             usage: '!demote @user',
-            permissions: [ADMIN_ROLE]
+            permissions: [ROLES.ADMIN]
         },
         promoteUser: {
             file: '../commands/roles/promote-user.js',
@@ -87,7 +84,7 @@ const commandConfig = {
             description: 'Promotes a user to a higher rank.',
             aliases: ['!promote', '!rankup'],
             usage: '!promote @user',
-            permissions: [ADMIN_ROLE]
+            permissions: [ROLES.ADMIN]
         },
         removeRole: {
             file: '../commands/roles/remove-role.js',
@@ -95,7 +92,7 @@ const commandConfig = {
             description: 'Removes a role from a user.',
             aliases: ['!removerole', '!take'],
             usage: '!removerole @user @role',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         toggleDuelistRole: {
             file: '../commands/roles/toggle-duelist-role.js',
@@ -113,7 +110,7 @@ const commandConfig = {
             description: 'Clears recent messages (under 14 days).',
             aliases: ['!clear', '!clean', '!delete'],
             usage: '!clear <amount>',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         clearOldMessages: {
             file: '../commands/utility/clear-old-messages.js',
@@ -121,7 +118,7 @@ const commandConfig = {
             description: 'Clears old messages (above 14 days).',
             aliases: ['!clearold', '!cleanold', '!deleteold'],
             usage: '!clearold <amount>',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
         postMessage: {
             file: '../commands/utility/post-message.js',
@@ -129,7 +126,7 @@ const commandConfig = {
             description: 'Posts a message to the specified channel.',
             aliases: ['!post'],
             usage: '!post #channel <text>',
-            permissions: [ADMIN_ROLE]
+            permissions: [ROLES.ADMIN]
         },
         resyncDatabase: {
             file: '../commands/utility/resync-database.js',
@@ -137,7 +134,7 @@ const commandConfig = {
             description: 'Manually resyncs the database with the current server data.',
             aliases: ['!resyncdb', '!resyncdatabase'],
             usage: '!resyncdb',
-            permissions: [ADMIN_ROLE, MODERATOR_ROLE]
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR]
         },
     },
 };

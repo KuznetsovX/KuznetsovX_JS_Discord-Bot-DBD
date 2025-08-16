@@ -1,12 +1,12 @@
 import { CHANNELS } from '../../config/channels.js';
-import { ADMIN_ROLE, MUTED_ROLE } from '../../config/roles.js';
+import { ROLES } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
 export default {
     run: async (message) => {
         // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(ADMIN_ROLE)) {
+        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
             log.action('MUTE USER', `❌ ${message.author.tag} tried to use !mute without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
@@ -19,20 +19,20 @@ export default {
         }
 
         // Prevent muting bots or fellow admins
-        if (mentioned.user.bot || mentioned.roles.cache.has(ADMIN_ROLE)) {
+        if (mentioned.user.bot || mentioned.roles.cache.has(ROLES.ADMIN)) {
             log.action('MUTE USER', `⚠️ ${message.author.tag} tried to mute ${mentioned.user.tag}.`);
             return message.reply('⚠️ Cannot mute admins or bots.');
         }
 
         // Prevent re-muting already muted users
-        if (mentioned.roles.cache.has(MUTED_ROLE)) {
+        if (mentioned.roles.cache.has(ROLES.MUTED)) {
             log.action('MUTE USER', `⚠️ ${message.author.tag} tried to mute ${mentioned.user.tag}, but they were already muted.`);
             return message.reply('⚠️ That user is already muted.');
         }
 
         try {
             // Add the muted role to the user
-            await mentioned.roles.add(MUTED_ROLE);
+            await mentioned.roles.add(ROLES.MUTED);
             await updateUserInDB(mentioned);
 
             // If the user is in a voice channel, move them to TEMP then back

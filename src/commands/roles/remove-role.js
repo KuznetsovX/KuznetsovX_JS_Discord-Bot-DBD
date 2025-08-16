@@ -1,4 +1,4 @@
-import { ADMIN_ROLE, ROLE_TIERS } from '../../config/roles.js';
+import { ROLES, ROLE_TIERS } from '../../config/roles.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
@@ -9,7 +9,7 @@ export default {
         const authorTag = message.author.tag;
 
         // Ensure the user has the required role to use the command
-        if (!author.roles.cache.has(ADMIN_ROLE)) {
+        if (!author.roles.cache.has(ROLES.ADMIN)) {
             log.action('REMOVE ROLE', `❌ ${authorTag} tried to use !removerole without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
