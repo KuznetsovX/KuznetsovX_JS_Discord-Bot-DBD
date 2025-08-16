@@ -2,25 +2,46 @@ import commandConfig from '../config/commands.js';
 
 const aliasMap = new Map();
 
-for (const key in commandConfig) {
-    const config = commandConfig[key];
-    const handlerModule = await import(config.file);
-    const handler = handlerModule.default || handlerModule;
+// Flatten nested command config into a simple array
+function flattenCommands(configSection) {
+    const flat = [];
 
-    for (const alias of config.aliases) {
-        aliasMap.set(alias.toLowerCase(), {
-            ...config,
-            handler
-        });
+    for (const key in configSection) {
+        const config = configSection[key];
+
+        if (config.file) {
+            flat.push(config);
+        } else if (config && typeof config === 'object') {
+            flat.push(...flattenCommands(config));
+        }
     }
+
+    return flat;
 }
+
+// Load all commands
+async function registerCommands() {
+    const commands = flattenCommands(commandConfig);
+
+    await Promise.all(commands.map(async config => {
+        const handlerModule = await import(config.file);
+        const handler = handlerModule.default || handler;
+
+        for (const alias of config.aliases) {
+            aliasMap.set(alias.toLowerCase(), { ...config, handler });
+        }
+    }));
+}
+
+// Register commands on startup
+await registerCommands();
 
 export default function messageCreate(client) {
     client.on('messageCreate', async (message) => {
         if (message.author.bot) return;
 
         const args = message.content.trim().split(/\s+/);
-        const command = args[0].toLowerCase();
+        const command = args.shift().toLowerCase();
 
         const match = aliasMap.get(command);
         if (!match) return;
@@ -32,4 +53,4 @@ export default function messageCreate(client) {
             await message.reply('❌ An error occurred while executing this command.');
         }
     });
-};
+}
