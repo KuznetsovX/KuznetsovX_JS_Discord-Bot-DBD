@@ -9,11 +9,16 @@ export default {
         }
 
         const args = message.content.trim().split(/\s+/);
-        const arg = args[1]?.toLowerCase() || '0';
+        const arg = args[1]?.toLowerCase();
+
+        if (!arg) {
+            await message.reply('❌ Please specify how many messages to delete (1-100) or "all".');
+            return;
+        }
 
         let limit = 0;
         if (arg === 'all') {
-            limit = 100; // max bulkDelete limit
+            limit = 100; // max Discord bulkDelete limit
         } else if (!isNaN(arg)) {
             limit = Math.min(parseInt(arg), 100);
         } else {
@@ -22,11 +27,15 @@ export default {
         }
 
         try {
+            // Always delete the command call itself first
+            await message.delete().catch(() => { });
+
+            // Fetch the requested number of *additional* messages
             const fetched = await message.channel.messages.fetch({ limit });
             const deletable = fetched.filter(m => Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
 
             if (deletable.size === 0) {
-                await message.reply('⚠️ No messages to delete.');
+                await message.channel.send('⚠️ No more messages to delete.');
                 return;
             }
 
@@ -35,7 +44,7 @@ export default {
             log.action('CLEAR MESSAGES', `Deleted ${deletable.size} messages by ${message.author.tag}`);
         } catch (e) {
             log.error('❌ Error deleting messages:', e);
-            await message.reply('❌ Something went wrong.');
+            await message.channel.send('❌ Something went wrong.');
         }
     }
 };
