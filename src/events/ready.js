@@ -16,22 +16,36 @@ export default async function ready(client) {
 
     const channel = client.channels.cache.get(CHANNELS.ADMIN.BOT);
     if (channel) {
-        channel.send('🔥 DBD.exe is now online!');
+        await channel.send('🪫 Starting up... please wait until all startup tasks are completed.');
     }
 
-    // Restore roles from the database before assigning default roles
-    await restoreRolesFromDatabase(guild);
+    try {
+        // Restore roles from the database before assigning default roles
+        await restoreRolesFromDatabase(guild);
 
-    // Assign default role to all users without a tier role
-    await autoAssignDefaultRole(guild);
+        // Assign default role to all users without a tier role
+        await autoAssignDefaultRole(guild);
 
-    // Manage tier roles after the default role assignment
-    for (const member of guild.members.cache.values()) {
-        if (!member.user.bot) {
-            await autoManageTierRoles(member);
+        // Manage tier roles after the default role assignment
+        for (const member of guild.members.cache.values()) {
+            if (!member.user.bot) {
+                await autoManageTierRoles(member);
+            }
+        }
+
+        // Sync all current members into DB
+        await syncMembersToDB(guild);
+
+        if (channel) {
+            await channel.send(`🔋 All startup tasks have been completed, <@${client.user.id}> is now ready to use.`);
+        }
+        log.action('READY', '✅ All startup tasks completed successfully.');
+    } catch (err) {
+        console.error('❌ Error during bot startup:', err);
+        log.error('READY', err);
+
+        if (channel) {
+            await channel.send(`⚠️ Startup failed with error: \`${err.message}\``);
         }
     }
-
-    // Sync all current members into DB
-    await syncMembersToDB(guild);
 }
