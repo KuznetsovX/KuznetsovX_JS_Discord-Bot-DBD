@@ -1,4 +1,4 @@
-import { ROLES, ROLE_TIERS } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
@@ -9,8 +9,8 @@ export default {
         const authorTag = message.author.tag;
 
         // Ensure the user has the required role to use the command
-        if (!author.roles.cache.has(ROLES.ADMIN)) {
-            log.action('REMOVE ROLE', `❌ ${authorTag} tried to use !removerole without permission.`);
+        if (!author.roles.cache.has(config.ROLES.ADMIN)) {
+            log.action('REMOVE ROLE', `❌ ${authorTag} tried to use ${config.PREFIX}removerole without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
@@ -56,8 +56,8 @@ export default {
             await updateUserInDB(mentioned);
 
             // If the removed role is a tier role and user now has no tier roles, assign the default role
-            if (ROLE_TIERS.includes(mentionedRole.id)) {
-                const hasTierRole = ROLE_TIERS.some(roleId => mentioned.roles.cache.has(roleId));
+            if (config.ROLE_TIERS.includes(mentionedRole.id)) {
+                const hasTierRole = config.ROLE_TIERS.some(roleId => mentioned.roles.cache.has(roleId));
                 if (!hasTierRole) {
                     await autoAssignDefaultRole(message.guild);
                 }

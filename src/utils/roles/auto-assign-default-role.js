@@ -1,4 +1,4 @@
-import { ROLES, ROLE_TIERS } from '../../config/roles.js';
+import config from '../../config/index.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import log from '../logging/log.js';
 
@@ -8,7 +8,7 @@ import log from '../logging/log.js';
  */
 export default async function assignDefaultRole(guild) {
     // Fetch the "Foreign Spy" role
-    const spyRole = guild.roles.cache.get(ROLES.SPY);
+    const spyRole = guild.roles.cache.get(config.ROLES.SPY);
     if (!spyRole) {
         log.error('AUTO ASSIGN DEFAULT ROLE', `"Foreign Spy" role not found.`);
         return;
@@ -19,10 +19,10 @@ export default async function assignDefaultRole(guild) {
 
     guild.members.cache.forEach(member => {
         // Skip bots and admins
-        if (member.user.bot || member.roles.cache.has(ROLES.ADMIN)) return;
+        if (member.user.bot || member.roles.cache.has(config.ROLES.ADMIN)) return;
 
         // Check if the member has a tier role
-        const hasTierRole = ROLE_TIERS.some(roleId => member.roles.cache.has(roleId));
+        const hasTierRole = config.ROLE_TIERS.some(roleId => member.roles.cache.has(roleId));
 
         // If no tier role, assign the "Foreign Spy" role
         if (!hasTierRole) {

@@ -1,4 +1,4 @@
-import { CHANNELS } from '../config/channels.js';
+import config from '../config/index.js';
 import { syncMembersToDB } from '../db/index.js';
 import autoAssignDefaultRole from '../utils/roles/auto-assign-default-role.js';
 import autoManageTierRoles from '../utils/roles/auto-manage-tier-roles.js';
@@ -14,7 +14,7 @@ export default async function ready(client) {
         return;
     }
 
-    const channel = client.channels.cache.get(CHANNELS.ADMIN.BOT);
+    const channel = client.channels.cache.get(config.CHANNELS.ADMIN.BOT);
     if (channel) {
         await channel.send('🪫 Starting up... please wait until all startup tasks are completed.');
     }

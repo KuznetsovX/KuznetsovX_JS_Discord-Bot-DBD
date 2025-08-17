@@ -1,4 +1,4 @@
-import { ROLE_TIERS } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
@@ -9,12 +9,12 @@ import { updateUserInDB } from '../../db/utils/update-user-db.js';
 export default async function manageTierRoles(member) {
     try {
         // Get the member's roles that are part of the tierable roles
-        const memberRoles = member.roles.cache.filter(role => ROLE_TIERS.includes(role.id));
+        const memberRoles = member.roles.cache.filter(role => config.ROLE_TIERS.includes(role.id));
 
         // If member has more than one tier role, remove the lower ones
         if (memberRoles.size > 1) {
             // Sort roles in descending order, so the highest tier role comes first
-            const sortedRoles = memberRoles.sort((a, b) => ROLE_TIERS.indexOf(b.id) - ROLE_TIERS.indexOf(a.id));
+            const sortedRoles = memberRoles.sort((a, b) => config.ROLE_TIERS.indexOf(b.id) - config.ROLE_TIERS.indexOf(a.id));
 
             // Keep the highest role (first in the sorted array)
             const highestRole = sortedRoles.first();

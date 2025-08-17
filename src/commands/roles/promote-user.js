@@ -1,4 +1,4 @@
-import { ROLES, ROLE_TIERS } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
@@ -7,8 +7,8 @@ export default {
         const authorTag = message.author.tag;
 
         // Ensure the user has the required role to use the command
-        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
-            log.action('PROMOTE USER', `❌ ${authorTag} tried to use !promote without permission.`);
+        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
+            log.action('PROMOTE USER', `❌ ${authorTag} tried to use ${config.PREFIX}promote without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
@@ -20,7 +20,7 @@ export default {
         }
 
         const currentRoles = mentioned.roles.cache;
-        const currentTierIndex = ROLE_TIERS.findIndex(roleId => currentRoles.has(roleId));
+        const currentTierIndex = config.ROLE_TIERS.findIndex(roleId => currentRoles.has(roleId));
 
         // Check if the mentioned user has a tier role
         if (currentTierIndex === -1) {
@@ -29,14 +29,14 @@ export default {
         }
 
         // Check if the user is already at the highest tier
-        if (currentTierIndex === ROLE_TIERS.length - 1) {
+        if (currentTierIndex === config.ROLE_TIERS.length - 1) {
             log.action('PROMOTE USER', `⚠️ ${authorTag} tried to promote ${mentioned.user.tag}, but they are already at the highest tier.`);
             return message.reply(`⚠️ ${mentioned} is already at the highest tier.`);
         }
 
         // Get the new role to assign
-        const newRoleId = ROLE_TIERS[currentTierIndex + 1];
-        const oldRoleId = ROLE_TIERS[currentTierIndex];
+        const newRoleId = config.ROLE_TIERS[currentTierIndex + 1];
+        const oldRoleId = config.ROLE_TIERS[currentTierIndex];
 
         // Attempt to remove the current role and add the new role
         try {

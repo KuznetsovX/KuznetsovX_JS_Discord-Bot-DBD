@@ -1,5 +1,4 @@
-import commandConfig from '../config/commands.js';
-
+import config from '../config/index.js';
 const aliasMap = new Map();
 
 // Flatten nested command config into a simple array
@@ -7,12 +6,12 @@ function flattenCommands(configSection) {
     const flat = [];
 
     for (const key in configSection) {
-        const config = configSection[key];
+        const configItem = configSection[key];
 
-        if (config.file) {
-            flat.push(config);
-        } else if (config && typeof config === 'object') {
-            flat.push(...flattenCommands(config));
+        if (configItem.file) {
+            flat.push(configItem);
+        } else if (configItem && typeof configItem === 'object') {
+            flat.push(...flattenCommands(configItem));
         }
     }
 
@@ -21,14 +20,14 @@ function flattenCommands(configSection) {
 
 // Load all commands
 async function registerCommands() {
-    const commands = flattenCommands(commandConfig);
+    const commands = flattenCommands(config.commands);
 
-    await Promise.all(commands.map(async config => {
-        const handlerModule = await import(config.file);
-        const handler = handlerModule.default || handler;
+    await Promise.all(commands.map(async cmd => {
+        const handlerModule = await import(cmd.file);
+        const handler = handlerModule.default || handlerModule;
 
-        for (const alias of config.aliases) {
-            aliasMap.set(alias.toLowerCase(), { ...config, handler });
+        for (const alias of cmd.aliases) {
+            aliasMap.set(alias.toLowerCase(), { ...cmd, handler });
         }
     }));
 }
@@ -40,7 +39,12 @@ export default function messageCreate(client) {
     client.on('messageCreate', async (message) => {
         if (message.author.bot) return;
 
-        const args = message.content.trim().split(/\s+/);
+        const content = message.content.trim();
+
+        // Ignore messages not starting with global prefix
+        if (!content.startsWith(config.PREFIX)) return;
+
+        const args = content.slice(config.PREFIX.length).trim().split(/\s+/);
         const command = args.shift().toLowerCase();
 
         const match = aliasMap.get(command);
@@ -49,7 +53,7 @@ export default function messageCreate(client) {
         try {
             await match.handler.run(message, args);
         } catch (error) {
-            console.error(`❌ Error running command ${command}:`, error);
+            console.error(`❌ Error running command ${config.PREFIX}${command}:`, error);
             await message.reply('❌ An error occurred while executing this command.');
         }
     });

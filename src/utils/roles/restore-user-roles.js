@@ -1,5 +1,5 @@
+import config from '../../config/index.js';
 import { getUserRoles } from '../../db/index.js';
-import { ROLES } from '../../config/roles.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import log from '../logging/log.js';
 
@@ -21,7 +21,7 @@ export async function restoreUserRoles(member) {
         if (!role) return false;
 
         // Skip restricted roles
-        if (roleID === ROLES.ADMIN || roleID === ROLES.BOT) return false;
+        if (roleID === config.ROLES.ADMIN || roleID === config.ROLES.BOT) return false;
 
         // Skip roles higher or equal to the bot’s highest role
         if (role.position >= botHighestRole.position) return false;

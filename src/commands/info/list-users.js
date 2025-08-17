@@ -1,4 +1,4 @@
-import { ROLES } from '../../config/roles.js';
+import config from '../../config/index.js';
 import { User } from '../../db/user-model.js';
 import log from '../../utils/logging/log.js';
 
@@ -6,8 +6,9 @@ export default {
     run: async (message) => {
         const authorTag = message.author.tag;
 
-        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
-            log.action('LIST USERS', `❌ ${authorTag} tried to use !list-users without permission.`);
+        // Access roles via central config
+        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
+            log.action('LIST USERS', `❌ ${authorTag} tried to use ${config.PREFIX}list-users without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
@@ -15,7 +16,7 @@ export default {
             const users = await User.findAll();
 
             if (!users.length) {
-                log.action('LIST USERS', `ℹ️ ${authorTag} ran !list-users — no users in database.`);
+                log.action('LIST USERS', `ℹ️ ${authorTag} ran ${config.PREFIX}list-users — no users in database.`);
                 return message.channel.send('📭 No users found in the database.');
             }
 
@@ -38,7 +39,7 @@ export default {
 
             log.action('LIST USERS', `✅ ${authorTag} listed ${users.length} users.`);
         } catch (error) {
-            log.error(`❌ Error in !list-users by ${authorTag}:`, error);
+            log.error(`❌ Error in ${config.PREFIX}list-users by ${authorTag}:`, error);
             await message.reply('❌ Something went wrong while listing users.');
         }
     }

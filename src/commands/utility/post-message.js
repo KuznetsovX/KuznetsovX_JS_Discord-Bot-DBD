@@ -1,4 +1,4 @@
-import { ROLES } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 
 export default {
@@ -6,8 +6,8 @@ export default {
         const authorTag = message.author.tag;
 
         // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
-            log.action('POST MESSAGE', `❌ ${authorTag} tried to use !post without permission.`);
+        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
+            log.action('POST MESSAGE', `❌ ${authorTag} tried to use ${config.PREFIX}post without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
@@ -24,7 +24,7 @@ export default {
 
         // Ensure the message has content
         if (!content) {
-            log.action('POST MESSAGE', `❌ ${authorTag} used !post without content after the channel mention.`);
+            log.action('POST MESSAGE', `❌ ${authorTag} used ${config.PREFIX}post without content after the channel mention.`);
             return message.reply('❌ You need to provide content to post after the channel mention.');
         }
 

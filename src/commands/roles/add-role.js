@@ -1,4 +1,4 @@
-import { ROLES, ROLE_TIERS } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import manageTierRoles from '../../utils/roles/auto-manage-tier-roles.js';
@@ -9,8 +9,8 @@ export default {
         const authorTag = message.author.tag;
 
         // Ensure the user has the required role to use the command
-        if (!author.roles.cache.has(ROLES.ADMIN)) {
-            log.action('ADD ROLE', `❌ ${authorTag} tried to use !addrole without permission.`);
+        if (!author.roles.cache.has(config.ROLES.ADMIN)) {
+            log.action('ADD ROLE', `❌ ${authorTag} tried to use ${config.PREFIX}addrole without permission.`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 

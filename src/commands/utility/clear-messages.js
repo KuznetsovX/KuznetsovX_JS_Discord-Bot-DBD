@@ -1,9 +1,9 @@
-import { ROLES } from '../../config/roles.js';
+import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 
 export default {
     run: async (message) => {
-        if (!message.member.roles.cache.has(ROLES.ADMIN)) {
+        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
             await message.reply('❌ You do not have permission.');
             return;
         }
