@@ -1,7 +1,16 @@
+import help from '../commands/info/help.js';
 import { ROLES } from './roles.js';
 
 const commands = {
     info: {
+        help: {
+            file: '../commands/info/help.js',
+            label: 'Help',
+            description: 'Displays a list of all commands or detailed information about a specific command.',
+            aliases: ['help', 'commands'],
+            usage: 'help OR help <command>',
+            permissions: []
+        },
         listUsers: {
             file: '../commands/info/list-users.js',
             label: 'List Users',
