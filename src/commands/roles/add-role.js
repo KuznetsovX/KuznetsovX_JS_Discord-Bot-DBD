@@ -8,12 +8,6 @@ export default {
         const author = message.member;
         const authorTag = message.author.tag;
 
-        // Ensure the user has the required role to use the command
-        if (!author.roles.cache.has(config.ROLES.ADMIN)) {
-            log.action('ADD ROLE', `❌ ${authorTag} tried to use ${config.PREFIX}addrole without permission.`);
-            return message.reply('❌ You do not have permission to use this command.');
-        }
-
         // Ensure a user is mentioned
         const mentioned = message.mentions.members.first();
         if (!mentioned) {
@@ -56,7 +50,7 @@ export default {
             await updateUserInDB(mentioned);
 
             // If the added role is a tier role, trigger auto-manage-tier-roles
-            if (ROLE_TIERS.includes(mentionedRole.id)) {
+            if (config.ROLE_TIERS.includes(mentionedRole.id)) {
                 await manageTierRoles(mentioned);
             }
         } catch (error) {

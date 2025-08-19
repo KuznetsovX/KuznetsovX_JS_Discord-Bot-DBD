@@ -5,12 +5,6 @@ export default {
     run: async (message) => {
         const authorTag = message.author.tag;
 
-        // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
-            log.action('POST MESSAGE', `❌ ${authorTag} tried to use ${config.PREFIX}post without permission.`);
-            return message.reply('❌ You do not have permission to use this command.');
-        }
-
         // Check for a mentioned channel
         const mentionedChannel = message.mentions.channels.first();
         if (!mentionedChannel || mentionedChannel.type !== 0) { // type 0 = GUILD_TEXT

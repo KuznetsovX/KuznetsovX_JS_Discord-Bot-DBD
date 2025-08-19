@@ -1,4 +1,6 @@
 import config from '../config/index.js';
+import { hasPermission } from '../utils/check-permissions.js';
+
 const aliasMap = new Map();
 
 // Flatten nested command config into a simple array
@@ -49,6 +51,11 @@ export default function messageCreate(client) {
 
         const match = aliasMap.get(command);
         if (!match) return;
+
+        // Check permissions before running command
+        if (!hasPermission(message.member, match.permissions)) {
+            return message.reply('❌ You do not have permission to use this command.');
+        }
 
         try {
             await match.handler.run(message, args);

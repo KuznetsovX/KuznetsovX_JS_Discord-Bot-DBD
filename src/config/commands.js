@@ -1,4 +1,3 @@
-import help from '../commands/info/help.js';
 import { ROLES } from './roles.js';
 
 const commands = {

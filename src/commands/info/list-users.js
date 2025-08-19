@@ -6,12 +6,6 @@ export default {
     run: async (message) => {
         const authorTag = message.author.tag;
 
-        // Access roles via central config
-        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
-            log.action('LIST USERS', `❌ ${authorTag} tried to use ${config.PREFIX}list-users without permission.`);
-            return message.reply('❌ You do not have permission to use this command.');
-        }
-
         try {
             const users = await User.findAll();
 

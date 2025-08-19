@@ -1,13 +1,7 @@
-import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 
 export default {
     run: async (message) => {
-        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
-            await message.reply('❌ You do not have permission.');
-            return;
-        }
-
         const args = message.content.trim().split(/\s+/);
         const arg = args[1]?.toLowerCase();
 

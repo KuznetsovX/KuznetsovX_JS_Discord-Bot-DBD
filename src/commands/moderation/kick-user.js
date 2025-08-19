@@ -1,14 +1,7 @@
-import config from '../../config/index.js';
 import log from '../../utils/logging/log.js';
 
 export default {
     run: async (message) => {
-        // Ensure the user has the required role to use the command
-        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
-            log.action('KICK USER', `❌ ${message.author.tag} tried to use ${config.PREFIX}kick without permission.`);
-            return message.reply('❌ You do not have permission to use this command.');
-        }
-
         // Ensure a user is mentioned
         const mentioned = message.mentions.members.first();
         if (!mentioned) {

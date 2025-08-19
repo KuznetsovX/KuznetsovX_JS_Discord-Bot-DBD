@@ -4,12 +4,6 @@ import { updateUserInDB } from '../../db/utils/update-user-db.js';
 
 export default {
     run: async (message) => {
-        // Check if the command author has the admin role
-        if (!message.member.roles.cache.has(config.ROLES.ADMIN)) {
-            log.action('UNMUTE USER', `❌ ${message.author.tag} tried to use ${config.PREFIX}unmute without permission.`);
-            return message.reply('❌ You do not have permission to use this command.');
-        }
-
         // Get the first mentioned member
         const mentioned = message.mentions.members.first();
         if (!mentioned) {
