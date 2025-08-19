@@ -1,41 +1,67 @@
 import log from '../../utils/logging/log.js';
 
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
 export default {
-    run: async (message) => {
-        const args = message.content.trim().split(/\s+/);
-        const arg = args[1]?.toLowerCase();
+    run: async (message, args) => {
+        const arg = args?.[0]?.toLowerCase();
 
         if (!arg) {
-            await message.reply('❌ Please specify how many messages to delete (1-100) or "all".');
+            await message.reply('❌ Please specify how many messages to delete or "all".');
             return;
         }
 
-        let limit = 0;
+        // Remove the invoking command so it isn't counted in the deletion
+        await message.delete().catch(() => { });
+
+        let deleteAll = false;
+        let target = 0;
+
         if (arg === 'all') {
-            limit = 100; // max Discord bulkDelete limit
+            deleteAll = true;
         } else if (!isNaN(arg)) {
-            limit = Math.min(parseInt(arg), 100);
+            target = Math.max(1, parseInt(arg, 10));
         } else {
-            await message.reply('❌ Specify a number (1-100) or "all".');
+            await message.channel.send('❌ Specify a number or "all".');
             return;
         }
+
+        let totalDeleted = 0;
 
         try {
-            // Always delete the command call itself first
-            await message.delete().catch(() => { });
+            if (deleteAll) {
+                // keep deleting batches of 100 until none are left (<14 days only)
+                while (true) {
+                    const deleted = await message.channel.bulkDelete(100, true);
+                    const count = deleted.size;
+                    if (count === 0) break;
+                    totalDeleted += count;
+                    // small pause to play nice with rate limits
+                    await sleep(900);
+                }
+            } else {
+                // delete up to `target` messages, in chunks of 100
+                let remaining = target;
+                while (remaining > 0) {
+                    const chunk = Math.min(remaining, 100);
+                    const deleted = await message.channel.bulkDelete(chunk, true);
+                    const count = deleted.size;
+                    if (count === 0) break; // nothing else deletable (likely >14 days)
+                    totalDeleted += count;
+                    remaining -= count;
+                    await sleep(900);
+                }
+            }
 
-            // Fetch the requested number of *additional* messages
-            const fetched = await message.channel.messages.fetch({ limit });
-            const deletable = fetched.filter(m => Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
-
-            if (deletable.size === 0) {
-                await message.channel.send('⚠️ No more messages to delete.');
+            if (totalDeleted === 0) {
+                await message.channel.send('⚠️ No messages could be deleted. (Discord only bulk-deletes messages newer than 14 days.)');
                 return;
             }
 
-            await message.channel.bulkDelete(deletable, true);
-            await message.channel.send(`🧹 Deleted ${deletable.size} messages.`);
-            log.action('CLEAR MESSAGES', `Deleted ${deletable.size} messages by ${message.author.tag}`);
+            const confirmation = await message.channel.send(`🧹 Deleted ${totalDeleted} messages.`);
+            setTimeout(() => confirmation.delete().catch(() => { }), 5000);
+
+            log.action('CLEAR MESSAGES', `Deleted ${totalDeleted} messages by ${message.author.tag}`);
         } catch (e) {
             log.error('❌ Error deleting messages:', e);
             await message.channel.send('❌ Something went wrong.');
