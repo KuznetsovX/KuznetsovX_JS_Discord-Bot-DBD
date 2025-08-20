@@ -3,6 +3,8 @@ import config from '../../config/index.js';
 
 export default {
     run: async (message, args) => {
+        const memberRoles = message.member.roles.cache.map(r => r.id);
+
         // If user typed "!help <command>"
         if (args.length > 0) {
             const input = args[0].toLowerCase();
@@ -10,9 +12,7 @@ export default {
             let found;
             for (const category of Object.values(config.commands)) {
                 for (const cmd of Object.values(category)) {
-                    if (
-                        cmd.aliases.map(a => a.toLowerCase()).includes(input)
-                    ) {
+                    if (cmd.aliases.map(a => a.toLowerCase()).includes(input)) {
                         found = cmd;
                         break;
                     }
@@ -37,7 +37,7 @@ export default {
             return message.reply({ embeds: [embed] });
         }
 
-        // Otherwise list all commands grouped by category
+        // Otherwise list all commands user can access
         const embed = new EmbedBuilder()
             .setTitle('📖 Command List')
             .setDescription(`Use \`${config.PREFIX}help <command>\` to get more info.`)
@@ -45,10 +45,13 @@ export default {
 
         for (const [categoryName, categoryCommands] of Object.entries(config.commands)) {
             const list = Object.values(categoryCommands)
+                .filter(cmd => cmd.permissions.length === 0 || cmd.permissions.some(r => memberRoles.includes(r)))
                 .map(cmd => `\`${config.PREFIX}${cmd.aliases[0]}\` - ${cmd.description}`)
                 .join('\n');
 
-            embed.addFields({ name: categoryName, value: list });
+            if (list) {
+                embed.addFields({ name: categoryName, value: list });
+            }
         }
 
         return message.reply({ embeds: [embed] });

@@ -96,7 +96,7 @@ const commands = {
             description: 'Demotes a user to a lower rank.',
             aliases: ['demote', 'rankdown'],
             usage: 'demote @user',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
         },
         promoteUser: {
             file: '../commands/roles/promote-user.js',
@@ -104,7 +104,7 @@ const commands = {
             description: 'Promotes a user to a higher rank.',
             aliases: ['promote', 'rankup'],
             usage: 'promote @user',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
         },
         removeRole: {
             file: '../commands/roles/remove-role.js',
