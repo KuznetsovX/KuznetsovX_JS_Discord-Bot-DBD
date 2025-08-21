@@ -1,5 +1,6 @@
 import config from '../config/index.js';
 import { hasPermission } from '../utils/check-permissions.js';
+import log from '../utils/logging/log.js';
 
 const aliasMap = new Map();
 
@@ -52,15 +53,28 @@ export default function messageCreate(client) {
         const match = aliasMap.get(command);
         if (!match) return;
 
+        // Log command attempt
+        log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${config.PREFIX}${command}" with args: [${args.join(' ')}]`);
+
         // Check permissions before running command
         if (!hasPermission(message.member, match.permissions)) {
+            log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${config.PREFIX}${command}" but lacks permissions`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
         try {
+            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${config.PREFIX}${command}"`);
+
+            if (match.delete) {
+                await message.delete().catch(err => {
+                    log.warn(`${match.label}`, `Could not delete message from ${message.author.tag} (${message.author.id}): ${err.message}`);
+                });
+            }
+
+            // Run the command
             await match.handler.run(message, args);
         } catch (error) {
-            console.error(`❌ Error running command ${config.PREFIX}${command}:`, error);
+            log.error(`${match.label}`, `Error in "${config.PREFIX}${command}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
             await message.reply('❌ An error occurred while executing this command.');
         }
     });

@@ -1,28 +1,19 @@
-import log from '../../utils/logging/log.js';
-
 export default {
     run: async (message) => {
-        // Ensure a user is mentioned
         const mentioned = message.mentions.members.first();
         if (!mentioned) {
-            log.action('KICK USER', `❌ No user mentioned by ${message.author.tag}.`);
             return message.reply('❌ Please mention a user to kick.');
         }
 
-        // Check if the bot has permission to kick the mentioned user
         if (!mentioned.kickable) {
-            log.action('KICK USER', `❌ Cannot kick ${mentioned.user.tag} — insufficient permissions.`);
             return message.reply('❌ I cannot kick this user. Do I have the right permissions?');
         }
 
-        // Attempt to kick the user
         try {
             await mentioned.kick();
-            message.channel.send(`🚪 ${mentioned} was kicked from the server.`);
-            log.action('KICK USER', `✅ ${mentioned.user.tag} was kicked by ${message.author.tag}.`);
+            await message.reply(`🚪 ${mentioned} was kicked from the server.`);
         } catch (error) {
-            log.error(`❌ Failed to kick ${mentioned.user.tag}:`, error);
-            message.reply('❌ Failed to kick the user.');
+            throw new Error(`Failed to kick ${mentioned.user.tag}: ${error.message}`);
         }
     }
 };

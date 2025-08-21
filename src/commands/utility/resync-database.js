@@ -1,16 +1,14 @@
 import { syncMembersToDB } from '../../db/index.js';
-import log from '../../utils/logging/log.js';
 
 export default {
     run: async (message) => {
+        const author = message.member;
+
         try {
             await syncMembersToDB(message.guild);
-
-            message.channel.send('🔄 Database has been resynced successfully.');
-            log.action('RESYNC DATABASE', `✅ ${message.author.tag} manually resynced the database.`);
+            await message.channel.send(`🔄 ${author}, database has been resynced successfully.`);
         } catch (error) {
-            log.error(`❌ Failed to resync database:`, error);
-            message.reply('❌ Failed to resync the database.');
+            throw new Error(`Failed to resync the database: ${error.message}`);
         }
     }
 };

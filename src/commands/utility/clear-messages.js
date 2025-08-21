@@ -1,18 +1,15 @@
-import log from '../../utils/logging/log.js';
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default {
     run: async (message, args) => {
+        const author = message.member;
+
         const arg = args?.[0]?.toLowerCase();
-
         if (!arg) {
-            await message.reply('❌ Please specify how many messages to delete or "all".');
-            return;
+            return message.channel.send(`❌ ${author}, please specify how many messages to delete or "all".`);
         }
-
-        // Remove the invoking command so it isn't counted in the deletion
-        await message.delete().catch(() => { });
 
         let deleteAll = false;
         let target = 0;
@@ -22,49 +19,39 @@ export default {
         } else if (!isNaN(arg)) {
             target = Math.max(1, parseInt(arg, 10));
         } else {
-            await message.channel.send('❌ Specify a number or "all".');
-            return;
+            return message.channel.send(`❌ ${author}, specify a number or "all".`);
         }
 
         let totalDeleted = 0;
 
         try {
             if (deleteAll) {
-                // keep deleting batches of 100 until none are left (<14 days only)
                 while (true) {
                     const deleted = await message.channel.bulkDelete(100, true);
-                    const count = deleted.size;
-                    if (count === 0) break;
-                    totalDeleted += count;
-                    // small pause to play nice with rate limits
+                    if (deleted.size === 0) break;
+                    totalDeleted += deleted.size;
                     await sleep(900);
                 }
             } else {
-                // delete up to `target` messages, in chunks of 100
                 let remaining = target;
                 while (remaining > 0) {
                     const chunk = Math.min(remaining, 100);
                     const deleted = await message.channel.bulkDelete(chunk, true);
-                    const count = deleted.size;
-                    if (count === 0) break; // nothing else deletable (likely >14 days)
-                    totalDeleted += count;
-                    remaining -= count;
+                    if (deleted.size === 0) break;
+                    totalDeleted += deleted.size;
+                    remaining -= deleted.size;
                     await sleep(900);
                 }
             }
 
             if (totalDeleted === 0) {
-                await message.channel.send('⚠️ No messages could be deleted. (Discord only bulk-deletes messages newer than 14 days.)');
-                return;
+                return message.channel.send(`⚠️ ${author}, no messages could be deleted. (Discord only bulk-deletes messages newer than 14 days.)`);
             }
 
-            const confirmation = await message.channel.send(`🧹 Deleted ${totalDeleted} messages.`);
+            const confirmation = await message.channel.send(`🧹 ${author}, deleted ${totalDeleted} messages.`);
             setTimeout(() => confirmation.delete().catch(() => { }), 5000);
-
-            log.action('CLEAR MESSAGES', `Deleted ${totalDeleted} messages by ${message.author.tag}`);
-        } catch (e) {
-            log.error('❌ Error deleting messages:', e);
-            await message.channel.send('❌ Something went wrong.');
+        } catch (error) {
+            throw new Error(`Failed to clear messages: ${error.message}`);
         }
     }
 };

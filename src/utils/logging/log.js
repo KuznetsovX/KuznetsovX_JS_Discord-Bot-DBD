@@ -1,34 +1,45 @@
-// Function to format the current timestamp as a string in the 'YYYY-MM-DD HH:MM:SS' format
+// Function to format the current timestamp as 'YYYY-MM-DD HH:MM:SS'
 const formatTimestamp = () => {
     const now = new Date();
-    const date = now.toLocaleDateString('en-CA');
+    const date = now.toLocaleDateString('en-CA'); // YYYY-MM-DD
     const time = now.toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
     });
-    return `${date} ${time}`;  // Returning the formatted timestamp
+    return `${date} ${time}`;
 };
 
-// Log utility with different log levels: info, warn, error, and action
+// Centralized log utility
 const log = {
-    // Logs an informational message
-    info: (msg) => {
-        console.log(`[INFO] ${formatTimestamp()} — ${msg}`);
+    // Generic logger used internally
+    _log: (level, label, msg, err = null) => {
+        const header = `[${level.toUpperCase()} - ${label.toUpperCase()}]`;
+        const message = `${header} ${formatTimestamp()} — ${msg}`;
+        switch (level.toLowerCase()) {
+            case 'info':
+                console.log(message);
+                break;
+            case 'warn':
+                console.warn(message);
+                break;
+            case 'error':
+                console.error(message);
+                if (err) console.error(err); // Log error stack if provided
+                break;
+            case 'action':
+                console.log(message);
+                break;
+            default:
+                console.log(message);
+        }
     },
-    // Logs a warning message
-    warn: (msg) => {
-        console.warn(`[WARN] ${formatTimestamp()} — ${msg}`);
-    },
-    // Logs an error message, with an optional error object
-    error: (msg, err = null) => {
-        console.error(`[ERROR] ${formatTimestamp()} — ${msg}`);
-        if (err) console.error(err);  // Log the error stack if provided
-    },
-    // Logs an action with a custom label
-    action: (label, msg) => {
-        console.log(`[${label.toUpperCase()}] ${formatTimestamp()} — ${msg}`);
-    }
+
+    // Convenience methods
+    info: (label, msg) => log._log('info', label, msg),
+    warn: (label, msg) => log._log('warn', label, msg),
+    error: (label, msg, err) => log._log('error', label, msg, err),
+    action: (label, msg) => log._log('action', label, msg),
 };
 
 export default log;

@@ -10,6 +10,7 @@ import { ROLES } from './roles.js';
  * aliases      - List of alternative triggers for the command
  * usage        - Example(s) of how to use the command
  * permissions  - Array of roles required to run the command (empty = everyone can use it)
+ * delete       - Whether the bot should delete the user's message
  */
 
 const commands = {
@@ -21,6 +22,7 @@ const commands = {
             aliases: ['help', 'commands', 'cmd'],
             usage: 'help OR help <command>',
             permissions: [],
+            delete: false,
         },
         listUsers: {
             file: '../commands/info/list-users.js',
@@ -29,6 +31,7 @@ const commands = {
             aliases: ['listusers', 'list'],
             usage: 'listusers',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         showUserAvatar: {
             file: '../commands/info/show-user-avatar.js',
@@ -37,6 +40,7 @@ const commands = {
             aliases: ['avatar', 'icon'],
             usage: 'avatar OR avatar @user',
             permissions: [],
+            delete: false,
         },
         showUserInfo: {
             file: '../commands/info/show-user-info.js',
@@ -45,6 +49,7 @@ const commands = {
             aliases: ['info', 'userinfo'],
             usage: 'info OR info @user',
             permissions: [],
+            delete: false,
         },
     },
     moderation: {
@@ -55,6 +60,7 @@ const commands = {
             aliases: ['ban'],
             usage: 'ban @user OR ban <userID>',
             permissions: [ROLES.ADMIN],
+            delete: false,
         },
         kickUser: {
             file: '../commands/moderation/kick-user.js',
@@ -63,6 +69,7 @@ const commands = {
             aliases: ['kick'],
             usage: 'kick @user',
             permissions: [ROLES.ADMIN],
+            delete: false,
         },
         muteUser: {
             file: '../commands/moderation/mute-user.js',
@@ -71,6 +78,7 @@ const commands = {
             aliases: ['mute'],
             usage: 'mute @user',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: false,
         },
         unmuteUser: {
             file: '../commands/moderation/unmute-user.js',
@@ -79,6 +87,7 @@ const commands = {
             aliases: ['unmute'],
             usage: 'unmute @user',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: false,
         },
     },
     roles: {
@@ -89,6 +98,7 @@ const commands = {
             aliases: ['addrole', 'give'],
             usage: 'addrole @user @role',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         demoteUser: {
             file: '../commands/roles/demote-user.js',
@@ -97,6 +107,7 @@ const commands = {
             aliases: ['demote', 'rankdown'],
             usage: 'demote @user',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         promoteUser: {
             file: '../commands/roles/promote-user.js',
@@ -105,6 +116,7 @@ const commands = {
             aliases: ['promote', 'rankup'],
             usage: 'promote @user',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         removeRole: {
             file: '../commands/roles/remove-role.js',
@@ -113,14 +125,16 @@ const commands = {
             aliases: ['removerole', 'take'],
             usage: 'removerole @user @role',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         toggleDuelistRole: {
             file: '../commands/roles/toggle-duelist-role.js',
             label: 'Toggle Duelist Role',
             description: 'Toggles the duelist role for a user.',
-            aliases: ['duelist'],
+            aliases: ['duelist', 'duel', '1v1'],
             usage: 'duelist',
             permissions: [],
+            delete: false,
         },
     },
     utility: {
@@ -131,6 +145,7 @@ const commands = {
             aliases: ['clear', 'clean', 'delete'],
             usage: 'clear <amount>',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         clearOldMessages: {
             file: '../commands/utility/clear-old-messages.js',
@@ -139,6 +154,7 @@ const commands = {
             aliases: ['clearold', 'cleanold', 'deleteold'],
             usage: 'clearold <amount>',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
         postMessage: {
             file: '../commands/utility/post-message.js',
@@ -147,6 +163,7 @@ const commands = {
             aliases: ['post'],
             usage: 'post #channel <text>',
             permissions: [ROLES.ADMIN],
+            delete: true,
         },
         resyncDatabase: {
             file: '../commands/utility/resync-database.js',
@@ -155,6 +172,7 @@ const commands = {
             aliases: ['resyncdb', 'resyncdatabase'],
             usage: 'resyncdb',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            delete: true,
         },
     },
 };

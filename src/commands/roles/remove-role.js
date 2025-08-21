@@ -1,64 +1,47 @@
 import config from '../../config/index.js';
-import log from '../../utils/logging/log.js';
 import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
 
 export default {
     run: async (message) => {
-        const author = message.member;
-        const authorTag = message.author.tag;
-
-        // Ensure a user is mentioned
         const mentioned = message.mentions.members.first();
         if (!mentioned) {
-            log.action('REMOVE ROLE', `❌ No user mentioned by ${authorTag}.`);
-            return message.reply('❌ Please mention a user to remove a role from.');
+            return message.channel.send(`❌ ${author}, please mention a user to remove a role from.`);
         }
 
-        // Ensure a role is mentioned
         const mentionedRole = message.mentions.roles.first();
         if (!mentionedRole) {
-            log.action('REMOVE ROLE', `❌ No role mentioned by ${authorTag}.`);
-            return message.reply('❌ Please mention a role to remove.');
+            return message.channel.send(`❌ ${author}, please mention a role to remove.`);
         }
 
-        // Prevent removing a role the user doesn't have
         if (!mentioned.roles.cache.has(mentionedRole.id)) {
-            log.action('REMOVE ROLE', `⚠️ ${authorTag} tried to remove a role (${mentionedRole.name}) that ${mentioned.user.tag} does not have.`);
-            return message.reply(`⚠️ ${mentioned} does not have the ${mentionedRole.name} role.`);
+            return message.channel.send(`⚠️ ${author}, user does not have this role.`);
         }
 
-        // Check role hierarchy: user can’t remove roles higher or equal to their highest role
         const authorHighest = author.roles.highest;
         if (mentionedRole.position >= authorHighest.position) {
-            log.action('REMOVE ROLE', `❌ ${authorTag} tried to remove a higher/equal role (${mentionedRole.name}).`);
-            return message.reply('❌ You cannot remove a role equal to or higher than your highest role.');
+            return message.channel.send(`❌ ${author}, you cannot remove a role equal to or higher than your highest role.`);
         }
 
-        // Also make sure the bot itself can remove the role
         const botMember = message.guild.members.me;
         if (!botMember || mentionedRole.position >= botMember.roles.highest.position) {
-            log.action('REMOVE ROLE', `❌ Bot lacks permission to remove role ${mentionedRole.name}.`);
-            return message.reply('❌ I don’t have permission to remove that role.');
+            return message.channel.send(`❌ ${author}, I do not have permission to remove that role.`);
         }
 
-        // Attempt to remove the role
         try {
             await mentioned.roles.remove(mentionedRole);
-            await message.channel.send(`✅ Removed role ${mentionedRole} from ${mentioned}.`);
-            log.action('REMOVE ROLE', `✅ ${mentioned.user.tag} had role ${mentionedRole.name} removed by ${authorTag}.`);
             await updateUserInDB(mentioned);
 
-            // If the removed role is a tier role and user now has no tier roles, assign the default role
             if (config.ROLE_TIERS.includes(mentionedRole.id)) {
                 const hasTierRole = config.ROLE_TIERS.some(roleId => mentioned.roles.cache.has(roleId));
                 if (!hasTierRole) {
                     await autoAssignDefaultRole(message.guild);
                 }
             }
+
+            await message.channel.send(`✅ ${author}, role was successfully removed from the user.`);
         } catch (error) {
-            log.error(`❌ Error removing role ${mentionedRole.name} from ${mentioned.user.tag}:`, error);
-            await message.reply('❌ Something went wrong while removing the role.');
+            throw new Error(`Failed to remove role ${mentionedRole.name} from ${mentioned.user.tag}: ${error.message}`);
         }
     }
 };
