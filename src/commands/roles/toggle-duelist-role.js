@@ -7,7 +7,7 @@ export default {
 
         const role = message.guild.roles.cache.get(config.ROLES.DUELIST);
         if (!role) {
-            return message.reply('❌ Could not find role.');
+            return message.reply(`❌ ${member}, I could not find the duelist role.`);
         }
 
         try {
