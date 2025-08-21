@@ -1,30 +1,35 @@
 import { sequelize, User } from './user-model.js';
+import log from '../utils/logging/log.js';
 
 export async function syncDatabase() {
     try {
         await sequelize.sync();
-        console.log('✅ Database synced successfully.');
+        log.action(`DATABASE`, `✅ Database synced successfully.`);
     } catch (error) {
-        console.error('❌ Error syncing the database:', error);
+        log.error(`DATABASE`, `❌ Error syncing the database: ${error.message}`, error);
     }
 }
 
 export async function syncMembersToDB(guild) {
-    const members = await guild.members.fetch();
+    try {
+        const members = await guild.members.fetch();
 
-    for (const member of members.values()) {
-        const roleNames = member.roles.cache
-            .filter(role => role.name !== '@everyone')
-            .map(role => `${role.name} (${role.id})`)
-            .join(', ');
+        for (const member of members.values()) {
+            const roleNames = member.roles.cache
+                .filter(role => role.name !== '@everyone')
+                .map(role => `${role.name} (${role.id})`)
+                .join(', ');
 
-        console.log(`🔄 Syncing ${member.user.tag} with roles: ${roleNames}`);
+            log.action(`DATABASE`, `🔄 Syncing ${member.user.tag} with roles: ${roleNames}`);
 
-        await User.upsert({
-            userId: member.id,
-            username: member.user.tag,
-            roles: roleNames
-        });
+            await User.upsert({
+                userId: member.id,
+                username: member.user.tag,
+                roles: roleNames
+            });
+        }
+    } catch (error) {
+        log.error(`DATABASE`, `❌ Failed to sync members for guild ${guild.id}: ${error.message}`, error);
     }
 }
 
@@ -33,14 +38,17 @@ export async function getUserRoles(userId) {
         const user = await User.findOne({ where: { userId } });
         if (!user || !user.roles) return [];
 
-        const roles = user.roles.split(', ').map(entry => {
-            const match = entry.match(/\((\d+)\)$/);
-            return match ? match[1] : null;
-        }).filter(Boolean);
+        const roles = user.roles
+            .split(', ')
+            .map(entry => {
+                const match = entry.match(/\((\d+)\)$/);
+                return match ? match[1] : null;
+            })
+            .filter(Boolean);
 
         return roles;
     } catch (error) {
-        console.error('❌ Failed to get user roles:', error);
+        log.error(`DATABASE`, `❌ Failed to get roles for userId ${userId}: ${error.message}`, error);
         return [];
     }
 }

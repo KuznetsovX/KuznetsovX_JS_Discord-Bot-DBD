@@ -4,7 +4,6 @@ import path from 'path';
 
 const dbFile = path.join(process.cwd(), 'data', 'botdata.sqlite');
 
-// Open the database
 export async function openDB() {
     return open({
         filename: dbFile,
