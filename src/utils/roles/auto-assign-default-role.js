@@ -10,7 +10,7 @@ export default async function assignDefaultRole(guild) {
     // Fetch the "Foreign Spy" role
     const spyRole = guild.roles.cache.get(config.ROLES.SPY);
     if (!spyRole) {
-        log.error('AUTO ASSIGN DEFAULT ROLE', `"Foreign Spy" role not found.`);
+        log.error('AUTO ASSIGN DEFAULT ROLE', `❌ "Foreign Spy" role not found.`);
         return;
     }
 
@@ -28,11 +28,11 @@ export default async function assignDefaultRole(guild) {
         if (!hasTierRole) {
             member.roles.add(spyRole)
                 .then(async () => {
-                    log.action('AUTO ASSIGN DEFAULT ROLE', `Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
+                    log.action('AUTO ASSIGN DEFAULT ROLE', `✅ Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
                     await updateUserInDB(member);
                 })
                 .catch(error => {
-                    log.error('AUTO ASSIGN DEFAULT ROLE', `Failed to assign "Foreign Spy" to ${member.user.tag}: ${error}`);
+                    log.error('AUTO ASSIGN DEFAULT ROLE', `❌ Failed to assign "Foreign Spy" to ${member.user.tag}: ${error}`);
                 });
         }
     });

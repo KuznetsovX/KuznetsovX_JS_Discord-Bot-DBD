@@ -9,7 +9,7 @@ const assignDefaultRole = async (member) => {
     const role = member.guild.roles.cache.get(config.ROLES.SPY);
 
     if (!role) {
-        log.error(`❌ "Foreign Spy" role not found for ${member.user.tag}.`);
+        log.error('GUILD MEMBER ADD', `❌ "Foreign Spy" role not found for ${member.user.tag}.`);
         return false;
     }
 
@@ -18,7 +18,7 @@ const assignDefaultRole = async (member) => {
         log.action('GUILD MEMBER ADD', `✅ Assigned "Foreign Spy" to ${member.user.tag}.`);
         return true;
     } catch (error) {
-        log.error(`❌ Error assigning default role for ${member.user.tag}:`, error);
+        log.error('GUILD MEMBER ADD', `❌ Error assigning default role for ${member.user.tag}:`, error);
         return false;
     }
 };
@@ -27,7 +27,7 @@ const restoreRoles = async (member) => {
     try {
         return await restoreUserRoles(member);
     } catch (error) {
-        log.error(`❌ Error restoring roles for ${member.user.tag}:`, error);
+        log.error('GUILD MEMBER ADD', `❌ Error restoring roles for ${member.user.tag}:`, error);
         return false;
     }
 };
@@ -38,7 +38,7 @@ const syncUser = async (member) => {
         log.action('GUILD MEMBER ADD', `✅ Synced ${member.user.tag} to the database.`);
         return true;
     } catch (error) {
-        log.error(`❌ Error syncing DB for ${member.user.tag}:`, error);
+        log.error('GUILD MEMBER ADD', `❌ Error syncing DB for ${member.user.tag}:`, error);
         return false;
     }
 };
@@ -47,7 +47,7 @@ const sendWelcomeImage = async (member) => {
     const channel = member.guild.channels.cache.get(config.CHANNELS.MAIN.TEXT);
 
     if (!channel) {
-        log.error('❌ Main text channel not found.');
+        log.error('GUILD MEMBER ADD', `❌ Main text channel not found.`);
         return;
     }
 
@@ -59,22 +59,21 @@ const sendWelcomeImage = async (member) => {
         });
         log.action('GUILD MEMBER ADD', `✅ Sent welcome card to ${member.user.tag}.`);
     } catch (error) {
-        log.error(`❌ Failed to send welcome card for ${member.user.tag}:`, error);
+        log.error('GUILD MEMBER ADD', `❌ Failed to send welcome card for ${member.user.tag}:`, error);
     }
 };
 
 export default async function guildMemberAdd(member) {
-    const rolesRestored = await restoreRoles(member);
-    if (!rolesRestored) {
+    const existsInDB = await User.findOne({ where: { userId: member.id } });
+
+    if (existsInDB) {
+        await restoreRoles(member);
+    } else {
         const defaultAssigned = await assignDefaultRole(member);
         if (!defaultAssigned) return;
-    }
 
-    const userSynced = await syncUser(member);
-    if (!userSynced) return;
-
-    const existsInDB = await User.findOne({ where: { userId: member.id } });
-    if (!existsInDB) {
         await sendWelcomeImage(member);
     }
-};
+
+    await syncUser(member);
+}

@@ -22,10 +22,10 @@ export default async function manageTierRoles(member) {
 
             // Remove lower-tier roles
             await member.roles.remove(rolesToRemove);
-            log.action('AUTO MANAGE TIER ROLES', `Removed lower-tier roles from ${member.user.tag}, keeping only ${highestRole.name}.`);
+            log.action('AUTO MANAGE TIER ROLES', `✅ Removed lower-tier roles from ${member.user.tag}, keeping only ${highestRole.name}.`);
             await updateUserInDB(member);
         }
     } catch (error) {
-        log.error('AUTO MANAGE TIER ROLES', `Failed to manage tier roles for ${member.user.tag}: ${error}`);
+        log.error('AUTO MANAGE TIER ROLES', `❌ Failed to manage tier roles for ${member.user.tag}: ${error}`);
     }
 }

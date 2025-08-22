@@ -25,17 +25,17 @@ export default async function restoreRolesFromDatabase(guild) {
                     const validRoles = storedRoles.filter(roleId => guild.roles.cache.has(roleId));
 
                     if (validRoles.length === 0) {
-                        log.warn('AUTO RESTORE ROLES', `Stored roles for ${member.user.tag} do not exist anymore.`);
+                        log.warn('AUTO RESTORE ROLES', `⚠️ Stored roles for ${member.user.tag} do not exist anymore.`);
                         return;
                     }
 
                     await member.roles.add(validRoles);
-                    log.action('AUTO RESTORE ROLES', `Restored roles for ${member.user.tag}: [${validRoles.join(', ')}]`);
+                    log.action('AUTO RESTORE ROLES', `✅ Restored roles for ${member.user.tag}: [${validRoles.join(', ')}]`);
                 } else {
-                    log.warn('AUTO RESTORE ROLES', `No stored roles found for ${member.user.tag}.`);
+                    log.warn('AUTO RESTORE ROLES', `⚠️ No stored roles found for ${member.user.tag}.`);
                 }
             } catch (err) {
-                log.error('AUTO RESTORE ROLES', `Failed restoring roles for ${member.user.tag}: ${err}`);
+                log.error('AUTO RESTORE ROLES', `❌ Failed restoring roles for ${member.user.tag}: ${err}`);
             }
         }
     });

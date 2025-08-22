@@ -1,6 +1,5 @@
 import config from '../../config/index.js';
 import { getUserRoles } from '../../db/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
 import log from '../logging/log.js';
 
 /**
@@ -21,7 +20,7 @@ export async function restoreUserRoles(member) {
         if (!role) return false;
 
         // Skip restricted roles
-        if (roleID === config.ROLES.ADMIN || roleID === config.ROLES.BOT) return false;
+        if (roleID === config.ROLES.ADMIN || roleID === config.ROLES.BOT || roleID === config.ROLES.MODERATOR) return false;
 
         // Skip roles higher or equal to the bot’s highest role
         if (role.position >= botHighestRole.position) return false;
@@ -33,11 +32,10 @@ export async function restoreUserRoles(member) {
 
     try {
         await member.roles.add(filteredRoles);
-        log.action('ROLE RESTORE', `✅ Restored roles for ${member.user.tag}: ${filteredRoles.join(', ')}`);
-        await updateUserInDB(member);
+        log.action('RESTORE USER ROLES', `✅ Restored roles for ${member.user.tag}: ${filteredRoles.join(', ')}`);
         return true;
     } catch (err) {
-        log.error(`❌ Failed to restore roles for ${member.user.tag}:`, err);
+        log.error(`RESTORE USER ROLES`, `❌ Failed to restore roles for ${member.user.tag}:`, err);
         return false;
     }
 }

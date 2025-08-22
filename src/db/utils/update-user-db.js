@@ -1,4 +1,5 @@
 import { User } from '../user-model.js';
+import log from '../../utils/logging/log.js';
 
 /**
  * Updates a single user's roles and username in the database
@@ -18,8 +19,8 @@ export async function updateUserInDB(member) {
             username: member.user.tag,
             roles: rolesString,
         });
-        console.log(`🔄 Synced DB for ${member.user.tag}`);
+        log.action(`UPDATE USER DB`, `🔄 Synced DB for ${member.user.tag}`);
     } catch (error) {
-        console.error(`❌ Failed to update DB for ${member.user.tag}: ${error}`);
+        log.error(`UPDATE USER DB`, `❌ Failed to update DB for ${member.user.tag}: ${error.message}`, error);
     }
 }
