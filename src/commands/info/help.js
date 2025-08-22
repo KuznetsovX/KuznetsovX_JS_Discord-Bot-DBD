@@ -5,7 +5,9 @@ export default {
     run: async (message, args) => {
         const memberRoles = message.member.roles.cache.map(r => r.id);
 
-        // If user typed "!help <command>"
+        const mainPrefix = config.PREFIXES[0];
+        const allPrefixesFooter = `Available prefixes: ${config.PREFIXES.join(' OR ')}`;
+
         if (args.length > 0) {
             const input = args[0].toLowerCase();
 
@@ -28,25 +30,26 @@ export default {
                 .setTitle(`📖 Help: ${found.label}`)
                 .addFields(
                     { name: 'Description', value: found.description || 'None' },
-                    { name: 'Usage', value: `${config.PREFIX}${found.usage}`, inline: true },
-                    { name: 'Aliases', value: found.aliases.join(', '), inline: true },
+                    { name: 'Usage', value: `\`${mainPrefix}${found.usage}\``, inline: true },
+                    { name: 'Aliases', value: found.aliases.map(a => `\`${a}\``).join(', '), inline: true },
                     { name: 'Permissions', value: found.permissions.length ? found.permissions.map(r => `<@&${r}>`).join(', ') : 'Everyone' }
                 )
+                .setFooter({ text: allPrefixesFooter })
                 .setColor('Purple');
 
             return message.reply({ embeds: [embed] });
         }
 
-        // Otherwise list all commands user can access
         const embed = new EmbedBuilder()
             .setTitle('📖 Command List')
-            .setDescription(`Use \`${config.PREFIX}help <command>\` to get more info.`)
+            .setDescription(`Use \`${mainPrefix}help <command>\` to get more info.`)
+            .setFooter({ text: allPrefixesFooter })
             .setColor('Purple');
 
         for (const [categoryName, categoryCommands] of Object.entries(config.commands)) {
             const list = Object.values(categoryCommands)
                 .filter(cmd => cmd.permissions.length === 0 || cmd.permissions.some(r => memberRoles.includes(r)))
-                .map(cmd => `\`${config.PREFIX}${cmd.aliases[0]}\` - ${cmd.description}`)
+                .map(cmd => `\`${mainPrefix}${cmd.aliases[0]}\` - ${cmd.description}`)
                 .join('\n');
 
             if (list) {

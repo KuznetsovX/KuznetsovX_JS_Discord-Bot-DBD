@@ -44,26 +44,24 @@ export default function messageCreate(client) {
 
         const content = message.content.trim();
 
-        // Ignore messages not starting with global prefix
-        if (!content.startsWith(config.PREFIX)) return;
+        const usedPrefix = config.PREFIXES.find(prefix => content.startsWith(prefix));
+        if (!usedPrefix) return;
 
-        const args = content.slice(config.PREFIX.length).trim().split(/\s+/);
+        const args = content.slice(usedPrefix.length).trim().split(/\s+/);
         const command = args.shift().toLowerCase();
 
         const match = aliasMap.get(command);
         if (!match) return;
 
-        // Log command attempt
-        log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${config.PREFIX}${command}" with args: [${args.join(' ')}]`);
+        log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${usedPrefix}${command}" with args: [${args.join(' ')}]`);
 
-        // Check permissions before running command
         if (!hasPermission(message.member, match.permissions)) {
-            log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${config.PREFIX}${command}" but lacks permissions`);
+            log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${usedPrefix}${command}" but lacks permissions`);
             return message.reply('❌ You do not have permission to use this command.');
         }
 
         try {
-            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${config.PREFIX}${command}"`);
+            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${command}"`);
 
             if (match.delete) {
                 await message.delete().catch(err => {
@@ -71,10 +69,9 @@ export default function messageCreate(client) {
                 });
             }
 
-            // Run the command
             await match.handler.run(message, args);
         } catch (error) {
-            log.error(`${match.label}`, `Error in "${config.PREFIX}${command}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
+            log.error(`${match.label}`, `Error in "${usedPrefix}${command}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
             await message.reply('❌ An error occurred while executing this command.');
         }
     });
