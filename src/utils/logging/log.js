@@ -10,36 +10,50 @@ const formatTimestamp = () => {
     return `${date} ${time}`;
 };
 
+// ANSI color codes
+const colors = {
+    reset: "\x1b[0m",
+    blue: "\x1b[34m",
+    yellow: "\x1b[33m",
+    red: "\x1b[31m",
+    magenta: "\x1b[35m",
+    gray: "\x1b[90m",
+};
+
 // Centralized log utility
 const log = {
-    // Generic logger used internally
     _log: (level, label, msg, err = null) => {
-        const header = `[${level.toUpperCase()} - ${label.toUpperCase()}]`;
-        const message = `${header} ${formatTimestamp()} — ${msg}`;
+        let color, icon;
         switch (level.toLowerCase()) {
-            case 'info':
-                console.log(message);
-                break;
-            case 'warn':
-                console.warn(message);
-                break;
-            case 'error':
-                console.error(message);
-                if (err) console.error(err); // Log error stack if provided
-                break;
             case 'action':
-                console.log(message);
-                break;
+                color = colors.magenta; icon = '⚡'; break;
+            case 'info':
+                color = colors.blue; icon = '❕'; break;
+            case 'warn':
+                color = colors.yellow; icon = '🚧'; break;
+            case 'error':
+                color = colors.red; icon = '🛑'; break;
             default:
-                console.log(message);
+                color = colors.reset; icon = '🔹';
+        }
+
+        const header = `${color}[${icon} ${label.toUpperCase()}]${colors.reset}`;
+        const timestamp = `${colors.gray}${formatTimestamp()}${colors.reset}`;
+        const message = `${header} ${timestamp} — ${msg}`;
+
+        switch (level.toLowerCase()) {
+            case 'action': console.log(message); break;
+            case 'info': console.log(message); break;
+            case 'warn': console.warn(message); break;
+            case 'error': console.error(message); if (err) console.error(err); break;
+            default: console.log(message);
         }
     },
 
-    // Convenience methods
+    action: (label, msg) => log._log('action', label, msg),
     info: (label, msg) => log._log('info', label, msg),
     warn: (label, msg) => log._log('warn', label, msg),
     error: (label, msg, err) => log._log('error', label, msg, err),
-    action: (label, msg) => log._log('action', label, msg),
 };
 
 export default log;
