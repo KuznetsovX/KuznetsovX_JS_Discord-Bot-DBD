@@ -4,27 +4,27 @@ function sleep(ms) {
 
 export default {
     run: async (message, args) => {
-        const author = message.member;
-
-        const arg = args?.[0]?.toLowerCase();
-        if (!arg) {
-            return message.channel.send(`❌ ${author}, please specify how many messages to delete or "all".`);
-        }
-
-        let deleteAll = false;
-        let target = 0;
-
-        if (arg === 'all') {
-            deleteAll = true;
-        } else if (!isNaN(arg)) {
-            target = Math.max(1, parseInt(arg, 10));
-        } else {
-            return message.channel.send(`❌ ${author}, specify a number or "all".`);
-        }
-
-        let totalDeleted = 0;
-
         try {
+            const author = message.member;
+
+            const arg = args?.[0]?.toLowerCase();
+            if (!arg) {
+                return message.channel.send(`❌ ${author}, please specify how many messages to delete or "all".`);
+            }
+
+            let deleteAll = false;
+            let target = 0;
+
+            if (arg === 'all') {
+                deleteAll = true;
+            } else if (!isNaN(arg)) {
+                target = Math.max(1, parseInt(arg, 10));
+            } else {
+                return message.channel.send(`❌ ${author}, specify a number or "all".`);
+            }
+
+            let totalDeleted = 0;
+
             if (deleteAll) {
                 while (true) {
                     const deleted = await message.channel.bulkDelete(100, true);

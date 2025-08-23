@@ -9,11 +9,12 @@ export default {
                 return message.channel.send('📭 No users found in the database.');
             }
 
-            const entries = users.map(u =>
-                `${u.username} (${u.userId}) — Warnings: ${u.warnings || 0} — ${u.roles?.split(', ').map(r => r.split(' (')[0]).join(', ') || 'No roles'}`
-            );
+            const entries = users.map(u => {
+                const roles = u.roles?.split(', ').map(r => r.split(' (')[0]).join(', ') || 'No roles';
+                return `${u.username} (${u.userId}) — Warnings: ${u.warnings || 0} — ${roles}`;
+            });
 
-            // Split into message-safe chunks
+            // Send in message-safe chunks
             let chunk = '';
             for (const entry of entries) {
                 if ((chunk + entry + '\n').length > 1900) {
@@ -23,13 +24,12 @@ export default {
                 chunk += entry + '\n';
             }
 
-            // Send the last chunk if any
             if (chunk.length > 0) {
                 await message.channel.send(`\`\`\`\n${chunk}\n\`\`\``);
             }
         } catch (error) {
             await message.channel.send('❌ Something went wrong while listing users.');
-            throw error;
+            throw new Error(`Failed to list users: ${error.message}`);
         }
     }
 };

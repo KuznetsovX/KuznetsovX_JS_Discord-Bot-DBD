@@ -3,16 +3,17 @@ import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
-        const mentioned = message.mentions.members.first();
-        if (!mentioned) {
-            return message.reply('❌ Please mention a user to unmute.');
-        }
-
-        if (!mentioned.roles.cache.has(config.ROLES.MUTED)) {
-            return message.reply('❌ User is not muted.');
-        }
-
         try {
+            const mentioned = message.mentions.members.first();
+
+            if (!mentioned) {
+                return message.reply('❌ Please mention a user to unmute.');
+            }
+
+            if (!mentioned.roles.cache.has(config.ROLES.MUTED)) {
+                return message.reply('❌ User is not muted.');
+            }
+
             await mentioned.roles.remove(config.ROLES.MUTED);
             await syncUserToDB(mentioned);
 
@@ -31,16 +32,14 @@ export default {
                     try {
                         await mentioned.voice.setChannel(originalChannel);
                     } catch (moveBackError) {
-                        throw new Error(
-                            `Failed to return ${mentioned.user.tag} to original voice channel: ${moveBackError.message}`
-                        );
+                        throw new Error(`Failed to return user to original voice channel: ${moveBackError.message}`);
                     }
                 }, 1000);
             }
 
-            await message.reply(`🔊 User has been unmuted.`);
+            return message.reply(`🔊 User has been unmuted.`);
         } catch (error) {
-            throw new Error(`Failed to unmute ${mentioned.user.tag}: ${error.message}`);
+            throw new Error(`Failed to unmute user: ${error.message}`);
         }
     }
 };

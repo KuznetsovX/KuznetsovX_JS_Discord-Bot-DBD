@@ -2,25 +2,25 @@ const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
 
 export default {
     run: async (message) => {
-        const author = message.member;
-
-        const args = message.content.trim().split(/\s+/);
-        const arg = args[1]?.toLowerCase();
-        if (!arg) {
-            return message.channel.send(`❌ ${author}, please specify how many old messages to delete (e.g., \`!clearold 50\`) or use "all".`);
-        }
-
-        let limit;
-        if (arg === 'all') {
-            limit = Infinity;
-        } else if (!isNaN(arg)) {
-            limit = parseInt(arg, 10);
-            if (limit <= 0) return message.channel.send(`❌ ${author}, specify a positive number of messages, or use "all".`);
-        } else {
-            return message.channel.send(`❌ ${author}, specify a number or "all".`);
-        }
-
         try {
+            const author = message.member;
+
+            const args = message.content.trim().split(/\s+/);
+            const arg = args[1]?.toLowerCase();
+            if (!arg) {
+                return message.channel.send(`❌ ${author}, please specify how many old messages to delete (e.g., \`!clearold 50\`) or use "all".`);
+            }
+
+            let limit;
+            if (arg === 'all') {
+                limit = Infinity;
+            } else if (!isNaN(arg)) {
+                limit = parseInt(arg, 10);
+                if (limit <= 0) return message.channel.send(`❌ ${author}, specify a positive number of messages, or use "all".`);
+            } else {
+                return message.channel.send(`❌ ${author}, specify a number or "all".`);
+            }
+
             let deleted = 0;
             let lastId = null;
 

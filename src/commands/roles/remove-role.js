@@ -4,33 +4,32 @@ import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js
 
 export default {
     run: async (message) => {
-        const author = message.member;
-
-        const mentioned = message.mentions.members.first();
-        if (!mentioned) {
-            return message.channel.send(`❌ ${author}, please mention a user to remove a role from.`);
-        }
-
-        const mentionedRole = message.mentions.roles.first();
-        if (!mentionedRole) {
-            return message.channel.send(`❌ ${author}, please mention a role to remove.`);
-        }
-
-        if (!mentioned.roles.cache.has(mentionedRole.id)) {
-            return message.channel.send(`⚠️ ${author}, user does not have this role.`);
-        }
-
-        const authorHighest = author.roles.highest;
-        if (mentionedRole.position >= authorHighest.position) {
-            return message.channel.send(`❌ ${author}, you cannot remove a role equal to or higher than your highest role.`);
-        }
-
-        const botMember = message.guild.members.me;
-        if (!botMember || mentionedRole.position >= botMember.roles.highest.position) {
-            return message.channel.send(`❌ ${author}, I do not have permission to remove that role.`);
-        }
-
         try {
+            const author = message.member;
+            const mentioned = message.mentions.members.first();
+            if (!mentioned) {
+                return message.channel.send(`❌ ${author}, please mention a user to remove a role from.`);
+            }
+
+            const mentionedRole = message.mentions.roles.first();
+            if (!mentionedRole) {
+                return message.channel.send(`❌ ${author}, please mention a role to remove.`);
+            }
+
+            if (!mentioned.roles.cache.has(mentionedRole.id)) {
+                return message.channel.send(`⚠️ ${author}, user does not have this role.`);
+            }
+
+            const authorHighest = author.roles.highest;
+            if (mentionedRole.position >= authorHighest.position) {
+                return message.channel.send(`❌ ${author}, you cannot remove a role equal to or higher than your highest role.`);
+            }
+
+            const botMember = message.guild.members.me;
+            if (!botMember || mentionedRole.position >= botMember.roles.highest.position) {
+                return message.channel.send(`❌ ${author}, I do not have permission to remove that role.`);
+            }
+
             await mentioned.roles.remove(mentionedRole);
             await syncUserToDB(mentioned);
 
@@ -41,9 +40,9 @@ export default {
                 }
             }
 
-            await message.channel.send(`✅ ${author}, role was successfully removed from the user.`);
+            return message.channel.send(`✅ ${author}, role was successfully removed from the user.`);
         } catch (error) {
-            throw new Error(`Failed to remove role ${mentionedRole.name} from ${mentioned.user.tag}: ${error.message}`);
+            throw new Error(`Failed to remove role ${message.mentions.roles.first()?.name || 'unknown'} from ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`);
         }
     }
 };

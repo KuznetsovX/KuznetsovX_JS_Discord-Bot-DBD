@@ -3,14 +3,14 @@ import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
-        const member = message.member;
-
-        const role = message.guild.roles.cache.get(config.ROLES.DUELIST);
-        if (!role) {
-            return message.reply(`❌ ${member}, I could not find the duelist role.`);
-        }
-
         try {
+            const member = message.member;
+            const role = message.guild.roles.cache.get(config.ROLES.DUELIST);
+
+            if (!role) {
+                return message.reply(`❌ ${member}, I could not find the duelist role.`);
+            }
+
             if (member.roles.cache.has(config.ROLES.DUELIST)) {
                 await member.roles.remove(config.ROLES.DUELIST);
                 await message.reply(`🚫 ${member} no longer wishes to participate in 1v1's.`);
@@ -21,7 +21,7 @@ export default {
 
             await syncUserToDB(member);
         } catch (error) {
-            throw new Error(`Failed to toggle duelist role for ${member.user.tag}: ${error.message}`);
+            throw new Error(`Failed to toggle duelist role for ${message.member.user.tag}: ${error.message}`);
         }
     }
 };
