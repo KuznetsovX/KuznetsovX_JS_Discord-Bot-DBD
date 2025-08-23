@@ -9,7 +9,9 @@ export default {
                 return message.channel.send('📭 No users found in the database.');
             }
 
-            const entries = users.map(u => `${u.username} (${u.userId}) — ${u.roles}`);
+            const entries = users.map(u =>
+                `${u.username} (${u.userId}) — Warnings: ${u.warnings || 0} — ${u.roles?.split(', ').map(r => r.split(' (')[0]).join(', ') || 'No roles'}`
+            );
 
             // Split into message-safe chunks
             let chunk = '';

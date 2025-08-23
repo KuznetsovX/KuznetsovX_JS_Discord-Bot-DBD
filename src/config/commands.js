@@ -89,6 +89,24 @@ const commands = {
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
             delete: false,
         },
+        unwarnUser: {
+            file: '../commands/moderation/unwarn-user.js',
+            label: 'Unwarn User',
+            description: 'Removes a warning from a user.',
+            aliases: ['unwarn'],
+            usage: 'unwarn @user',
+            permissions: [ROLES.ADMIN],
+            delete: false,
+        },
+        warnUser: {
+            file: '../commands/moderation/warn-user.js',
+            label: 'Warn User',
+            description: 'Issues a warning to a user.',
+            aliases: ['warn'],
+            usage: 'warn @user [reason]',
+            permissions: [ROLES.ADMIN],
+            delete: false,
+        },
     },
     roles: {
         addRole: {

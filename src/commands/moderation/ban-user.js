@@ -1,3 +1,5 @@
+import { removeUserFromDB } from '../../db/utils/remove-user-from-db.js';
+
 export default {
     run: async (message) => {
         const args = message.content.trim().split(/\s+/);
@@ -12,6 +14,7 @@ export default {
 
             try {
                 await mentioned.ban();
+                await removeUserFromDB(mentioned);
                 await message.reply(`🔨 User was banned from the server.`);
             } catch (error) {
                 throw new Error(`Failed to ban ${mentioned.user.tag}: ${error.message}`);
@@ -21,6 +24,7 @@ export default {
 
             try {
                 await message.guild.bans.create(userId);
+                await removeUserFromDB(mentioned);
                 await message.reply(`🔨 User was banned from the server.`);
             } catch (error) {
                 throw new Error(`Failed to ban user by ID ${userId}: ${error.message}`);
