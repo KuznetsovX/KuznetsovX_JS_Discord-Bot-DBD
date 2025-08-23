@@ -4,6 +4,8 @@ import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js
 
 export default {
     run: async (message) => {
+        const author = message.member;
+
         const mentioned = message.mentions.members.first();
         if (!mentioned) {
             return message.channel.send(`❌ ${author}, please mention a user to remove a role from.`);
