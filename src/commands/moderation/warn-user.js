@@ -9,17 +9,33 @@ export default {
             const mentioned = message.mentions.members.first();
             if (!mentioned) return message.reply('❌ Please mention a user to warn.');
 
+            const authorMember = message.member;
+            const isAdmin = authorMember.roles.cache.has(config.ROLES.ADMIN);
+
             if (mentioned.user.bot || mentioned.roles.cache.has(config.ROLES.ADMIN)) {
                 return message.reply('⚠️ Cannot warn admins or bots.');
             }
 
+            if (!isAdmin) {
+                const authorHighestRole = authorMember.roles.highest.position;
+                const mentionedHighestRole = mentioned.roles.highest.position;
+                if (mentionedHighestRole >= authorHighestRole) {
+                    return message.reply('⚠️ You cannot warn users with the same or higher roles.');
+                }
+            }
+
             const reason = args.slice(1).join(' ') || 'No reason provided';
             const maxWarns = config.commands.moderation.warnUser.warns;
+            const moderatorLimit = Math.min(2, maxWarns - 1);
 
             const [user] = await User.findOrCreate({
                 where: { userId: mentioned.id },
                 defaults: { username: mentioned.user.tag, warnings: 0 }
             });
+
+            if (!isAdmin && user.warnings >= moderatorLimit) {
+                return message.reply(`⚠️ You cannot give more than ${moderatorLimit} warnings. Only admins can give further warnings.`);
+            }
 
             user.warnings += 1;
             await user.save();

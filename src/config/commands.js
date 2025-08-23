@@ -95,7 +95,7 @@ const commands = {
             description: 'Removes a warning from a user.',
             aliases: ['unwarn'],
             usage: 'unwarn @user',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
             delete: false,
         },
         warnUser: {
@@ -104,7 +104,7 @@ const commands = {
             description: 'Issues a warning to a user.',
             aliases: ['warn'],
             usage: 'warn @user [reason]',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
             delete: false,
             warns: 4, // Maximum amount of warnings before action is taken
         },

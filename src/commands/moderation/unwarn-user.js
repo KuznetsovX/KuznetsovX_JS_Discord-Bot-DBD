@@ -1,4 +1,5 @@
 import { User } from '../../db/user-model.js';
+import config from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
@@ -9,9 +10,27 @@ export default {
                 return message.reply('❌ Please mention a user to unwarn.');
             }
 
+            const authorMember = message.member;
+            const isAdmin = authorMember.roles.cache.has(config.ROLES.ADMIN);
+
             const user = await User.findOne({ where: { userId: mentioned.id } });
             if (!user || user.warnings === 0) {
                 return message.reply(`⚠️ User **${mentioned.user.tag}** has no warnings to remove.`);
+            }
+
+            const maxWarns = config.commands.moderation.warnUser.warns;
+            const moderatorLimit = maxWarns - 1;
+
+            if (!isAdmin && user.warnings >= moderatorLimit) {
+                return message.reply(`⚠️ Only admins can remove warnings from users with ${moderatorLimit} or more warnings.`);
+            }
+
+            if (!isAdmin) {
+                const authorHighestRole = authorMember.roles.highest.position;
+                const mentionedHighestRole = mentioned.roles.highest.position;
+                if (mentionedHighestRole >= authorHighestRole) {
+                    return message.reply('⚠️ You cannot remove warnings from users with the same or higher roles.');
+                }
             }
 
             user.warnings -= 1;
