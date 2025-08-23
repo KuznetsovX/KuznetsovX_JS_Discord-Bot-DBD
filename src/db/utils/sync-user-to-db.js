@@ -19,8 +19,8 @@ export async function syncUserToDB(member) {
             username: member.user.tag,
             roles: rolesString,
         });
-        log.action(`UPDATE USER DB`, `🔄 Synced DB for ${member.user.tag}`);
+        log.action(`SYNC USER TO DB`, `🔄 Synced DB for ${member.user.tag}`);
     } catch (error) {
-        log.error(`UPDATE USER DB`, `❌ Failed to update DB for ${member.user.tag}: ${error.message}`, error);
+        log.error(`SYNC USER TO DB`, `❌ Failed to sync DB for ${member.user.tag}: ${error.message}`, error);
     }
 }
