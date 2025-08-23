@@ -20,6 +20,11 @@ export const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    warnings: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+    },
 });
 
 export { sequelize };

@@ -3,7 +3,7 @@ import log from '../utils/logging/log.js';
 
 export async function syncDatabase() {
     try {
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });
         log.action(`DATABASE`, `✅ Database schema synchronized successfully.`);
     } catch (error) {
         log.error(`DATABASE`, `❌ Error synchronizing database schema: ${error.message}`, error);
