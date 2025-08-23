@@ -3,7 +3,7 @@ import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
 import { restoreUserRoles } from '../utils/roles/restore-user-roles.js';
-import { updateUserInDB } from '../db/utils/update-user-db.js';
+import { syncUserToDB } from '../db/utils/sync-user-to-db.js';
 
 const assignDefaultRole = async (member) => {
     const role = member.guild.roles.cache.get(config.ROLES.SPY);
@@ -34,7 +34,7 @@ const restoreRoles = async (member) => {
 
 const syncUser = async (member) => {
     try {
-        await updateUserInDB(member);
+        await syncUserToDB(member);
         log.action('GUILD MEMBER ADD', `✅ Synced ${member.user.tag} to the database.`);
         return true;
     } catch (error) {

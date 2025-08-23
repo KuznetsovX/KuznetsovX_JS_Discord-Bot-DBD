@@ -1,6 +1,6 @@
 import config from '../../config/index.js';
 import log from '../logging/log.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 /**
  * Function to remove lower-tier roles and keep only the highest one for each member
@@ -23,7 +23,7 @@ export default async function manageTierRoles(member) {
             // Remove lower-tier roles
             await member.roles.remove(rolesToRemove);
             log.action('AUTO MANAGE TIER ROLES', `✅ Removed lower-tier roles from ${member.user.tag}, keeping only ${highestRole.name}.`);
-            await updateUserInDB(member);
+            await syncUserToDB(member);
         }
     } catch (error) {
         log.error('AUTO MANAGE TIER ROLES', `❌ Failed to manage tier roles for ${member.user.tag}: ${error}`);

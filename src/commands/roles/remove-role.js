@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
 
 export default {
@@ -30,7 +30,7 @@ export default {
 
         try {
             await mentioned.roles.remove(mentionedRole);
-            await updateUserInDB(mentioned);
+            await syncUserToDB(mentioned);
 
             if (config.ROLE_TIERS.includes(mentionedRole.id)) {
                 const hasTierRole = config.ROLE_TIERS.some(roleId => mentioned.roles.cache.has(roleId));

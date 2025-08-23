@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import manageTierRoles from '../../utils/roles/auto-manage-tier-roles.js';
 
 export default {
@@ -32,7 +32,7 @@ export default {
 
         try {
             await mentioned.roles.add(mentionedRole);
-            await updateUserInDB(mentioned);
+            await syncUserToDB(mentioned);
 
             if (config.ROLE_TIERS.includes(mentionedRole.id)) {
                 await manageTierRoles(mentioned);

@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import log from '../logging/log.js';
 
 /**
@@ -29,7 +29,7 @@ export default async function assignDefaultRole(guild) {
             member.roles.add(spyRole)
                 .then(async () => {
                     log.action('AUTO ASSIGN DEFAULT ROLE', `✅ Auto-assigned "Foreign Spy" to ${member.user.tag}.`);
-                    await updateUserInDB(member);
+                    await syncUserToDB(member);
                 })
                 .catch(error => {
                     log.error('AUTO ASSIGN DEFAULT ROLE', `❌ Failed to assign "Foreign Spy" to ${member.user.tag}: ${error}`);

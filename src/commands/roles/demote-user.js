@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
@@ -27,7 +27,7 @@ export default {
         try {
             await mentioned.roles.remove(oldRoleId);
             await mentioned.roles.add(newRoleId);
-            await updateUserInDB(mentioned);
+            await syncUserToDB(mentioned);
 
             await message.channel.send(`🔽 ${author}, user was successfully demoted.`);
         } catch (error) {

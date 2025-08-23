@@ -5,7 +5,7 @@ import log from '../../utils/logging/log.js';
  * Updates a single user's roles and username in the database
  * @param {GuildMember} member - The Discord guild member
  */
-export async function updateUserInDB(member) {
+export async function syncUserToDB(member) {
     if (!member || !member.user) return;
 
     const rolesString = member.roles.cache

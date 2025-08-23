@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
@@ -14,7 +14,7 @@ export default {
 
         try {
             await mentioned.roles.remove(config.ROLES.MUTED);
-            await updateUserInDB(mentioned);
+            await syncUserToDB(mentioned);
 
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {

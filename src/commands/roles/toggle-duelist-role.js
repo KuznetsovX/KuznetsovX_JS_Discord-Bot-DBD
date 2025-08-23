@@ -1,5 +1,5 @@
 import config from '../../config/index.js';
-import { updateUserInDB } from '../../db/utils/update-user-db.js';
+import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
@@ -19,7 +19,7 @@ export default {
                 await message.reply(`⚔️ ${member} is ready for 1v1's!`);
             }
 
-            await updateUserInDB(member);
+            await syncUserToDB(member);
         } catch (error) {
             throw new Error(`Failed to toggle duelist role for ${member.user.tag}: ${error.message}`);
         }
