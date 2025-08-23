@@ -7,6 +7,7 @@ import { syncDatabase } from './db/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
 import messageCreate from './events/message-create.js';
 import ready from './events/ready.js';
+import log from './utils/logging/log.js';
 
 const client = new Client({
     intents: [
@@ -41,10 +42,10 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 const closeDB = async () => {
     try {
         await sequelize.close();
-        console.log('✅ Database connection closed.');
+        log.action('DATABASE', '✅ Database connection closed.');
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error closing database connection:', error);
+        log.error('DATABASE', `❌ Error closing database connection: ${error.message}`, error);
         process.exit(1);
     }
 };
