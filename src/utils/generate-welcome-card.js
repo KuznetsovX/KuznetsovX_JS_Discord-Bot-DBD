@@ -16,7 +16,7 @@ export default async function generateWelcomeCard(member) {
     const ctx = canvas.getContext('2d');
 
     // Draw background image
-    const bgPath = path.join(__dirname, '../assets/dbd-exe_bg.png');
+    const bgPath = path.join(__dirname, '../../assets/dbd-exe_bg.png');
     const background = await loadImage(bgPath);
     ctx.drawImage(background, 0, 0, width, height);
 
