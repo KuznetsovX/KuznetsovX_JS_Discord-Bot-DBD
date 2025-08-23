@@ -13,7 +13,7 @@ export default {
         }
 
         if (mentioned.roles.cache.has(config.ROLES.MUTED)) {
-            return message.reply('⚠️ That user is already muted.');
+            return message.reply('⚠️ User is already muted.');
         }
 
         try {
@@ -40,7 +40,7 @@ export default {
                 }, 1000);
             }
 
-            await message.reply(`🔇 ${mentioned} has been muted.`);
+            await message.reply(`🔇 User has been muted.`);
         } catch (error) {
             throw new Error(`Failed to mute ${mentioned.user.tag}: ${error.message}`);
         }

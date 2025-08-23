@@ -7,12 +7,12 @@ export default {
 
         if (mentioned) {
             if (!mentioned.bannable) {
-                return message.reply('❌ I cannot ban this user. Do I have the right permissions?');
+                return message.reply('❌ I cannot ban this user.');
             }
 
             try {
                 await mentioned.ban();
-                await message.reply(`🔨 ${mentioned} was banned from the server.`);
+                await message.reply(`🔨 User was banned from the server.`);
             } catch (error) {
                 throw new Error(`Failed to ban ${mentioned.user.tag}: ${error.message}`);
             }
@@ -21,7 +21,7 @@ export default {
 
             try {
                 await message.guild.bans.create(userId);
-                await message.reply(`🔨 User with ID \`${userId}\` was banned from the server.`);
+                await message.reply(`🔨 User was banned from the server.`);
             } catch (error) {
                 throw new Error(`Failed to ban user by ID ${userId}: ${error.message}`);
             }

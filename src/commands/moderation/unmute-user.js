@@ -9,7 +9,7 @@ export default {
         }
 
         if (!mentioned.roles.cache.has(config.ROLES.MUTED)) {
-            return message.reply('❌ This user is not muted.');
+            return message.reply('❌ User is not muted.');
         }
 
         try {
@@ -38,7 +38,7 @@ export default {
                 }, 1000);
             }
 
-            await message.reply(`🔊 ${mentioned} has been unmuted.`);
+            await message.reply(`🔊 User has been unmuted.`);
         } catch (error) {
             throw new Error(`Failed to unmute ${mentioned.user.tag}: ${error.message}`);
         }

@@ -6,12 +6,12 @@ export default {
         }
 
         if (!mentioned.kickable) {
-            return message.reply('❌ I cannot kick this user. Do I have the right permissions?');
+            return message.reply('❌ I cannot kick this user.');
         }
 
         try {
             await mentioned.kick();
-            await message.reply(`🚪 ${mentioned} was kicked from the server.`);
+            await message.reply(`🚪 User was kicked from the server.`);
         } catch (error) {
             throw new Error(`Failed to kick ${mentioned.user.tag}: ${error.message}`);
         }
