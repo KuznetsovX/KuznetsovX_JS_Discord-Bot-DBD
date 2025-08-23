@@ -7,6 +7,11 @@ const sequelize = new Sequelize({
 });
 
 export const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     userId: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -25,6 +30,8 @@ export const User = sequelize.define('User', {
         defaultValue: 0,
         allowNull: false,
     },
+}, {
+    timestamps: true,
 });
 
 export { sequelize };
