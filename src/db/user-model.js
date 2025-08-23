@@ -4,18 +4,22 @@ const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './data/botdata.sqlite',
     logging: false,
+    dialectOptions: {
+        timeout: 10000
+    }
 });
 
 export const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
+        allowNull: true,
+        unique: true,
     },
     userId: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        primaryKey: true,
     },
     username: {
         type: DataTypes.STRING,
