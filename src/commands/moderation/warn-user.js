@@ -13,6 +13,7 @@ export default {
         }
 
         const reason = args.slice(1).join(' ') || 'No reason provided';
+        const maxWarns = config.commands.moderation.warnUser.warns;
 
         const [user] = await User.findOrCreate({
             where: { userId: mentioned.id },
@@ -23,18 +24,18 @@ export default {
         await user.save();
         await syncUserToDB(mentioned);
 
-        if (user.warnings >= 4) {
+        if (user.warnings >= maxWarns) {
             try {
-                await mentioned.ban({ reason: `Reached 4 warnings. Last reason: ${reason}` });
+                await mentioned.ban({ reason: `Reached ${maxWarns} warnings. Last reason: ${reason}` });
                 await removeUserFromDB(mentioned);
-                message.reply(`🔨 User has been banned after 4 warnings.`);
+                message.reply(`🔨 User has been banned after ${maxWarns} warnings.`);
             } catch {
                 message.reply(`❌ Failed to ban user.`);
             }
-        } else if (user.warnings === 3) {
+        } else if (user.warnings === maxWarns - 1) {
             try {
-                await mentioned.kick({ reason: `Reached 3 warnings. Last reason: ${reason}` });
-                message.reply(`🚪 User has been kicked after 3 warnings.`);
+                await mentioned.kick({ reason: `Reached ${maxWarns - 1} warnings. Last reason: ${reason}` });
+                message.reply(`🚪 User has been kicked after ${maxWarns - 1} warnings.`);
             } catch {
                 message.reply(`❌ Failed to kick user.`);
             }

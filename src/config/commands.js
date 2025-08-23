@@ -106,6 +106,7 @@ const commands = {
             usage: 'warn @user [reason]',
             permissions: [ROLES.ADMIN],
             delete: false,
+            warns: 4, // Maximum amount of warnings before action is taken
         },
     },
     roles: {
