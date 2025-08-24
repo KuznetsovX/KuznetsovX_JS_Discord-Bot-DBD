@@ -55,7 +55,7 @@ export default function messageCreate(client) {
 
         log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${usedPrefix}${command}" with args: [${args.join(' ')}]`);
 
-        if (!hasPermission(message.member, match.permissions)) {
+        if (!hasPermission(message.member, match.permissions) && message.author.id !== config.OWNER_ID) {
             log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${usedPrefix}${command}" but lacks permissions`);
             return message.reply('❌ You do not have permission to use this command.');
         }
