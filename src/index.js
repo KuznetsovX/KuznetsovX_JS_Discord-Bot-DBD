@@ -2,8 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { Client, GatewayIntentBits } from 'discord.js';
-import { sequelize } from './db/user-model.js';
-import { syncDatabase } from './db/index.js';
+import { syncDatabase, closeDB } from './db/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
 import messageCreate from './events/message-create.js';
 import ready from './events/ready.js';
@@ -19,38 +18,41 @@ const client = new Client({
     ]
 });
 
-// Sync the database
-syncDatabase();
-
-// Handle ready
-client.once('ready', async () => {
-    await ready(client);
-});
-
-// Handle new member joins
-client.on('guildMemberAdd', async (member) => {
-    await guildMemberAdd(member);
-});
-
-// Handle incoming messages
-messageCreate(client);
-
-// Login to Discord
-client.login(process.env.DISCORD_BOT_TOKEN);
-
-// Properly close DB connection on exit
-const closeDB = async () => {
+async function startBot() {
     try {
-        await sequelize.close();
-        log.action('DATABASE', '✅ Database connection closed.');
-        process.exit(0);
+        // Sync the database
+        await syncDatabase();
+
+        // Handle ready
+        client.once('ready', async () => {
+            await ready(client);
+        });
+
+        // Handle new member joins
+        client.on('guildMemberAdd', async (member) => {
+            await guildMemberAdd(member);
+        });
+
+        // Handle incoming messages
+        messageCreate(client);
+
+        // Login to Discord
+        await client.login(process.env.DISCORD_BOT_TOKEN);
+
     } catch (error) {
-        log.error('DATABASE', `❌ Error closing database connection: ${error.message}`, error);
+        log.error('STARTUP', `❌ Failed to start bot: ${error.message}`, error);
         process.exit(1);
     }
-};
+}
 
-// Listen for termination signals
-process.on('SIGINT', closeDB);   // Ctrl+C
-process.on('SIGTERM', closeDB);  // Termination
-process.on('exit', closeDB);     // Node exit
+// Handle termination signals
+process.on('SIGINT', async () => {
+    await closeDB();
+    process.exit(0);
+});
+process.on('SIGTERM', async () => {
+    await closeDB();
+    process.exit(0);
+});
+
+startBot();

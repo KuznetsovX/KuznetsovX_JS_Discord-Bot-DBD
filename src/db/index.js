@@ -52,3 +52,15 @@ export async function getUserRoles(userId) {
         return [];
     }
 }
+
+// Properly close DB connection on exit
+export const closeDB = async () => {
+    try {
+        await sequelize.close();
+        log.action('DATABASE', '✅ Database connection closed.');
+        process.exit(0);
+    } catch (error) {
+        log.error('DATABASE', `❌ Error closing database connection: ${error.message}`, error);
+        process.exit(1);
+    }
+};
