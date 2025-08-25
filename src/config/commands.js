@@ -2,8 +2,8 @@ import { ROLES } from './roles.js';
 
 /**
  * Command configuration
- * Each command object should follow this structure:
- *
+ * 
+ * Essential:
  * file         - Path to the command handler file
  * label        - Display name (used in help menus)
  * description  - Short explanation of what the command does
@@ -11,6 +11,9 @@ import { ROLES } from './roles.js';
  * usage        - Example(s) of how to use the command
  * permissions  - Array of roles required to run the command (empty = everyone can use it)
  * delete       - Whether the bot should delete the user's message
+ * 
+ * Optional:
+ * warns        - Maximum number of warnings before action is taken
  */
 
 const commands = {
@@ -106,7 +109,7 @@ const commands = {
             usage: 'warn @user [reason]',
             permissions: [ROLES.ADMIN, ROLES.MODERATOR],
             delete: false,
-            warns: 4, // Maximum amount of warnings before action is taken
+            warns: 4,
         },
     },
     roles: {
