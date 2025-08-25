@@ -65,8 +65,28 @@ export default function messageCreate(client) {
 
             if (match.delete) {
                 await message.delete().catch(err => {
-                    log.warn(`${match.label}`, `Could not delete message from ${message.author.tag} (${message.author.id}): ${err.message}`);
+                    log.warn(
+                        `${match.label}`,
+                        `Could not delete message from ${message.author.tag} (${message.author.id}): ${err.message}`
+                    );
                 });
+
+                message._send = (content) => {
+                    if (typeof content === "string") {
+                        return message.channel.send(`${message.author}, ${content}`);
+                    } else {
+                        return message.channel.send({
+                            ...content,
+                            content: `${message.author}${content.content ? " " + content.content : ""}`
+                        });
+                    }
+                };
+
+            } else {
+                message._send = (content) =>
+                    message.reply({
+                        ...(typeof content === "string" ? { content } : content)
+                    });
             }
 
             await match.handler.run(message, args);

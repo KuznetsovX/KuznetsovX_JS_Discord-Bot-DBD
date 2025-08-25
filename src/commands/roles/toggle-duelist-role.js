@@ -8,15 +8,15 @@ export default {
             const role = message.guild.roles.cache.get(config.ROLES.DUELIST);
 
             if (!role) {
-                return message.reply(`❌ ${member}, I could not find the duelist role.`);
+                return message._send(`❌ I could not find the duelist role.`);
             }
 
             if (member.roles.cache.has(config.ROLES.DUELIST)) {
                 await member.roles.remove(config.ROLES.DUELIST);
-                await message.reply(`🚫 ${member} no longer wishes to participate in 1v1's.`);
+                await message._send(`🚫 You are no longer participating in 1v1's.`);
             } else {
                 await member.roles.add(config.ROLES.DUELIST);
-                await message.reply(`⚔️ ${member} is ready for 1v1's!`);
+                await message._send(`⚔️ You are now participating in 1v1's!`);
             }
 
             await syncUserToDB(member);

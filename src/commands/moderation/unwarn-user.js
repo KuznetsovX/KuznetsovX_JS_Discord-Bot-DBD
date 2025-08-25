@@ -7,7 +7,7 @@ export default {
         try {
             const mentioned = message.mentions.members.first();
             if (!mentioned) {
-                return message.reply('❌ Please mention a user to unwarn.');
+                return message._send('❌ Please mention a user to unwarn.');
             }
 
             const authorMember = message.member;
@@ -15,21 +15,21 @@ export default {
 
             const user = await User.findOne({ where: { userId: mentioned.id } });
             if (!user || user.warnings === 0) {
-                return message.reply(`⚠️ User **${mentioned.user.tag}** has no warnings to remove.`);
+                return message._send(`⚠️ User has no warnings to remove.`);
             }
 
             const maxWarns = config.commands.moderation.warnUser.warns;
             const moderatorLimit = maxWarns - 1;
 
             if (!isAdmin && user.warnings >= moderatorLimit) {
-                return message.reply(`⚠️ Only admins can remove warnings from users with ${moderatorLimit} or more warnings.`);
+                return message._send(`⚠️ Only admins can remove warnings from users with ${moderatorLimit} or more warnings.`);
             }
 
             if (!isAdmin) {
                 const authorHighestRole = authorMember.roles.highest.position;
                 const mentionedHighestRole = mentioned.roles.highest.position;
                 if (mentionedHighestRole >= authorHighestRole) {
-                    return message.reply('⚠️ You cannot remove warnings from users with the same or higher roles.');
+                    return message._send('⚠️ You cannot remove warnings from users with the same or higher roles.');
                 }
             }
 
@@ -37,7 +37,7 @@ export default {
             await user.save();
             await syncUserToDB(mentioned);
 
-            return message.reply(`✅ Removed a warning from user. Total warnings: ${user.warnings}`);
+            return message._send(`✅ Removed a warning from user. Total warnings: ${user.warnings}`);
         } catch (error) {
             throw new Error(`Failed to remove a warning: ${error.message}`);
         }

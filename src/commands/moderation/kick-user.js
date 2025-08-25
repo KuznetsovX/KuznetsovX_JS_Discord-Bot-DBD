@@ -4,15 +4,15 @@ export default {
             const mentioned = message.mentions.members.first();
 
             if (!mentioned) {
-                return message.reply('❌ Please mention a user to kick.');
+                return message._send('❌ Please mention a user to kick.');
             }
 
             if (!mentioned.kickable) {
-                return message.reply('❌ I cannot kick this user.');
+                return message._send('❌ I cannot kick this user.');
             }
 
             await mentioned.kick({ reason: `Kicked by ${message.author.tag}` });
-            return message.reply(`🚪 User was kicked from the server.`);
+            return message._send(`🚪 User was kicked from the server.`);
         } catch (error) {
             throw new Error(`Failed to kick user: ${error.message}`);
         }

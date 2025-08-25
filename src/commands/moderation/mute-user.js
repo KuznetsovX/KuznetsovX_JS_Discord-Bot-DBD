@@ -7,15 +7,15 @@ export default {
             const mentioned = message.mentions.members.first();
 
             if (!mentioned) {
-                return message.reply('❌ Please mention a user to mute.');
+                return message._send('❌ Please mention a user to mute.');
             }
 
             if (mentioned.user.bot || mentioned.roles.cache.has(config.ROLES.ADMIN)) {
-                return message.reply('⚠️ Cannot mute admins or bots.');
+                return message._send('⚠️ Cannot mute admins or bots.');
             }
 
             if (mentioned.roles.cache.has(config.ROLES.MUTED)) {
-                return message.reply('⚠️ User is already muted.');
+                return message._send('⚠️ User is already muted.');
             }
 
             await mentioned.roles.add(config.ROLES.MUTED);
@@ -39,7 +39,7 @@ export default {
                 }, 1000);
             }
 
-            return message.reply(`🔇 User has been muted.`);
+            return message._send(`🔇 User has been muted.`);
         } catch (error) {
             throw new Error(`Failed to mute user: ${error.message}`);
         }

@@ -1,11 +1,9 @@
 export default {
     run: async (message) => {
         try {
-            const author = message.member;
-
             const mentionedChannel = message.mentions.channels.first();
             if (!mentionedChannel || mentionedChannel.type !== 0) {
-                return message.channel.send(`❌ ${author}, please mention a valid text channel to post into.`);
+                return message._send(`❌ Please mention a valid text channel to post into.`);
             }
 
             const split = message.content.trim().split(' ');
@@ -13,7 +11,7 @@ export default {
             const content = split.slice(contentIndex).join(' ');
 
             if (!content) {
-                return message.channel.send(`❌ ${author}, you need to provide content to post after the channel mention.`);
+                return message._send(`❌ You need to provide content to post after the channel mention.`);
             }
 
             await mentionedChannel.send(content);

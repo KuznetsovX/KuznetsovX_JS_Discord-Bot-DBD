@@ -27,7 +27,7 @@ export default {
                 )
                 .setFooter({ text: 'User Info', iconURL: message.client.user.displayAvatarURL() });
 
-            await message.reply({ embeds: [embed] });
+            await message._send({ embeds: [embed] });
         } catch (error) {
             throw new Error(`Failed to show user info: ${error.message}`);
         }

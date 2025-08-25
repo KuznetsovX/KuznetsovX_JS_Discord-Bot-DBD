@@ -10,22 +10,22 @@ export default {
 
             if (mentioned) {
                 if (!mentioned.bannable) {
-                    return message.reply('❌ I cannot ban this user.');
+                    return message._send('❌ I cannot ban this user.');
                 }
 
                 await mentioned.ban({ reason: `Banned by ${message.author.tag}` });
                 await removeUserFromDB(mentioned);
-                return message.reply(`🔨 User was banned from the server.`);
+                return message._send(`🔨 User was banned from the server.`);
             }
 
             if (args[1] && isValidSnowflake(args[1])) {
                 const userId = args[1];
                 await message.guild.bans.create(userId, { reason: `Banned by ${message.author.tag}` });
                 await removeUserFromDB(userId);
-                return message.reply(`🔨 User was banned from the server.`);
+                return message._send(`🔨 User was banned from the server.`);
             }
 
-            return message.reply('❌ Please mention a user or provide a valid numeric user ID to ban.');
+            return message._send('❌ Please mention a user or provide a valid numeric user ID to ban.');
         } catch (error) {
             throw new Error(`Failed to ban user: ${error.message}`);
         }

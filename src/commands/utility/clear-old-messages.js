@@ -3,12 +3,10 @@ const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
 export default {
     run: async (message) => {
         try {
-            const author = message.member;
-
             const args = message.content.trim().split(/\s+/);
             const arg = args[1]?.toLowerCase();
             if (!arg) {
-                return message.channel.send(`❌ ${author}, please specify how many old messages to delete (e.g., \`!clearold 50\`) or use "all".`);
+                return message._send(`❌ Please specify how many old messages to delete (e.g., \`!clearold 50\`) or use "all".`);
             }
 
             let limit;
@@ -16,9 +14,9 @@ export default {
                 limit = Infinity;
             } else if (!isNaN(arg)) {
                 limit = parseInt(arg, 10);
-                if (limit <= 0) return message.channel.send(`❌ ${author}, specify a positive number of messages, or use "all".`);
+                if (limit <= 0) return message._send(`❌ Specify a positive number of messages, or use "all".`);
             } else {
-                return message.channel.send(`❌ ${author}, specify a number or "all".`);
+                return message._send(`❌ Specify a number or "all".`);
             }
 
             let deleted = 0;
@@ -45,10 +43,10 @@ export default {
             }
 
             if (deleted > 0) {
-                const confirmation = await message.channel.send(`🧹 ${author}, deleted ${deleted} old messages (plus the command call).`);
+                const confirmation = await message._send(`🧹 Deleted ${deleted} old messages (plus the command call).`);
                 setTimeout(() => confirmation.delete().catch(() => { }), 5000);
             } else {
-                await message.channel.send(`⚠️ ${author}, no old messages found to delete.`);
+                await message._send(`⚠️ No old messages found to delete.`);
             }
         } catch (error) {
             throw new Error(`Failed to delete old messages: ${error.message}`);

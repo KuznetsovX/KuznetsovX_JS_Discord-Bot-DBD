@@ -24,7 +24,7 @@ export default {
                 }
 
                 if (!found) {
-                    return message.reply(`❌ Command \`${input}\` not found.`);
+                    return message._send(`❌ Command \`${input}\` not found.`);
                 }
 
                 const embed = new EmbedBuilder()
@@ -38,7 +38,7 @@ export default {
                     .setFooter({ text: allPrefixesFooter })
                     .setColor('Purple');
 
-                return message.reply({ embeds: [embed] });
+                return message._send({ embeds: [embed] });
             }
 
             // Otherwise, display general command list
@@ -59,7 +59,7 @@ export default {
                 }
             }
 
-            return message.reply({ embeds: [embed] });
+            return message._send({ embeds: [embed] });
         } catch (error) {
             throw new Error(`Failed to display help: ${error.message}`);
         }

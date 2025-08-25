@@ -5,11 +5,9 @@ function sleep(ms) {
 export default {
     run: async (message, args) => {
         try {
-            const author = message.member;
-
             const arg = args?.[0]?.toLowerCase();
             if (!arg) {
-                return message.channel.send(`❌ ${author}, please specify how many messages to delete or "all".`);
+                return message._send(`❌ Please specify how many messages to delete or "all".`);
             }
 
             let deleteAll = false;
@@ -20,7 +18,7 @@ export default {
             } else if (!isNaN(arg)) {
                 target = Math.max(1, parseInt(arg, 10));
             } else {
-                return message.channel.send(`❌ ${author}, specify a number or "all".`);
+                return message._send(`❌ Specify a number or "all".`);
             }
 
             let totalDeleted = 0;
@@ -45,10 +43,10 @@ export default {
             }
 
             if (totalDeleted === 0) {
-                return message.channel.send(`⚠️ ${author}, no messages could be deleted. (Discord only bulk-deletes messages newer than 14 days.)`);
+                return message._send(`⚠️ No messages could be deleted. (Discord only bulk-deletes messages newer than 14 days.)`);
             }
 
-            const confirmation = await message.channel.send(`🧹 ${author}, deleted ${totalDeleted} messages.`);
+            const confirmation = await message._send(`🧹 Deleted ${totalDeleted} messages.`);
             setTimeout(() => confirmation.delete().catch(() => { }), 5000);
         } catch (error) {
             throw new Error(`Failed to clear messages: ${error.message}`);
