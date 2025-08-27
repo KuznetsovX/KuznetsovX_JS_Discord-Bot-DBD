@@ -13,7 +13,7 @@ export default {
                 const input = args[0].toLowerCase();
                 let found;
 
-                for (const category of Object.values(config.commands)) {
+                for (const category of Object.values(config.COMMANDS)) {
                     for (const cmd of Object.values(category)) {
                         if (cmd.aliases.map(a => a.toLowerCase()).includes(input)) {
                             found = cmd;
@@ -48,7 +48,7 @@ export default {
                 .setFooter({ text: allPrefixesFooter })
                 .setColor('Purple');
 
-            for (const [categoryName, categoryCommands] of Object.entries(config.commands)) {
+            for (const [categoryName, categoryCommands] of Object.entries(config.COMMANDS)) {
                 const list = Object.values(categoryCommands)
                     .filter(cmd => cmd.permissions.length === 0 || cmd.permissions.some(r => memberRoles.includes(r)))
                     .map(cmd => `\`${mainPrefix}${cmd.aliases[0]}\` - ${cmd.description}`)

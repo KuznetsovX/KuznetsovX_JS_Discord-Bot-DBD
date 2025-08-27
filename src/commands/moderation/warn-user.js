@@ -25,7 +25,7 @@ export default {
             }
 
             const reason = args.slice(1).join(' ') || 'No reason provided';
-            const maxWarns = config.commands.moderation.warnUser.warns;
+            const maxWarns = config.COMMANDS.moderation.warnUser.warns;
             const moderatorLimit = Math.min(2, maxWarns - 1);
 
             const [user] = await User.findOrCreate({

@@ -16,7 +16,7 @@ import { ROLES } from './roles.js';
  * warns        - Maximum number of warnings before action is taken
  */
 
-const commands = {
+const COMMANDS = {
     info: {
         help: {
             file: '../commands/info/help.js',
@@ -199,4 +199,4 @@ const commands = {
     },
 };
 
-export default commands;
+export default COMMANDS;

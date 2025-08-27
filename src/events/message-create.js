@@ -23,7 +23,7 @@ function flattenCommands(configSection) {
 
 // Load all commands
 async function registerCommands() {
-    const commands = flattenCommands(config.commands);
+    const commands = flattenCommands(config.COMMANDS);
 
     await Promise.all(commands.map(async cmd => {
         const handlerModule = await import(cmd.file);
