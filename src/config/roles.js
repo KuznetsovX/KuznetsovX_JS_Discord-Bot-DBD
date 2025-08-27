@@ -4,7 +4,6 @@
  * Essential:
  * position     - Role position in the server hierarchy
  * id           - Discord Role ID
- * emoji        - Emoji/icon representing the role
  * label        - Display name of the role (matches Discord role name)
  * description  - Explanation of what this role means or is used for
  * color        - Hex color code of the role (for UI/embeds)
@@ -18,8 +17,7 @@ const ROLES = {
     ADMIN: {
         position: 1,
         id: '1338215159289610330',
-        emoji: '⚕️',
-        label: 'For The People user',
+        label: '⚕️ For The People user ⚕️',
         description: 'Server administrator with full access.',
         color: '#a020f0',
         users: 0,
@@ -27,8 +25,7 @@ const ROLES = {
     BOT: {
         position: 2,
         id: '1369311261413867573',
-        emoji: '🐦‍⬛',
-        label: 'DBD.exe',
+        label: '🐦‍⬛ DBD.exe 🐦‍⬛',
         description: 'Automated bot account.',
         color: '#a020f0',
         users: 0,
@@ -36,8 +33,7 @@ const ROLES = {
     MODERATOR: {
         position: 3,
         id: '1405236224901517332',
-        emoji: '⚠️',
-        label: 'U-ban Evader',
+        label: '⚠️ U-ban Evader ⚠️',
         description: 'Moderators responsible for keeping order.',
         color: '#e97400',
         users: 0,
@@ -45,8 +41,7 @@ const ROLES = {
     MUTED: {
         position: 4,
         id: '1373260386979283004',
-        emoji: '🔇',
-        label: 'Muted',
+        label: '🔇 Muted 🔇',
         description: 'Users temporarily restricted from chatting.',
         color: '#505050',
         users: 0,
@@ -54,8 +49,7 @@ const ROLES = {
     TRUSTED: {
         position: 5,
         id: '1343215068254568458',
-        emoji: '🔥',
-        label: 'Fast vaulting from any angle',
+        label: '🔥 Fast vaulting from any angle 🔥',
         description: 'Trusted members of the community.',
         color: '#aa006e',
         users: 0,
@@ -64,8 +58,7 @@ const ROLES = {
     VERIFIED: {
         position: 6,
         id: '1338216499445371062',
-        emoji: '⚡',
-        label: 'Do yens pls',
+        label: '⚡ Do yens pls ⚡',
         description: 'Verified community members.',
         color: '#ffbb00',
         users: 0,
@@ -74,17 +67,15 @@ const ROLES = {
     DUELIST: {
         position: 7,
         id: '1368236287865262172',
-        emoji: '⚔️',
-        label: '1v1 ME, BOT?!',
-        description: 'Users who participate in duels.',
+        label: '⚔️ 1v1 ME, BOT?! ⚔️',
+        description: 'Users who want to participate in 1v1 games.',
         color: '#ffffff',
         users: 0,
     },
     SPY: {
         position: 8,
         id: '1338970627750760568',
-        emoji: '🥷',
-        label: 'Foreign Spy',
+        label: '🥷 Foreign Spy 🥷',
         description: 'Default role assigned to new users.',
         color: '#757575',
         users: 0,
