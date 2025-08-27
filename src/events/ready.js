@@ -18,7 +18,7 @@ export default async function ready(client) {
         return;
     }
 
-    const channel = client.channels.cache.get(CHANNELS.ADMIN.BOT);
+    const channel = client.channels.cache.get(CHANNELS.ADMIN_BOT.id);
     if (channel) {
         await channel.send('🪫 Starting up... please wait until all startup tasks are completed.');
     }

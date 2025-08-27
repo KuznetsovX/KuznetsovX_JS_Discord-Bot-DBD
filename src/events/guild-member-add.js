@@ -44,7 +44,7 @@ const syncUser = async (member) => {
 };
 
 const sendWelcomeImage = async (member) => {
-    const channel = member.guild.channels.cache.get(CHANNELS.MAIN.TEXT);
+    const channel = member.guild.channels.cache.get(CHANNELS.MAIN_TEXT.id);
 
     if (!channel) {
         log.error('GUILD MEMBER ADD', `❌ Main text channel not found.`);

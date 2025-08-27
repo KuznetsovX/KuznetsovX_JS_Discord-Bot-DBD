@@ -1,34 +1,108 @@
+/**
+ * Channels configuration
+ * 
+ * Essential:
+ * type         - Channel type (category, text, voice)
+ * id           - Channel ID
+ * label        - Display name of the channel (matches Discord channel name)
+ * 
+ * Optional:
+ * description  - Short description of the channel's purpose
+ */
+
 const CHANNELS = {
-    ADMIN: {
-        CATEGORY: '1369957470293721150', // 🛡️ Admin
-        TEXT: '1369656849023893535', // 📜・admin
-        BOT: '1388835947616931870', // 🤖・bot
-        VOICE: '1369957841745743902', // 🔊・Admin
+    ADMIN_CATEGORY: {
+        type: 'CATEGORY',
+        id: '1369957470293721150',
+        label: '🛡️ Admin',
+        description: 'Category for administration and staff.',
     },
-
-    INFO: {
-        CATEGORY: '1372166437401268368', // ℹ️ Info & Help
-        NEWS: '1372166730402496553', // 📢・announcements
-        HELP: '1397848281123389500', // ❓・help
+    ADMIN_TEXT: {
+        type: 'TEXT',
+        id: '1369656849023893535',
+        label: '📜・admin',
     },
-
-    JUICERS: {
-        CATEGORY: '1350258846886527018', // 🍹・Juice 'em up
-        TEXT: '1388544750004469871', // 📄・comp-stomp
-        VOICE: '1340351282686333121', // 🔦・Off The Record
+    ADMIN_BOT: {
+        type: 'TEXT',
+        id: '1388835947616931870',
+        label: '🤖・bot',
+        description: 'Text channel for bot messages, tests and logs.',
     },
-
-    MAIN: {
-        CATEGORY: '1338208487720751258', // 🎯 Comp plays
-        TEXT: '1338208487720751260', // 💬・wannabe-comp-players
-        VOICE: '1340350676466925588', // 🔋・Installing DBD
-        VOICE_SECONDARY: '1338208487720751261', // 🪫・Uninstalling DBD
-        VOICE_OTHER: '1400920690403836044', // 🫠・Other
+    ADMIN_VOICE: {
+        type: 'VOICE',
+        id: '1369957841745743902',
+        label: '🔊・Admin',
     },
-
-    TEMPORARY: {
-        CATEGORY: '1338969515316215891', // 💤・Non-comp
-        VOICE: '1340350512092024832', // ⌛・AFK
+    INFO_CATEGORY: {
+        type: 'CATEGORY',
+        id: '1372166437401268368',
+        label: 'ℹ️ Info & Help',
+    },
+    INFO_ANNOUNCEMENTS: {
+        type: 'TEXT',
+        id: '1372166730402496553',
+        label: '📢・announcements',
+        description: 'Channel for server news, announcements, and updates.',
+    },
+    INFO_HELP: {
+        type: 'TEXT',
+        id: '1397848281123389500',
+        label: '❓・help',
+        description: 'Channel where higher-ups post useful content for server members.',
+    },
+    JUICERS_CATEGORY: {
+        type: 'CATEGORY',
+        id: '1350258846886527018',
+        label: '🍹Juice \'em up',
+        description: 'Category for trusted users only.',
+    },
+    JUICERS_TEXT: {
+        type: 'TEXT',
+        id: '1388544750004469871',
+        label: '📄・comp-stomp',
+    },
+    JUICERS_VOICE: {
+        type: 'VOICE',
+        id: '1340351282686333121',
+        label: '🔦・Off The Record',
+    },
+    MAIN_CATEGORY: {
+        type: 'CATEGORY',
+        id: '1338208487720751258',
+        label: '🎯 Comp plays',
+        description: 'Category for everyone.',
+    },
+    MAIN_TEXT: {
+        type: 'TEXT',
+        id: '1338208487720751260',
+        label: '💬・wannabe-comp-players',
+    },
+    MAIN_VOICE: {
+        type: 'VOICE',
+        id: '1340350676466925588',
+        label: '🔋・Installing DBD',
+    },
+    MAIN_VOICE_SECONDARY: {
+        type: 'VOICE',
+        id: '1338208487720751261',
+        label: '🪫・Uninstalling DBD',
+    },
+    MAIN_VOICE_OTHER: {
+        type: 'VOICE',
+        id: '1400920690403836044',
+        label: '🫠・Other',
+    },
+    TEMPORARY_CATEGORY: {
+        type: 'CATEGORY',
+        id: '1338969515316215891',
+        label: '💤・Non-comp',
+        description: 'AFK category, used for commands and moving users.',
+    },
+    TEMPORARY_VOICE: {
+        type: 'VOICE',
+        id: '1340350512092024832',
+        label: '⌛・AFK',
+        description: 'Voice channel for users who are AFK or waiting to be moved.',
     },
 };
 

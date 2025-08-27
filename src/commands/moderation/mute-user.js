@@ -23,9 +23,9 @@ export default {
 
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {
-                const tempChannel = message.guild.channels.cache.get(CHANNELS.TEMPORARY.VOICE);
+                const tempChannel = message.guild.channels.cache.get(CHANNELS.TEMPORARY_VOICE.id);
                 if (!tempChannel?.isVoiceBased?.()) {
-                    throw new Error(`TEMPORARY_VOICE_CHANNEL ID ${CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`);
+                    throw new Error(`TEMPORARY_VOICE_CHANNEL ID ${CHANNELS.TEMPORARY_VOICE.id} is invalid or not a voice channel.`);
                 }
 
                 await mentioned.voice.setChannel(tempChannel);
