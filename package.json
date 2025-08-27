@@ -1,16 +1,27 @@
 {
   "name": "kuznetsovx_js_discord-bot",
   "version": "1.0.0",
+  "description": "Discord bot for managing a Dead by Daylight (DBD) community server.",
   "type": "module",
   "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KuznetsovX/KuznetsovX_JS_Discord-Bot-DBD.git"
+  },
+  "keywords": [
+    "discord-bot",
+    "dead-by-daylight",
+    "nodejs"
+  ],
   "author": "KuznetsovX",
   "license": "ISC",
-  "description": "Discord bot for managing a Dead by Daylight (DBD) community server.",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "canvas": "^3.1.2",
     "discord.js": "^14.19.3",
