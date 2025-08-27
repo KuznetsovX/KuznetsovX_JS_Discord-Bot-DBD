@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import manageTierRoles from '../../utils/roles/auto-manage-tier-roles.js';
 
@@ -33,7 +33,8 @@ export default {
             await mentioned.roles.add(mentionedRole);
             await syncUserToDB(mentioned);
 
-            if (config.ROLE_TIERS.includes(mentionedRole.id)) {
+            const roleConfig = Object.values(ROLES).find(r => r.id === mentionedRole.id);
+            if (roleConfig?.tier) {
                 await manageTierRoles(mentioned);
             }
 

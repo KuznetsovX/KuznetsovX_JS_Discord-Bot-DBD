@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import autoAssignDefaultRole from '../../utils/roles/auto-assign-default-role.js';
 
@@ -33,8 +33,12 @@ export default {
             await mentioned.roles.remove(mentionedRole);
             await syncUserToDB(mentioned);
 
-            if (config.ROLE_TIERS.includes(mentionedRole.id)) {
-                const hasTierRole = config.ROLE_TIERS.some(roleId => mentioned.roles.cache.has(roleId));
+            const roleConfig = Object.values(ROLES).find(r => r.id === mentionedRole.id);
+            if (roleConfig?.tier) {
+                const hasTierRole = Object.values(ROLES)
+                    .filter(r => r.tier)
+                    .some(r => mentioned.roles.cache.has(r.id));
+
                 if (!hasTierRole) {
                     await autoAssignDefaultRole(message.guild);
                 }
@@ -42,7 +46,7 @@ export default {
 
             return message._send(`✅ Role was successfully removed from the user.`);
         } catch (error) {
-            throw new Error(`Failed to remove role ${message.mentions.roles.first()?.name || 'unknown'} from ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`);
+            throw new Error(`Failed to remove role ${message.mentions.roles.first()?.name || 'unknown'} ` + `from ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`);
         }
     }
 };

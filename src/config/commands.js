@@ -1,4 +1,4 @@
-import { ROLES } from './roles.js';
+import ROLES from './roles.js';
 
 /**
  * Command configuration
@@ -33,7 +33,7 @@ const COMMANDS = {
             description: 'Lists all users in the server, their IDs and roles.',
             aliases: ['listusers', 'list'],
             usage: 'listusers',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         showUserAvatar: {
@@ -62,7 +62,7 @@ const COMMANDS = {
             description: 'Bans a user from the server.',
             aliases: ['ban'],
             usage: 'ban @user OR ban <userID>',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN.id],
             delete: false,
         },
         kickUser: {
@@ -71,7 +71,7 @@ const COMMANDS = {
             description: 'Kicks a user from the server.',
             aliases: ['kick'],
             usage: 'kick @user',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN.id],
             delete: false,
         },
         muteUser: {
@@ -80,7 +80,7 @@ const COMMANDS = {
             description: 'Mutes a user, text and voice chat are disabled for them.',
             aliases: ['mute'],
             usage: 'mute @user',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: false,
         },
         unmuteUser: {
@@ -89,7 +89,7 @@ const COMMANDS = {
             description: 'Unmutes a previously muted user.',
             aliases: ['unmute'],
             usage: 'unmute @user',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: false,
         },
         unwarnUser: {
@@ -98,7 +98,7 @@ const COMMANDS = {
             description: 'Removes a warning from a user.',
             aliases: ['unwarn'],
             usage: 'unwarn @user',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: false,
         },
         warnUser: {
@@ -107,7 +107,7 @@ const COMMANDS = {
             description: 'Issues a warning to a user.',
             aliases: ['warn'],
             usage: 'warn @user [reason]',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: false,
             warns: 4,
         },
@@ -119,7 +119,7 @@ const COMMANDS = {
             description: 'Adds a role to a user.',
             aliases: ['addrole', 'give'],
             usage: 'addrole @user @role',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         demoteUser: {
@@ -128,7 +128,7 @@ const COMMANDS = {
             description: 'Demotes a user to a lower rank.',
             aliases: ['demote', 'rankdown'],
             usage: 'demote @user',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         promoteUser: {
@@ -137,7 +137,7 @@ const COMMANDS = {
             description: 'Promotes a user to a higher rank.',
             aliases: ['promote', 'rankup'],
             usage: 'promote @user',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         removeRole: {
@@ -146,7 +146,7 @@ const COMMANDS = {
             description: 'Removes a role from a user.',
             aliases: ['removerole', 'take'],
             usage: 'removerole @user @role',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         toggleDuelistRole: {
@@ -166,7 +166,7 @@ const COMMANDS = {
             description: 'Clears recent messages (under 14 days).',
             aliases: ['clear', 'clean', 'delete'],
             usage: 'clear <amount>',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         clearOldMessages: {
@@ -175,7 +175,7 @@ const COMMANDS = {
             description: 'Clears old messages (above 14 days).',
             aliases: ['clearold', 'cleanold', 'deleteold'],
             usage: 'clearold <amount>',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
         postMessage: {
@@ -184,7 +184,7 @@ const COMMANDS = {
             description: 'Posts a message to the specified channel.',
             aliases: ['post'],
             usage: 'post #channel <text>',
-            permissions: [ROLES.ADMIN],
+            permissions: [ROLES.ADMIN.id],
             delete: true,
         },
         resyncDatabase: {
@@ -193,7 +193,7 @@ const COMMANDS = {
             description: 'Manually resyncs the database with the current server data.',
             aliases: ['resyncdb', 'resyncdatabase'],
             usage: 'resyncdb',
-            permissions: [ROLES.ADMIN, ROLES.MODERATOR],
+            permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
         },
     },

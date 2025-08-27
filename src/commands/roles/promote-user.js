@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
@@ -9,25 +9,28 @@ export default {
                 return message._send(`❌ Please mention a user to promote.`);
             }
 
-            const currentRoles = mentioned.roles.cache;
-            const currentTierIndex = config.ROLE_TIERS.findIndex(roleId => currentRoles.has(roleId));
+            const tierRoles = Object.values(ROLES).filter(r => r.tier);
+            const userTierRole = tierRoles.find(r => mentioned.roles.cache.has(r.id));
 
-            if (currentTierIndex === -1) {
+            if (!userTierRole) {
                 return message._send(`⚠️ User has no tier role to promote.`);
             }
 
-            if (currentTierIndex === config.ROLE_TIERS.length - 1) {
+            const newTier = userTierRole.tier + 1;
+            if (newTier > Math.max(...tierRoles.map(r => r.tier))) {
                 return message._send(`⚠️ User is already at the highest tier.`);
             }
 
-            const newRoleId = config.ROLE_TIERS[currentTierIndex + 1];
-            const oldRoleId = config.ROLE_TIERS[currentTierIndex];
+            const newRole = tierRoles.find(r => r.tier === newTier);
+            if (!newRole) {
+                return message._send(`❌ Could not find a role for tier ${newTier}.`);
+            }
 
-            await mentioned.roles.remove(oldRoleId);
-            await mentioned.roles.add(newRoleId);
+            await mentioned.roles.remove(userTierRole.id);
+            await mentioned.roles.add(newRole.id);
             await syncUserToDB(mentioned);
 
-            return message._send(`🔼 User was successfully promoted.`);
+            return message._send(`🔼 User was successfully promoted from ${userTierRole.label} to ${newRole.label}.`);
         } catch (error) {
             throw new Error(`Failed to promote ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`);
         }

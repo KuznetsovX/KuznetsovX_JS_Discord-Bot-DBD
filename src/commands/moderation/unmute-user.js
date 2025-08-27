@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES, CHANNELS } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
@@ -10,19 +10,19 @@ export default {
                 return message._send('❌ Please mention a user to unmute.');
             }
 
-            if (!mentioned.roles.cache.has(config.ROLES.MUTED)) {
+            if (!mentioned.roles.cache.has(ROLES.MUTED.id)) {
                 return message._send('❌ User is not muted.');
             }
 
-            await mentioned.roles.remove(config.ROLES.MUTED);
+            await mentioned.roles.remove(ROLES.MUTED.id);
             await syncUserToDB(mentioned);
 
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {
-                const tempChannel = message.guild.channels.cache.get(config.CHANNELS.TEMPORARY.VOICE);
+                const tempChannel = message.guild.channels.cache.get(CHANNELS.TEMPORARY.VOICE);
                 if (!tempChannel?.isVoiceBased?.()) {
                     throw new Error(
-                        `TEMPORARY_VOICE_CHANNEL ID ${config.CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`
+                        `TEMPORARY_VOICE_CHANNEL ID ${CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`
                     );
                 }
 

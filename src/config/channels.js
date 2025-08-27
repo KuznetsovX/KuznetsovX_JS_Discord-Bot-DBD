@@ -1,4 +1,4 @@
-export const CHANNELS = {
+const CHANNELS = {
     ADMIN: {
         CATEGORY: '1369957470293721150', // 🛡️ Admin
         TEXT: '1369656849023893535', // 📜・admin
@@ -32,3 +32,4 @@ export const CHANNELS = {
     },
 };
 
+export default CHANNELS;

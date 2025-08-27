@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import log from '../logging/log.js';
 
@@ -7,8 +7,9 @@ import log from '../logging/log.js';
  * @param {import('discord.js').Guild} guild
  */
 export default async function assignDefaultRole(guild) {
-    // Fetch the "Foreign Spy" role
-    const spyRole = guild.roles.cache.get(config.ROLES.SPY);
+    // Fetch the "Foreign Spy" role from ROLES
+    const spyRoleId = ROLES.SPY.id;
+    const spyRole = guild.roles.cache.get(spyRoleId);
     if (!spyRole) {
         log.error('AUTO ASSIGN DEFAULT ROLE', `❌ "Foreign Spy" role not found.`);
         return;
@@ -17,12 +18,17 @@ export default async function assignDefaultRole(guild) {
     // Fetch all members
     await guild.members.fetch();
 
+    // Get all tier roles
+    const tierRoleIds = Object.values(ROLES)
+        .filter(r => r.tier)
+        .map(r => r.id);
+
     guild.members.cache.forEach(member => {
         // Skip bots and admins
-        if (member.user.bot || member.roles.cache.has(config.ROLES.ADMIN)) return;
+        if (member.user.bot || member.roles.cache.has(ROLES.ADMIN.id)) return;
 
         // Check if the member has a tier role
-        const hasTierRole = config.ROLE_TIERS.some(roleId => member.roles.cache.has(roleId));
+        const hasTierRole = tierRoleIds.some(roleId => member.roles.cache.has(roleId));
 
         // If no tier role, assign the "Foreign Spy" role
         if (!hasTierRole) {

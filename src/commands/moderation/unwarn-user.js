@@ -1,5 +1,5 @@
 import { User } from '../../db/user-model.js';
-import config from '../../config/index.js';
+import { ROLES, COMMANDS } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
@@ -11,14 +11,14 @@ export default {
             }
 
             const authorMember = message.member;
-            const isAdmin = authorMember.roles.cache.has(config.ROLES.ADMIN);
+            const isAdmin = authorMember.roles.cache.has(ROLES.ADMIN.id);
 
             const user = await User.findOne({ where: { userId: mentioned.id } });
             if (!user || user.warnings === 0) {
                 return message._send(`⚠️ User has no warnings to remove.`);
             }
 
-            const maxWarns = config.COMMANDS.moderation.warnUser.warns;
+            const maxWarns = COMMANDS.moderation.warnUser.warns;
             const moderatorLimit = maxWarns - 1;
 
             if (!isAdmin && user.warnings >= moderatorLimit) {

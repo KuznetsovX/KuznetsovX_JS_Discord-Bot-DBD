@@ -1,21 +1,21 @@
-import config from '../../config/index.js';
+import { ROLES } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
     run: async (message) => {
         try {
             const member = message.member;
-            const role = message.guild.roles.cache.get(config.ROLES.DUELIST);
+            const role = message.guild.roles.cache.get(ROLES.DUELIST.id);
 
             if (!role) {
                 return message._send(`❌ I could not find the duelist role.`);
             }
 
-            if (member.roles.cache.has(config.ROLES.DUELIST)) {
-                await member.roles.remove(config.ROLES.DUELIST);
+            if (member.roles.cache.has(ROLES.DUELIST.id)) {
+                await member.roles.remove(ROLES.DUELIST.id);
                 await message._send(`🚫 You are no longer participating in 1v1's.`);
             } else {
-                await member.roles.add(config.ROLES.DUELIST);
+                await member.roles.add(ROLES.DUELIST.id);
                 await message._send(`⚔️ You are now participating in 1v1's!`);
             }
 

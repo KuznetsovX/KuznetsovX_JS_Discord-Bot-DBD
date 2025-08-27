@@ -1,4 +1,4 @@
-import config from './config/index.js';
+import { DISCORD_BOT_TOKEN } from './config/index.js';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { syncDatabase, closeDB } from './db/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
@@ -35,7 +35,7 @@ async function startBot() {
         messageCreate(client);
 
         // Login to Discord
-        await client.login(config.DISCORD_BOT_TOKEN);
+        await client.login(DISCORD_BOT_TOKEN);
 
     } catch (error) {
         log.error('STARTUP', `❌ Failed to start bot: ${error.message}`, error);

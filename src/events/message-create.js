@@ -1,4 +1,4 @@
-import config from '../config/index.js';
+import { COMMANDS, PREFIXES, OWNER_ID } from '../config/index.js';
 import { hasPermission } from '../utils/check-permissions.js';
 import log from '../utils/logging/log.js';
 
@@ -23,7 +23,7 @@ function flattenCommands(configSection) {
 
 // Load all commands
 async function registerCommands() {
-    const commands = flattenCommands(config.COMMANDS);
+    const commands = flattenCommands(COMMANDS);
 
     await Promise.all(commands.map(async cmd => {
         const handlerModule = await import(cmd.file);
@@ -44,7 +44,7 @@ export default function messageCreate(client) {
 
         const content = message.content.trim();
 
-        const usedPrefix = config.PREFIXES.find(prefix => content.startsWith(prefix));
+        const usedPrefix = PREFIXES.find(prefix => content.startsWith(prefix));
         if (!usedPrefix) return;
 
         const args = content.slice(usedPrefix.length).trim().split(/\s+/);
@@ -55,7 +55,7 @@ export default function messageCreate(client) {
 
         log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${usedPrefix}${command}" with args: [${args.join(' ')}]`);
 
-        if (!hasPermission(message.member, match.permissions) && message.author.id !== config.OWNER_ID) {
+        if (!hasPermission(message.member, match.permissions) && message.author.id !== OWNER_ID) {
             log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${usedPrefix}${command}" but lacks permissions`);
             return message.reply('❌ You do not have permission to use this command.');
         }

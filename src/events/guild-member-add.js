@@ -1,4 +1,4 @@
-import config from '../config/index.js';
+import { ROLES, CHANNELS } from '../config/index.js';
 import { User } from '../db/user-model.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
@@ -6,7 +6,7 @@ import { restoreUserRoles } from '../utils/roles/restore-user-roles.js';
 import { syncUserToDB } from '../db/utils/sync-user-to-db.js';
 
 const assignDefaultRole = async (member) => {
-    const role = member.guild.roles.cache.get(config.ROLES.SPY);
+    const role = member.guild.roles.cache.get(ROLES.SPY.id);
 
     if (!role) {
         log.error('GUILD MEMBER ADD', `❌ "Foreign Spy" role not found for ${member.user.tag}.`);
@@ -44,7 +44,7 @@ const syncUser = async (member) => {
 };
 
 const sendWelcomeImage = async (member) => {
-    const channel = member.guild.channels.cache.get(config.CHANNELS.MAIN.TEXT);
+    const channel = member.guild.channels.cache.get(CHANNELS.MAIN.TEXT);
 
     if (!channel) {
         log.error('GUILD MEMBER ADD', `❌ Main text channel not found.`);

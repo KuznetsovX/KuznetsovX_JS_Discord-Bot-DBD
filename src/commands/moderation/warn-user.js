@@ -1,5 +1,5 @@
 import { User } from '../../db/user-model.js';
-import config from '../../config/index.js';
+import { ROLES, COMMANDS } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 import { removeUserFromDB } from '../../db/utils/remove-user-from-db.js';
 
@@ -10,9 +10,9 @@ export default {
             if (!mentioned) return message._send('❌ Please mention a user to warn.');
 
             const authorMember = message.member;
-            const isAdmin = authorMember.roles.cache.has(config.ROLES.ADMIN);
+            const isAdmin = authorMember.roles.cache.has(ROLES.ADMIN.id);
 
-            if (mentioned.user.bot || mentioned.roles.cache.has(config.ROLES.ADMIN)) {
+            if (mentioned.user.bot || mentioned.roles.cache.has(ROLES.ADMIN.id)) {
                 return message._send('⚠️ Cannot warn admins or bots.');
             }
 
@@ -25,7 +25,7 @@ export default {
             }
 
             const reason = args.slice(1).join(' ') || 'No reason provided';
-            const maxWarns = config.COMMANDS.moderation.warnUser.warns;
+            const maxWarns = COMMANDS.moderation.warnUser.warns;
             const moderatorLimit = Math.min(2, maxWarns - 1);
 
             const [user] = await User.findOrCreate({

@@ -1,4 +1,4 @@
-import config from '../../config/index.js';
+import { ROLES, CHANNELS } from '../../config/index.js';
 import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
 
 export default {
@@ -10,22 +10,22 @@ export default {
                 return message._send('❌ Please mention a user to mute.');
             }
 
-            if (mentioned.user.bot || mentioned.roles.cache.has(config.ROLES.ADMIN)) {
-                return message._send('⚠️ Cannot mute admins or bots.');
+            if (mentioned.user.bot || mentioned.roles.cache.has(ROLES.ADMIN.id) || mentioned.roles.cache.has(ROLES.MODERATOR.id)) {
+                return message._send('⚠️ Cannot mute admins, moderators or bots.');
             }
 
-            if (mentioned.roles.cache.has(config.ROLES.MUTED)) {
+            if (mentioned.roles.cache.has(ROLES.MUTED.id)) {
                 return message._send('⚠️ User is already muted.');
             }
 
-            await mentioned.roles.add(config.ROLES.MUTED);
+            await mentioned.roles.add(ROLES.MUTED.id);
             await syncUserToDB(mentioned);
 
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {
-                const tempChannel = message.guild.channels.cache.get(config.CHANNELS.TEMPORARY.VOICE);
+                const tempChannel = message.guild.channels.cache.get(CHANNELS.TEMPORARY.VOICE);
                 if (!tempChannel?.isVoiceBased?.()) {
-                    throw new Error(`TEMPORARY_VOICE_CHANNEL ID ${config.CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`);
+                    throw new Error(`TEMPORARY_VOICE_CHANNEL ID ${CHANNELS.TEMPORARY.VOICE} is invalid or not a voice channel.`);
                 }
 
                 await mentioned.voice.setChannel(tempChannel);
