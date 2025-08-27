@@ -10,12 +10,6 @@ const sequelize = new Sequelize({
 });
 
 export const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: true,
-        unique: true,
-    },
     userId: {
         type: DataTypes.STRING,
         allowNull: false,
