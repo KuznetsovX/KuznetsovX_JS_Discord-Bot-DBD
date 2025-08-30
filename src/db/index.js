@@ -53,7 +53,19 @@ export async function getUserRoles(userId) {
     }
 }
 
-// Properly close DB connection on exit
+export async function saveUserRoles(userId, roleIds) {
+    try {
+        const roleNames = roleIds.map(id => `<${id}>`).join(', ');
+        await User.upsert({
+            userId,
+            roles: roleIds.join(','),
+        });
+        log.action(`DATABASE`, `💾 Saved roles for userId ${userId}: ${roleNames}`);
+    } catch (error) {
+        log.error(`DATABASE`, `❌ Failed to save roles for userId ${userId}: ${error.message}`, error);
+    }
+}
+
 export const closeDB = async () => {
     try {
         await sequelize.close();
