@@ -1,4 +1,4 @@
-import { DISCORD_BOT_TOKEN } from './config/index.js';
+import { DISCORD_BOT_TOKEN, PREFIXES } from './config/index.js';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { syncDatabase, closeDB } from './db/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
@@ -24,6 +24,9 @@ async function startBot() {
         // Handle ready
         client.once('ready', async () => {
             await ready(client);
+
+            const helpActivity = PREFIXES.map(p => `${p}help`).join(' OR ');
+            client.user.setActivity(helpActivity, { type: 2 });
         });
 
         // Handle new member joins
