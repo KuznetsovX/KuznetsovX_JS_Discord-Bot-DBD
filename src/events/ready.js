@@ -1,4 +1,4 @@
-import { CHANNELS } from '../config/index.js';
+import { CHANNELS, PREFIXES } from '../config/index.js';
 import { syncMembersToDB } from '../db/index.js';
 import autoAssignDefaultRole from '../utils/roles/auto-assign-default-role.js';
 import autoManageTierRoles from '../utils/roles/auto-manage-tier-roles.js';
@@ -57,4 +57,7 @@ export default async function ready(client) {
             await channel.send(`⚠️ Startup failed with error: \`${err.message}\``);
         }
     }
+
+    const helpActivity = PREFIXES.map(p => `${p}help`).join(' OR ');
+    client.user.setActivity(helpActivity, { type: 2 });
 }
