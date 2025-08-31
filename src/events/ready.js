@@ -1,15 +1,9 @@
 import { CHANNELS, PREFIXES } from '../config/index.js';
-import { syncMembersToDB } from '../db/index.js';
-import autoAssignDefaultRole from '../utils/roles/auto-assign-default-role.js';
-import autoManageTierRoles from '../utils/roles/auto-manage-tier-roles.js';
-import restoreRolesFromDatabase from '../utils/roles/auto-restore-roles.js';
+import { syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
+import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
 import log from '../utils/logging/log.js';
-import { initMetaTable, shouldSyncDB, updateLastSync } from '../db/sqlite-meta.js';
 
 export default async function ready(client) {
-    // Initialize meta table for tracking timestamps
-    await initMetaTable();
-
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);
 
     const guild = client.guilds.cache.first();
@@ -24,20 +18,12 @@ export default async function ready(client) {
     }
 
     try {
-        // Restore roles from the database before assigning default roles
-        await restoreRolesFromDatabase(guild);
+        await guild.members.fetch();
 
-        // Assign default role to all users without a tier role
-        await autoAssignDefaultRole(guild);
+        await restoreRoles(guild);
+        await assignDefaultRole(guild);
+        await manageTierRoles(guild);
 
-        // Manage tier roles after the default role assignment
-        for (const member of guild.members.cache.values()) {
-            if (!member.user.bot) {
-                await autoManageTierRoles(member);
-            }
-        }
-
-        // Sync all current members into DB only if 24h passed since last sync
         if (await shouldSyncDB()) {
             await syncMembersToDB(guild);
             await updateLastSync();
@@ -58,6 +44,5 @@ export default async function ready(client) {
         }
     }
 
-    const helpActivity = PREFIXES.map(p => `${p}help`).join(' OR ');
-    client.user.setActivity(helpActivity, { type: 2 });
+    client.user.setActivity(PREFIXES.map(p => `${p}help`).join(' OR '), { type: 2 });
 }

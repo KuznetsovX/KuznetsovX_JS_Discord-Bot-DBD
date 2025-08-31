@@ -1,47 +1,8 @@
-import { ROLES, CHANNELS } from '../config/index.js';
-import { User } from '../db/user-model.js';
+import { CHANNELS } from '../config/index.js';
+import { User } from '../db/index.js';
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
-import { restoreUserRoles } from '../utils/roles/restore-user-roles.js';
-import { syncUserToDB } from '../db/utils/sync-user-to-db.js';
-
-const assignDefaultRole = async (member) => {
-    const role = member.guild.roles.cache.get(ROLES.SPY.id);
-
-    if (!role) {
-        log.error('GUILD MEMBER ADD', `❌ "Foreign Spy" role not found for ${member.user.tag}.`);
-        return false;
-    }
-
-    try {
-        await member.roles.add(role);
-        log.action('GUILD MEMBER ADD', `✅ Assigned "Foreign Spy" to ${member.user.tag}.`);
-        return true;
-    } catch (error) {
-        log.error('GUILD MEMBER ADD', `❌ Error assigning default role for ${member.user.tag}:`, error);
-        return false;
-    }
-};
-
-const restoreRoles = async (member) => {
-    try {
-        return await restoreUserRoles(member);
-    } catch (error) {
-        log.error('GUILD MEMBER ADD', `❌ Error restoring roles for ${member.user.tag}:`, error);
-        return false;
-    }
-};
-
-const syncUser = async (member) => {
-    try {
-        await syncUserToDB(member);
-        log.action('GUILD MEMBER ADD', `✅ Synced ${member.user.tag} to the database.`);
-        return true;
-    } catch (error) {
-        log.error('GUILD MEMBER ADD', `❌ Error syncing DB for ${member.user.tag}:`, error);
-        return false;
-    }
-};
+import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-manager.js';
 
 const sendWelcomeImage = async (member) => {
     const channel = member.guild.channels.cache.get(CHANNELS.MAIN_TEXT.id);
@@ -69,11 +30,9 @@ export default async function guildMemberAdd(member) {
     if (existsInDB) {
         await restoreRoles(member);
     } else {
-        const defaultAssigned = await assignDefaultRole(member);
-        if (!defaultAssigned) return;
-
+        await assignDefaultRole(member);
         await sendWelcomeImage(member);
     }
 
-    await syncUser(member);
+    await saveRoles(member);
 }
