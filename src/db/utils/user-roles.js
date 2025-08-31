@@ -1,5 +1,5 @@
-import log from '../../utils/logging/log.js';
 import { User } from '../connection/index.js';
+import log from '../../utils/logging/log.js';
 
 /**
  * Get roles for a specific user from the DB

@@ -1,5 +1,5 @@
-import { DISCORD_BOT_TOKEN } from './config/index.js';
 import { Client, GatewayIntentBits } from 'discord.js';
+import { DISCORD_BOT_TOKEN } from './config/index.js';
 import { syncDatabase, closeDB } from './db/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
 import messageCreate from './events/message-create.js';

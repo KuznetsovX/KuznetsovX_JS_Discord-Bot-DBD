@@ -1,7 +1,7 @@
 import { CHANNELS, PREFIXES } from '../config/index.js';
 import { syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
-import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
 import log from '../utils/logging/log.js';
+import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
 
 export default async function ready(client) {
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);

@@ -1,6 +1,6 @@
-import UserModel from '../models/user-model.js';
-import MetaModel from '../models/meta-model.js';
 import { Sequelize, DataTypes } from 'sequelize';
+import MetaModel from '../models/meta-model.js';
+import UserModel from '../models/user-model.js';
 import log from '../../utils/logging/log.js';
 
 export const sequelize = new Sequelize({

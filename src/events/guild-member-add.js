@@ -1,8 +1,8 @@
 import { CHANNELS } from '../config/index.js';
 import { User } from '../db/index.js';
-import generateWelcomeCard from '../utils/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-manager.js';
+import generateWelcomeCard from '../utils/generate-welcome-card.js';
 
 const sendWelcomeImage = async (member) => {
     const channel = member.guild.channels.cache.get(CHANNELS.MAIN_TEXT.id);

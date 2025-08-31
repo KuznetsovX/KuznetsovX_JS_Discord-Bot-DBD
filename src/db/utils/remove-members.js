@@ -1,5 +1,5 @@
-import { User } from '../connection/index.js';
 import { Op } from 'sequelize';
+import { User } from '../connection/index.js';
 import log from '../../utils/logging/log.js';
 
 /**
