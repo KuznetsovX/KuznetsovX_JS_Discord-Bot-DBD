@@ -1,22 +1,23 @@
 import ROLES from './roles.js';
 
 /**
- * Command configuration
- * 
- * Essential:
- * file         - Path to the command handler file
- * label        - Display name (used in help menus)
- * description  - Short explanation of what the command does
- * aliases      - List of alternative triggers for the command
- * usage        - Example(s) of how to use the command
- * permissions  - Array of roles required to run the command (empty = everyone can use it)
- * delete       - Whether the bot should delete the user's message
- * lock         - Prevents concurrent execution; if set to 'true' - only one instance of this command can run at a time.
- *
- * Optional:
- * warns        - Maximum number of warnings before action is taken
+ * @typedef {Object} Command
+ * @property {string} file - Path to the command handler file
+ * @property {string} label - Display name (used in help menus)
+ * @property {string} description - Short explanation of what the command does
+ * @property {string[]} aliases - List of alternative triggers for the command
+ * @property {string} usage - Example(s) of how to use the command
+ * @property {string[]} permissions - Array of roles required to run the command (empty = everyone can use it)
+ * @property {boolean} delete - Whether the bot should delete the user's message
+ * @property {boolean} lock - Prevents concurrent execution; if set to true, only one instance of this command can run at a time
+ * @property {number} [warns] - Maximum number of warnings before action is taken (optional)
  */
 
+/**
+ * @typedef {Object.<string, Record<string, Command>>} CommandCategory
+ */
+
+/** @type {CommandCategory} */
 const COMMANDS = {
     info: {
         help: {
@@ -69,6 +70,7 @@ const COMMANDS = {
             usage: 'ban @user OR ban <userID>',
             permissions: [ROLES.ADMIN.id],
             delete: true,
+            lock: false,
         },
         kickUser: {
             file: '../commands/moderation/kick-user.js',

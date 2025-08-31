@@ -1,18 +1,15 @@
 /**
- * Roles configuration
- * 
- * Essential:
- * position     - Role position in the server hierarchy
- * id           - Discord Role ID
- * label        - Display name of the role (matches Discord role name)
- * description  - Explanation of what this role means or is used for
- * color        - Hex color code of the role (for UI/embeds)
- * users        - Number of users that currently have this role
- *
- * Optional:
- * tier         - Tier level (only for tiered roles; higher = stronger)
+ * @typedef {Object} Role
+ * @property {number} position - Role position in the server hierarchy
+ * @property {string} id - Discord Role ID
+ * @property {string} label - Display name of the role (matches Discord role name)
+ * @property {string} description - Explanation of what this role means or is used for
+ * @property {string} color - Hex color code of the role (for UI/embeds)
+ * @property {number} users - Number of users that currently have this role
+ * @property {number} [tier] - Tier level (only for tiered roles; higher = stronger)
  */
 
+/** @type {Record<string, Role>} */
 const ROLES = {
     ADMIN: {
         position: 1,

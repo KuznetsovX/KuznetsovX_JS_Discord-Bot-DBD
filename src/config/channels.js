@@ -1,15 +1,12 @@
 /**
- * Channels configuration
- * 
- * Essential:
- * type         - Channel type (category, text, voice)
- * id           - Channel ID
- * label        - Display name of the channel (matches Discord channel name)
- * 
- * Optional:
- * description  - Short description of the channel's purpose
+ * @typedef {Object} Channel
+ * @property {'CATEGORY' | 'TEXT' | 'VOICE'} type - Channel type
+ * @property {string} id - Discord Channel ID
+ * @property {string} label - Display name of the channel (matches Discord channel name)
+ * @property {string} [description] - Optional description of the channel's purpose
  */
 
+/** @type {Record<string, Channel>} */
 const CHANNELS = {
     ADMIN_CATEGORY: {
         type: 'CATEGORY',
