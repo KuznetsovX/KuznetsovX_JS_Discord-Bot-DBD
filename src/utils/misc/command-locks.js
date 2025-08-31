@@ -1,4 +1,3 @@
-// utils/locks.js
 export const commandLocks = new Map();
 
 /**
