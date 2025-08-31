@@ -1,5 +1,5 @@
 import { ROLES } from '../../config/index.js';
-import { manageTierRoles } from '../../utils/roles/role-manager.js';
+import { saveRoles, manageTierRoles } from '../../utils/roles/role-manager.js';
 
 export default {
     run: async (message) => {
