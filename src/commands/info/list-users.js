@@ -1,4 +1,4 @@
-import { User } from '../../db/user-model.js';
+import { User } from '../../db/index.js';
 
 export default {
     run: async (message) => {
@@ -9,14 +9,13 @@ export default {
                 return message._send('📭 No users found in the database.');
             }
 
-            await message._send(`📜 Sending you the full list of users in the database:`);
+            await message._send(`📜 Full list of users:`);
 
             const entries = users.map(u => {
-                const roles = u.roles?.split(', ').map(r => r.split(' (')[0]).join(', ') || 'No roles';
+                const roles = u.roles || 'No roles';
                 return `${u.username} (${u.userId}) — Warnings: ${u.warnings || 0} — ${roles}`;
             });
 
-            // Send in message-safe chunks via plain channel.send
             let chunk = '';
             for (const entry of entries) {
                 if ((chunk + entry + '\n').length > 1900) {

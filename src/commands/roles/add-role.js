@@ -1,6 +1,5 @@
 import { ROLES } from '../../config/index.js';
-import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
-import manageTierRoles from '../../utils/roles/auto-manage-tier-roles.js';
+import { manageTierRoles } from '../../utils/roles/role-manager.js';
 
 export default {
     run: async (message) => {
@@ -20,23 +19,22 @@ export default {
                 return message._send(`⚠️ User already has this role.`);
             }
 
-            const authorHighest = author.roles.highest;
-            if (mentionedRole.position >= authorHighest.position) {
+            if (mentionedRole.position >= author.roles.highest.position) {
                 return message._send(`❌ You cannot assign a role equal to or higher than your highest role.`);
             }
 
-            const botMember = message.guild.members.me;
-            if (!botMember || mentionedRole.position >= botMember.roles.highest.position) {
+            if (mentionedRole.position >= message.guild.members.me.roles.highest.position) {
                 return message._send(`❌ I do not have permission to assign that role.`);
             }
 
             await mentioned.roles.add(mentionedRole);
-            await syncUserToDB(mentioned);
 
             const roleConfig = Object.values(ROLES).find(r => r.id === mentionedRole.id);
             if (roleConfig?.tier) {
                 await manageTierRoles(mentioned);
             }
+
+            await saveRoles(mentioned);
 
             return message._send(`✅ Role was successfully added to the user.`);
         } catch (error) {

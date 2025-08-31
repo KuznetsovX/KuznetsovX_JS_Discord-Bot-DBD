@@ -1,7 +1,6 @@
-import { User } from '../../db/user-model.js';
+import { User, removeUserFromDB } from '../../db/index.js';
 import { ROLES, COMMANDS } from '../../config/index.js';
-import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
-import { removeUserFromDB } from '../../db/utils/remove-user-from-db.js';
+import { saveRoles } from '../../utils/roles/role-manager.js';
 
 export default {
     run: async (message, args) => {
@@ -39,7 +38,7 @@ export default {
 
             user.warnings += 1;
             await user.save();
-            await syncUserToDB(mentioned);
+            await saveRoles(mentioned);
 
             if (user.warnings >= maxWarns) {
                 try {

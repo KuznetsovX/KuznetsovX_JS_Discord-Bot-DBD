@@ -1,5 +1,4 @@
-import { syncMembersToDB } from '../../db/index.js';
-import { updateLastSync } from '../../db/sqlite-meta.js';
+import { syncMembersToDB, updateLastSync } from '../../db/index.js';
 
 export default {
     run: async (message) => {

@@ -1,5 +1,5 @@
 import { ROLES, CHANNELS } from '../../config/index.js';
-import { syncUserToDB } from '../../db/utils/sync-user-to-db.js';
+import { saveRoles } from '../../utils/roles/role-manager.js';
 
 export default {
     run: async (message) => {
@@ -15,7 +15,7 @@ export default {
             }
 
             await mentioned.roles.remove(ROLES.MUTED.id);
-            await syncUserToDB(mentioned);
+            await saveRoles(mentioned);
 
             const originalChannel = mentioned.voice.channel;
             if (originalChannel) {
