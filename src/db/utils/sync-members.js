@@ -1,4 +1,3 @@
-// src/db/utils/sync-members.js
 import { User } from '../connection/index.js';
 import log from '../../utils/logging/log.js';
 
