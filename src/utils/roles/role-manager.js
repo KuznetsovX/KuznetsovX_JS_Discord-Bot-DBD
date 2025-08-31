@@ -2,26 +2,38 @@ import { ROLES } from '../../config/index.js';
 import { getUserRoles, syncUserToDB } from '../../db/index.js';
 import log from '../logging/log.js';
 
-async function runForTarget(target, fn) {
+/**
+ * Runs a function for a single member or all members of a guild.
+ * @param {import('discord.js').Guild|import('discord.js').GuildMember} target
+ * @param {(member: import('discord.js').GuildMember) => Promise<void>} fn
+ * @param {Object} options
+ * @param {boolean} [options.skipBots=true]
+ * @param {boolean} [options.skipAdmins=true]
+ */
+async function runForTarget(target, fn, options = { skipBots: false, skipAdmins: false }) {
+    const { skipBots, skipAdmins } = options;
+
+    const processMember = async (member) => {
+        if (skipBots && member.user.bot) return;
+        if (skipAdmins && member.roles.cache.has(ROLES.ADMIN.id)) return;
+        await fn(member);
+    };
+
     if (target?.members) {
         // target is guild
         await target.members.fetch();
         for (const member of target.members.cache.values()) {
-            if (member.user.bot || member.roles.cache.has(ROLES.ADMIN.id)) continue;
-            await fn(member);
+            await processMember(member);
         }
     } else {
         // target is member
-        const member = target;
-        if (member.user.bot || member.roles.cache.has(ROLES.ADMIN.id)) return;
-        await fn(member);
+        await processMember(target);
     }
 }
 
 export async function assignDefaultRole(target) {
     return runForTarget(target, async (member) => {
         const tierRoleIds = Object.values(ROLES).filter(r => r.tier).map(r => r.id);
-
         const hasTierRole = tierRoleIds.some(roleId => member.roles.cache.has(roleId));
 
         if (!hasTierRole) {
@@ -39,7 +51,7 @@ export async function assignDefaultRole(target) {
                 log.error('ROLE MANAGER', `❌ Failed to assign default role to ${member.user.tag}: ${err}`);
             }
         }
-    });
+    }, { skipBots: true, skipAdmins: true });
 }
 
 export async function manageTierRoles(target) {
@@ -65,7 +77,7 @@ export async function manageTierRoles(target) {
                 log.error('ROLE MANAGER', `❌ Failed to clean tier roles for ${member.user.tag}: ${err}`);
             }
         }
-    });
+    }, { skipBots: true, skipAdmins: true });
 }
 
 export async function restoreRoles(target) {
@@ -84,7 +96,7 @@ export async function restoreRoles(target) {
                 .map(nameOrId => member.guild.roles.cache.get(nameOrId) || member.guild.roles.cache.find(r => r.name === nameOrId))
                 .filter(role => {
                     if (!role) return false;
-                    if (role.id === ROLES.ADMIN.id || role.id === ROLES.BOT.id || role.id === ROLES.MODERATOR.id) return false;
+                    if ([ROLES.BOT.id, ROLES.MODERATOR.id, ROLES.ADMIN.id].includes(role.id)) return false;
                     if (role.position >= botHighestRole.position) return false;
                     return true;
                 });
@@ -100,12 +112,10 @@ export async function restoreRoles(target) {
         } catch (err) {
             log.error('ROLE MANAGER', `❌ Failed to restore roles for ${member.user.tag}: ${err}`);
         }
-    });
+    }, { skipBots: true, skipAdmins: false });
 }
 
 export async function saveRoles(member) {
-    if (member.user.bot || member.roles.cache.has(ROLES.ADMIN.id)) return;
-
     await syncUserToDB(member);
     log.action('ROLE MANAGER', `✅ Saved roles for ${member.user.tag}`);
 }
