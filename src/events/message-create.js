@@ -1,41 +1,35 @@
 import { COMMANDS, PREFIXES, OWNER_ID } from '../config/index.js';
 import { hasPermission } from '../utils/check-permissions.js';
 import log from '../utils/logging/log.js';
+import { isLocked, acquireLock, releaseLock } from '../utils/locks.js';
+import { checkCooldown } from '../utils/cooldowns.js';
 
 const aliasMap = new Map();
 
-// Flatten nested command config into a simple array
 function flattenCommands(configSection) {
     const flat = [];
-
     for (const key in configSection) {
         const configItem = configSection[key];
-
         if (configItem.file) {
-            flat.push(configItem);
+            flat.push({ ...configItem, canonicalName: key });
         } else if (configItem && typeof configItem === 'object') {
             flat.push(...flattenCommands(configItem));
         }
     }
-
     return flat;
 }
 
-// Load all commands
 async function registerCommands() {
     const commands = flattenCommands(COMMANDS);
-
     await Promise.all(commands.map(async cmd => {
         const handlerModule = await import(cmd.file);
         const handler = handlerModule.default || handlerModule;
-
         for (const alias of cmd.aliases) {
             aliasMap.set(alias.toLowerCase(), { ...cmd, handler });
         }
     }));
 }
 
-// Register commands on startup
 await registerCommands();
 
 export default function messageCreate(client) {
@@ -43,32 +37,36 @@ export default function messageCreate(client) {
         if (message.author.bot) return;
 
         const content = message.content.trim();
-
         const usedPrefix = PREFIXES.find(prefix => content.startsWith(prefix));
         if (!usedPrefix) return;
 
         const args = content.slice(usedPrefix.length).trim().split(/\s+/);
-        const command = args.shift().toLowerCase();
+        const commandInput = args.shift().toLowerCase();
 
-        const match = aliasMap.get(command);
+        const match = aliasMap.get(commandInput);
         if (!match) return;
 
-        log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${usedPrefix}${command}" with args: [${args.join(' ')}]`);
-
-        if (!hasPermission(message.member, match.permissions) && message.author.id !== OWNER_ID) {
-            log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${usedPrefix}${command}" but lacks permissions`);
-            return message.reply('❌ You do not have permission to use this command.');
+        if (checkCooldown(message.author.id, match.canonicalName)) {
+            return message.reply('⏳ You are using this command too quickly. Please wait a few seconds.');
         }
 
+        const lockKey = match.lock ? match.canonicalName : `${match.canonicalName}-${message.author.id}`;
+        if (isLocked(lockKey)) {
+            return message.reply('⏳ This command is already running. Please wait...');
+        }
+        acquireLock(lockKey);
+
         try {
-            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${command}"`);
+            log.info(`${match.label}`, `${message.author.tag} (${message.author.id}) tried to run "${usedPrefix}${commandInput}" with args: [${args.join(' ')}]`);
+
+            if (!hasPermission(message.member, match.permissions) && message.author.id !== OWNER_ID) {
+                log.warn(`${match.label}`, `${message.author.tag} (${message.author.id}) attempted "${usedPrefix}${commandInput}" but lacks permissions`);
+                return message.reply('❌ You do not have permission to use this command.');
+            }
 
             if (match.delete) {
                 await message.delete().catch(err => {
-                    log.warn(
-                        `${match.label}`,
-                        `Could not delete message from ${message.author.tag} (${message.author.id}): ${err.message}`
-                    );
+                    log.warn(`${match.label}`, `Could not delete message from ${message.author.tag} (${message.author.id}): ${err.message}`);
                 });
 
                 message._send = (content) => {
@@ -81,7 +79,6 @@ export default function messageCreate(client) {
                         });
                     }
                 };
-
             } else {
                 message._send = (content) =>
                     message.reply({
@@ -90,9 +87,12 @@ export default function messageCreate(client) {
             }
 
             await match.handler.run(message, args);
+            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${commandInput}"`);
         } catch (error) {
-            log.error(`${match.label}`, `Error in "${usedPrefix}${command}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
+            log.error(`${match.label}`, `Error in "${usedPrefix}${commandInput}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
             await message.reply('❌ An error occurred while executing this command.');
+        } finally {
+            releaseLock(lockKey);
         }
     });
 }
