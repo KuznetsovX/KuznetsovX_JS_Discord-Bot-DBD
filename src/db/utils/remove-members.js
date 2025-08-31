@@ -1,8 +1,9 @@
-import { User } from '../user-model.js';
+import { User } from '../connection/index.js';
+import { Op } from 'sequelize';
 import log from '../../utils/logging/log.js';
 
 /**
- * Removes a user from the database
+ * Removes a single user from the database
  * @param {GuildMember|String|Object} memberOrId - The Discord guild member, their ID, or an object with `id` and optional `tag`
  */
 export async function removeUserFromDB(memberOrId) {
@@ -24,9 +25,7 @@ export async function removeUserFromDB(memberOrId) {
     }
 
     try {
-        const deleted = await User.destroy({
-            where: { userId }
-        });
+        const deleted = await User.destroy({ where: { userId } });
 
         if (deleted) {
             log.action('REMOVE USER FROM DB', `🗑️ Removed ${tag} (Discord ID: ${userId}) from the database`);
@@ -35,5 +34,27 @@ export async function removeUserFromDB(memberOrId) {
         }
     } catch (error) {
         log.error('REMOVE USER FROM DB', `❌ Failed to remove ${tag} (Discord ID: ${userId}): ${error.message}`, error);
+    }
+}
+
+/**
+ * Removes all users from the database for a given guild
+ * @param {Guild} guild - The Discord guild
+ */
+export async function removeMembersFromDB(guild) {
+    if (!guild) return;
+
+    const members = guild.members.cache.filter(m => !m.user.bot);
+    const memberIds = members.map(m => m.id);
+
+    if (memberIds.length === 0) return;
+
+    try {
+        const deleted = await User.destroy({
+            where: { userId: { [Op.in]: memberIds } }
+        });
+        log.action('REMOVE ALL USERS FROM DB', `🗑️ Removed ${deleted} members from the database for guild ${guild.name}`);
+    } catch (error) {
+        log.error('REMOVE ALL USERS FROM DB', `❌ Failed to remove members for guild ${guild.name}: ${error.message}`, error);
     }
 }
