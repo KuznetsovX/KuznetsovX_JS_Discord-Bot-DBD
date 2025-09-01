@@ -12,6 +12,7 @@ archive/
 *.sqlite
 *.sqlite-journal
 *.db-backup
+!data/.gitkeep
 
 # Node modules
 node_modules/
