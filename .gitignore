@@ -11,6 +11,7 @@ archive/
 # DB
 *.sqlite
 *.sqlite-journal
+*.db-backup
 
 # Node modules
 node_modules/
