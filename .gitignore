@@ -24,7 +24,8 @@ logs/
 *.log
 npm-debug.log*
 
-# Other
-info.md
-redirect.html
+# DEV
+discord-dev-portal.html
+github-repo.html
+INFO.md
 TODO.md
