@@ -8,6 +8,10 @@ import log from '../../utils/logging/log.js';
 export async function syncUserToDB(member) {
     if (!member || !member.user) return;
 
+    const roleIds = member.roles.cache
+        .filter(role => role.name !== '@everyone')
+        .map(role => role.id);
+
     const roleNames = member.roles.cache
         .filter(role => role.name !== '@everyone')
         .map(role => role.name);
@@ -16,14 +20,14 @@ export async function syncUserToDB(member) {
         await User.upsert({
             userId: member.id,
             username: member.user.tag,
-            roles: roleNames.length ? roleNames.join(', ') : 'No roles', // fallback
+            roleIds: roleIds.length ? roleIds.join(',') : '',
+            roles: roleNames.length ? roleNames.join(', ') : 'No roles',
         });
         log.action('SYNC USER TO DB', `🔄 Synced DB for ${member.user.tag}`);
     } catch (error) {
         log.error('SYNC USER TO DB', `❌ Failed to sync DB for ${member.user.tag}: ${error.message}`, error);
     }
 }
-
 
 /**
  * Sync all members of a guild into the database
@@ -32,7 +36,7 @@ export async function syncUserToDB(member) {
 export async function syncMembersToDB(guild) {
     if (!guild) return;
 
-    const members = guild.members.cache.filter(m => !m.user.bot);
+    const members = guild.members.cache;
     for (const member of members.values()) {
         await syncUserToDB(member);
     }
