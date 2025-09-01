@@ -9,9 +9,11 @@
 archive/
 
 # DB
-*.sqlite
-*.sqlite-journal
-*.db-backup
+## Ignore all DB files
+data/*.sqlite
+data/*.sqlite-journal
+data/*.db-backup
+## But keep .gitkeep so the folder can exist in Git
 !data/.gitkeep
 
 # Node modules
