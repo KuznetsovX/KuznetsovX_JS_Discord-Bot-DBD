@@ -1,3 +1,4 @@
+import showCommonTiles from '../commands/info/show-common-tiles.js';
 import ROLES from './roles.js';
 
 /**
@@ -38,6 +39,16 @@ const COMMANDS = {
             usage: 'listusers',
             permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
             delete: true,
+            lock: false,
+        },
+        showCommonTiles: {
+            file: '../commands/info/show-common-tiles.js',
+            label: 'Show Common Tiles',
+            description: 'Displays a list of common tiles.',
+            aliases: ['tiles', 'commontiles'],
+            usage: 'tiles OR tiles <tileName>',
+            permissions: [],
+            delete: false,
             lock: false,
         },
         showUserAvatar: {
