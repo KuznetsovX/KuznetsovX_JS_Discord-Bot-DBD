@@ -91,9 +91,7 @@ export default {
             const tile = resolveTile(inputRaw);
 
             if (!tile) {
-                return message._send(
-                    `❌ Tile \`${inputRaw}\` not found or ambiguous. Try the exact label.`
-                );
+                return message._send(`❌ Tile \`${inputRaw}\` not found or ambiguous. Try the exact label.`);
             }
 
             const filePath = path.join(projectRoot, tile.image.replace('../../', ''));
