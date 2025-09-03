@@ -80,8 +80,8 @@ const COMMANDS = {
             aliases: ['ban'],
             usage: 'ban @user OR ban <userID>',
             permissions: [ROLES.ADMIN.id],
-            delete: true,
-            lock: false,
+            delete: false,
+            lock: true,
         },
         kickUser: {
             file: '../commands/moderation/kick-user.js',
