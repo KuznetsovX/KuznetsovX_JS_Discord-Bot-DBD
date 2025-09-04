@@ -27,11 +27,14 @@ export default {
                     return message._send(`❌ Command \`${input}\` not found.`);
                 }
 
+                // Format usage: prefix each example
+                const usageFormatted = found.usage.map(u => `${mainPrefix}${u}`).join(' OR ');
+
                 const embed = new EmbedBuilder()
                     .setTitle(`📖 Help: ${found.label}`)
                     .addFields(
                         { name: 'Description', value: found.description || 'None' },
-                        { name: 'Usage', value: `\`${mainPrefix}${found.usage}\``, inline: true },
+                        { name: 'Usage', value: `\`${usageFormatted}\``, inline: true },
                         { name: 'Aliases', value: found.aliases.map(a => `\`${a}\``).join(', '), inline: true },
                         { name: 'Permissions', value: found.permissions.length ? found.permissions.map(r => `<@&${r}>`).join(', ') : 'Everyone' }
                     )
