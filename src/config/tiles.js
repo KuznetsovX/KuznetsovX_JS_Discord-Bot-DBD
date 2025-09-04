@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} Tile
  * @property {string} image - Path to the image file
- * @property {string} label - Human-readable label of the tile
+ * @property {string} label - Display name of the tile
  * @property {string[]} aliases - List of alternative triggers
  */
 
