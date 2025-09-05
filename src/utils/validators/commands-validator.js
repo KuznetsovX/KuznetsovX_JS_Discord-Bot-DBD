@@ -8,7 +8,11 @@
  */
 export default function validateCommands(commands) {
     for (const category of Object.values(commands)) {
-        for (const [name, cmd] of Object.entries(category)) {
+        if (!category.commands || typeof category.commands !== 'object') {
+            throw new Error(`Category "${category.label || 'unknown'}" is missing a "commands" object`);
+        }
+
+        for (const [name, cmd] of Object.entries(category.commands)) {
             const required = ["file", "label", "description", "aliases", "usage", "permissions", "delete", "lock"];
             const missing = required.filter(f => !(f in cmd));
             if (missing.length) throw new Error(`Command "${name}" is missing required field(s): ${missing.join(', ')}`);
