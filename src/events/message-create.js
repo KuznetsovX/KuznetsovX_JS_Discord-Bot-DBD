@@ -40,6 +40,8 @@ await registerCommands();
 
 export default function messageCreate(client) {
     client.on('messageCreate', async (message) => {
+        if (!client.isInitialized) return;
+
         if (message.author.bot) return;
 
         const content = message.content.trim();

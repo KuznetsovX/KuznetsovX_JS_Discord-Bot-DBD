@@ -16,6 +16,8 @@ const client = new Client({
     ]
 });
 
+client.isInitialized = false;
+
 async function startBot() {
     try {
         // Sync the database
