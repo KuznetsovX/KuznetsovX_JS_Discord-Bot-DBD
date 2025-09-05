@@ -9,15 +9,15 @@ import TILES from './tiles.js';
 
 import validateChannels from '../utils/validators/channels-validator.js';
 import validateCommands from '../utils/validators/commands-validator.js';
-//import validateMaps from '../utils/validators/maps-validator.js';
+import validateMaps from '../utils/validators/maps-validator.js';
 import validateRoles from '../utils/validators/roles-validator.js';
-//import validateTiles from '../utils/validators/tiles-validator.js';
+import validateTiles from '../utils/validators/tiles-validator.js';
 
 validateChannels(CHANNELS);
 validateCommands(COMMANDS);
-//validateMaps(MAPS);
+validateMaps(MAPS);
 validateRoles(ROLES);
-//validateTiles(TILES);
+validateTiles(TILES);
 
 export const PREFIXES = ['!', '?'];
 export const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN?.trim();
