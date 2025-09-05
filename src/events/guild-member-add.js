@@ -5,7 +5,7 @@ import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-
 import generateWelcomeCard from '../utils/generate-welcome-card.js';
 
 const sendWelcomeImage = async (member) => {
-    const channel = member.guild.channels.cache.get(CHANNELS.MAIN_TEXT.id);
+    const channel = member.guild.channels.cache.get(CHANNELS.MAIN.channels.TEXT.id);
 
     if (!channel) {
         log.error('GUILD MEMBER ADD', `❌ Main text channel not found.`);

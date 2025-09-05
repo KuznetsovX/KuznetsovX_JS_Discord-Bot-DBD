@@ -14,7 +14,7 @@ export default {
                 let found;
 
                 for (const category of Object.values(COMMANDS)) {
-                    for (const cmd of Object.values(category)) {
+                    for (const cmd of Object.values(category.commands)) {
                         if (cmd.aliases.map(a => a.toLowerCase()).includes(input)) {
                             found = cmd;
                             break;
@@ -27,7 +27,6 @@ export default {
                     return message._send(`❌ Command \`${input}\` not found.`);
                 }
 
-                // Format usage: prefix each example
                 const usageFormatted = found.usage.map(u => `${mainPrefix}${u}`).join(' OR ');
 
                 const embed = new EmbedBuilder()
@@ -47,18 +46,18 @@ export default {
             // Otherwise, display general command list
             const embed = new EmbedBuilder()
                 .setTitle('📖 Command List')
-                .setDescription(`Use \`${mainPrefix}help <command>\` to get more info.`)
+                .setDescription(`**Use \`${mainPrefix}help <command>\` to get more info**.`)
                 .setFooter({ text: allPrefixesFooter })
                 .setColor('Purple');
 
-            for (const [categoryName, categoryCommands] of Object.entries(COMMANDS)) {
-                const list = Object.values(categoryCommands)
+            for (const category of Object.values(COMMANDS)) {
+                const list = Object.values(category.commands)
                     .filter(cmd => cmd.permissions.length === 0 || cmd.permissions.some(r => memberRoles.includes(r)))
                     .map(cmd => `\`${mainPrefix}${cmd.aliases[0]}\` - ${cmd.description}`)
                     .join('\n');
 
                 if (list) {
-                    embed.addFields({ name: categoryName, value: list });
+                    embed.addFields({ name: category.label, value: list });
                 }
             }
 

@@ -12,7 +12,7 @@ export default async function ready(client) {
         return;
     }
 
-    const channel = client.channels.cache.get(CHANNELS.ADMIN_BOT.id);
+    const channel = client.channels.cache.get(CHANNELS.ADMIN.channels.BOT.id);
     if (channel) {
         await channel.send('🪫 Starting up... please wait until all startup tasks are completed.');
     }

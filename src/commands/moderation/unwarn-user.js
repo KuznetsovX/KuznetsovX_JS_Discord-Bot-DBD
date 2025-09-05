@@ -18,7 +18,7 @@ export default {
                 return message._send(`⚠️ User has no warnings to remove.`);
             }
 
-            const maxWarns = COMMANDS.moderation.warnUser.warns;
+            const maxWarns = COMMANDS.moderation.commands.warnUser.warns;
             const moderatorLimit = maxWarns - 1;
 
             if (!isAdmin && user.warnings >= moderatorLimit) {

@@ -9,11 +9,17 @@ const aliasMap = new Map();
 function flattenCommands(configSection) {
     const flat = [];
     for (const key in configSection) {
-        const configItem = configSection[key];
-        if (configItem.file) {
-            flat.push({ ...configItem, canonicalName: key });
-        } else if (configItem && typeof configItem === 'object') {
-            flat.push(...flattenCommands(configItem));
+        const category = configSection[key];
+
+        if (category.commands && typeof category.commands === 'object') {
+            // Category has a commands object - flatten them
+            for (const cmdKey in category.commands) {
+                const cmd = category.commands[cmdKey];
+                flat.push({ ...cmd, canonicalName: cmdKey });
+            }
+        } else if (category.file) {
+            // Single command at top level
+            flat.push({ ...category, canonicalName: key });
         }
     }
     return flat;
