@@ -1,4 +1,3 @@
-import showCommonTiles from '../commands/info/show-common-tiles.js';
 import ROLES from './roles.js';
 
 /**
@@ -41,11 +40,21 @@ const COMMANDS = {
             delete: true,
             lock: false,
         },
-        showCommonTiles: {
-            file: '../commands/info/show-common-tiles.js',
-            label: 'Show Common Tiles',
+        showMaps: {
+            file: '../commands/info/show-maps.js',
+            label: 'Show Maps',
+            description: 'Displays a list of all maps.',
+            aliases: ['maps', 'map'],
+            usage: ['maps', 'maps <map>'],
+            permissions: [],
+            delete: false,
+            lock: false,
+        },
+        showTiles: {
+            file: '../commands/info/show-tiles.js',
+            label: 'Show Tiles',
             description: 'Displays a list of common tiles.',
-            aliases: ['tiles', 'commontiles'],
+            aliases: ['tiles', 'tile', 'commontiles'],
             usage: ['tiles', 'tiles <tile>'],
             permissions: [],
             delete: false,
