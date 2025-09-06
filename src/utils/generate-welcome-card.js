@@ -20,14 +20,23 @@ export default async function generateWelcomeCard(member) {
     const background = await loadImage(bgPath);
     ctx.drawImage(background, 0, 0, width, height);
 
-    // Load and draw user's avatar as a circle
-    const avatarURL = member.user.displayAvatarURL({ extension: 'png', size: 128 });
-    const avatar = await loadImage(avatarURL);
+    // Load avatar with fallback
+    let avatar;
+    try {
+        const avatarURL = member.user.displayAvatarURL({ extension: 'png', size: 128 });
+        avatar = await loadImage(avatarURL);
+    } catch (err) {
+        console.error(`Failed to load avatar for ${member.user.tag}`, err);
+        // fallback local avatar
+        const defaultAvatarPath = path.join(__dirname, '../../assets/bot/default-avatar.png');
+        avatar = await loadImage(defaultAvatarPath);
+    }
 
     const avatarSize = 128;
     const avatarX = 50;
     const avatarY = height / 2 - avatarSize / 2;
 
+    // Draw circular avatar
     ctx.save();
     ctx.beginPath();
     ctx.arc(
@@ -60,4 +69,4 @@ export default async function generateWelcomeCard(member) {
     // Return image as a Discord attachment
     const buffer = canvas.toBuffer('image/png');
     return new AttachmentBuilder(buffer, { name: 'welcome.png' });
-};
+}
