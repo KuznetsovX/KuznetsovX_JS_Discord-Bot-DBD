@@ -1,4 +1,4 @@
-import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
+import { EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, MessageFlags } from 'discord.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { TILES, ROLES } from '../../config/index.js';
@@ -49,21 +49,70 @@ export default {
             const member = message.member;
             const isAdmin = member.roles.cache.has(ROLES.ADMIN.id);
 
-            // Case 1: no arguments - show list
+            // Case 1: interactive mode (no args)
             if (args.length === 0) {
-                const tileList = Object.values(TILES)
-                    .map(t => {
-                        const aliases = t.aliases && t.aliases.length ? t.aliases.join(', ') : 'none';
-                        return `• **${t.label}** (aliases: \`${aliases}\`)`;
-                    })
-                    .join('\n');
+                const tileSelect = new StringSelectMenuBuilder()
+                    .setCustomId('tile_select')
+                    .setPlaceholder('Choose a tile...')
+                    .addOptions(
+                        Object.entries(TILES).map(([key, tile]) => ({
+                            label: tile.label,
+                            value: key
+                        }))
+                    );
+
+                const row = new ActionRowBuilder().addComponents(tileSelect);
 
                 const embed = new EmbedBuilder()
-                    .setTitle('📋 Available Tiles')
-                    .setDescription(tileList)
+                    .setTitle('🏚️ Tile Browser')
+                    .setDescription('Select a tile from the dropdown below.')
                     .setColor('Purple');
 
-                return message._send({ embeds: [embed] });
+                const msg = await message._send({ embeds: [embed], components: [row] });
+
+                const collector = msg.createMessageComponentCollector({ time: 120_000 });
+
+                collector.on('collect', async (interaction) => {
+                    if (interaction.user.id !== message.author.id) {
+                        return interaction.reply({
+                            content: '❌ Only the command author can use this menu.',
+                            flags: MessageFlags.Ephemeral
+                        });
+                    }
+
+                    if (interaction.isStringSelectMenu() && interaction.customId === 'tile_select') {
+                        const tileKey = interaction.values[0];
+                        const tile = TILES[tileKey];
+                        if (!tile) return interaction.reply({
+                            content: '❌ Tile not found.',
+                            flags: MessageFlags.Ephemeral
+                        });
+
+                        const filePath = path.join(projectRoot, tile.image.replace('../../', ''));
+                        const file = new AttachmentBuilder(filePath, { name: 'tile.jpg' });
+
+                        const tileEmbed = new EmbedBuilder()
+                            .setTitle(tile.label)
+                            .setImage('attachment://tile.jpg')
+                            .setColor('Purple');
+
+                        return interaction.update({
+                            embeds: [tileEmbed],
+                            files: [file],
+                            components: [row] // keep the menu active for continuous browsing
+                        });
+                    }
+                });
+
+                collector.on('end', () => {
+                    // disable the dropdown after timeout
+                    const disabledRow = new ActionRowBuilder().addComponents(
+                        StringSelectMenuBuilder.from(tileSelect).setDisabled(true)
+                    );
+                    msg.edit({ components: [disabledRow] }).catch(() => { });
+                });
+
+                return;
             }
 
             // Case 2: "all" - show all images (Admins only)
@@ -86,7 +135,7 @@ export default {
                 return;
             }
 
-            // Case 3: show specific tile
+            // Case 3: direct lookup
             const inputRaw = args.join(' ').trim();
             const tile = resolveTile(inputRaw);
 
