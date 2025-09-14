@@ -44,6 +44,12 @@ npm install
 ```
 DISCORD_TOKEN=your-bot-token-here
 OWNER_ID=your-discord-id
+DB_USER=your-db-username
+DB_PASSWORD=your-db-password
+DB_NAME=your-db-name
+DB_HOST=your-db-hostname
+DB_PORT=your-db-port
+DB_DIALECT=your-db-dialect
 ```
 
 4. Start the bot:
