@@ -22,6 +22,16 @@ const COMMANDS = {
     admin: {
         label: 'Administration',
         commands: {
+            resyncDatabase: {
+                file: '../commands/admin/resync-database.js',
+                label: 'Resync Database',
+                description: 'Manually resyncs the database with the current server data.',
+                aliases: ['resyncdb', 'resyncdatabase'],
+                usage: ['resyncdb'],
+                permissions: [ROLES.ADMIN.id],
+                delete: true,
+                lock: true,
+            },
             updateBotPresence: {
                 file: '../commands/admin/update-bot-presence.js',
                 label: 'Update Bot Presence',
@@ -252,16 +262,6 @@ const COMMANDS = {
                 permissions: [ROLES.ADMIN.id],
                 delete: true,
                 lock: false,
-            },
-            resyncDatabase: {
-                file: '../commands/utility/resync-database.js',
-                label: 'Resync Database',
-                description: 'Manually resyncs the database with the current server data.',
-                aliases: ['resyncdb', 'resyncdatabase'],
-                usage: ['resyncdb'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
-                lock: true,
             },
         },
     },
