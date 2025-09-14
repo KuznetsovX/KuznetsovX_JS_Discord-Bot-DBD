@@ -1,9 +1,12 @@
+import { fn, col } from 'sequelize';
 import { User } from '../../db/index.js';
 
 export default {
     run: async (message) => {
         try {
-            const users = await User.findAll();
+            const users = await User.findAll({
+                order: [[fn('LOWER', col('username')), 'ASC']]
+            });
 
             if (!users.length) {
                 return message._send('📭 No users found in the database.');
