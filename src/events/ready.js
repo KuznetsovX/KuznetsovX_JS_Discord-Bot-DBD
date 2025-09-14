@@ -1,5 +1,5 @@
 import { CHANNELS } from '../config/index.js';
-import { syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
+import { shouldBackup, runBackup, syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
 import { setBotPresence } from '../utils/set-bot-presence.js';
@@ -29,6 +29,10 @@ export default async function ready(client) {
 
         if (await shouldSyncDB()) {
             await syncMembersToDB(guild);
+            if (await shouldBackup()) {
+                await runBackup();
+                log.action('READY', '💾 Database backup created (24h interval check).');
+            }
             await updateLastSync();
             log.action('READY', '✅ Members synced to DB (24h interval check).');
         } else {
