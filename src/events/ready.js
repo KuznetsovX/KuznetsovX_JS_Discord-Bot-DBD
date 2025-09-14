@@ -1,7 +1,8 @@
-import { CHANNELS, PREFIXES } from '../config/index.js';
+import { CHANNELS } from '../config/index.js';
 import { syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
+import { setBotPresence } from '../utils/set-bot-presence.js';
 
 export default async function ready(client) {
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);
@@ -16,6 +17,8 @@ export default async function ready(client) {
     if (channel) {
         await channel.send('🪫 Starting up... please wait until all startup tasks are completed.');
     }
+
+    setBotPresence(client, 'starting');
 
     try {
         await guild.members.fetch();
@@ -36,7 +39,10 @@ export default async function ready(client) {
             await channel.send(`🔋 All startup tasks have been completed, <@${client.user.id}> is now ready to use.`);
             client.isInitialized = true;
         }
+
         log.info('READY', '✅ All startup tasks completed successfully.');
+
+        setBotPresence(client, 'default');
     } catch (err) {
         log.error('READY', '❌ Error during bot startup', err);
 
@@ -45,6 +51,4 @@ export default async function ready(client) {
             client.isInitialized = false;
         }
     }
-
-    client.user.setActivity(PREFIXES.map(p => `${p}help`).join(' OR '), { type: 2 });
 }

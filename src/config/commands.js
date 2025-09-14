@@ -19,6 +19,21 @@ import ROLES from './roles.js';
 
 /** @type {CommandCategory} */
 const COMMANDS = {
+    admin: {
+        label: 'Administration',
+        commands: {
+            updateBotPresence: {
+                file: '../commands/admin/update-bot-presence.js',
+                label: 'Update Bot Presence',
+                description: 'Updates the bot\'s presence status.',
+                aliases: ['presence', 'pres'],
+                usage: ['presence <status>'],
+                permissions: [ROLES.ADMIN.id],
+                delete: false,
+                lock: true,
+            },
+        },
+    },
     info: {
         label: 'Information',
         commands: {
