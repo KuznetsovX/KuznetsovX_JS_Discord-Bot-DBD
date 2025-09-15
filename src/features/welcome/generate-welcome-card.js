@@ -16,7 +16,7 @@ export default async function generateWelcomeCard(member) {
     const ctx = canvas.getContext('2d');
 
     // Draw background image
-    const bgPath = path.join(__dirname, '../../assets/bot/dbd-exe_bg.png');
+    const bgPath = path.join(__dirname, '../../../assets/bot/dbd-exe_bg.png');
     const background = await loadImage(bgPath);
     ctx.drawImage(background, 0, 0, width, height);
 
@@ -28,7 +28,7 @@ export default async function generateWelcomeCard(member) {
     } catch (err) {
         console.error(`Failed to load avatar for ${member.user.tag}`, err);
         // fallback local avatar
-        const defaultAvatarPath = path.join(__dirname, '../../assets/bot/default-avatar.png');
+        const defaultAvatarPath = path.join(__dirname, '../../../assets/bot/default-avatar.png');
         avatar = await loadImage(defaultAvatarPath);
     }
 

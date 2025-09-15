@@ -2,7 +2,7 @@ import { CHANNELS } from '../config/index.js';
 import { User } from '../db/index.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-manager.js';
-import generateWelcomeCard from '../utils/generate-welcome-card.js';
+import generateWelcomeCard from '../features/welcome/generate-welcome-card.js';
 
 const sendWithRetry = async (channel, member, card, maxRetries = 3, delayMs = 1000) => {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
