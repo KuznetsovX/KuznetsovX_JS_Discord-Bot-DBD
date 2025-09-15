@@ -1,4 +1,4 @@
-import { setBotPresence } from '../../utils/set-bot-presence.js';
+import { setBotPresence } from '../../utils/misc/set-bot-presence.js';
 import { PRESENCES } from '../../config/index.js';
 
 export default {

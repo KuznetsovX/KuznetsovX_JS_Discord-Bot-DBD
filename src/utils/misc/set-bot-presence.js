@@ -1,4 +1,4 @@
-import { PRESENCES } from '../config/index.js';
+import { PRESENCES } from '../../config/index.js';
 
 export function setBotPresence(client, key) {
     const entry = PRESENCES[key];

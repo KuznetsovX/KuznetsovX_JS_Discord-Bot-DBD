@@ -2,7 +2,7 @@ import { CHANNELS } from '../config/index.js';
 import { shouldBackup, runBackup, syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
-import { setBotPresence } from '../utils/set-bot-presence.js';
+import { setBotPresence } from '../utils/misc/set-bot-presence.js';
 
 export default async function ready(client) {
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);
