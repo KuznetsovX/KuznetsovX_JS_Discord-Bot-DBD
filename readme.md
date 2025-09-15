@@ -24,6 +24,46 @@ This bot is intended for use exclusively on this server:
 
 ---
 
+## Prerequisites
+
+Before installing the bot, make sure you have:
+
+- [Node.js](https://nodejs.org/en/download) (v18 or newer recommended)
+- [PostgreSQL](https://www.postgresql.org/download/) (v14 or newer)
+  - Create a database and user with the required permissions.
+  - Keep your database credentials handy for the `.env` file.
+
+### PostgreSQL setup
+
+1. Install PostgreSQL
+
+    - **Windows**: Download and run the installer from [here](https://www.postgresql.org/download/windows/), or use PowerShell:
+    ```powershell
+    winget install PostgreSQL.PostgreSQL
+    ```
+
+    - **Linux (Debian/Ubuntu)**:
+    ```bash
+    sudo apt update
+    sudo apt install postgresql postgresql-contrib
+    ```
+
+    - **macOS (Homebrew)**:
+    ```bash
+    brew install postgresql
+    ```
+
+2. Create a database and user (replace values as needed):
+```sql
+CREATE DATABASE dbd_bot;
+CREATE USER dbd_user WITH ENCRYPTED PASSWORD 'your-password';
+GRANT ALL PRIVILEGES ON DATABASE dbd_bot TO dbd_user;
+```
+
+3. Make sure PostgreSQL is running, then keep these credentials handy for your .env file.
+
+---
+
 ## Installation
 
 1. Clone the repository:
@@ -50,6 +90,7 @@ DB_NAME=your-db-name
 DB_HOST=your-db-hostname
 DB_PORT=your-db-port
 DB_DIALECT=your-db-dialect
+PG_DUMP_PATH=path-to-your-db-dump
 ```
 
 4. Start the bot:
