@@ -2,7 +2,7 @@ import { COMMANDS, PREFIXES, OWNER_ID } from '../config/index.js';
 import log from '../utils/logging/log.js';
 import { checkCooldown } from '../utils/misc/command-cooldowns.js';
 import { isLocked, acquireLock, releaseLock } from '../utils/misc/command-locks.js';
-import { hasPermission } from '../utils/check-permissions.js';
+import { hasPermission } from '../utils/roles/check-permissions.js';
 
 const aliasMap = new Map();
 
