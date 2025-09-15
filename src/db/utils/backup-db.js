@@ -12,6 +12,7 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
+const pgDumpPath = process.env.PG_DUMP_PATH;
 
 // Backup folder
 const backupFolder = path.resolve('./data/.db-backup');
@@ -55,7 +56,6 @@ export async function runBackup() {
     }
 
     // Run pg_dump (plain SQL)
-    const pgDumpPath = 'D:\\PostgreSQL\\bin\\pg_dump.exe'; // adjust path if necessary
     const command = `set PGPASSWORD=${DB_PASSWORD}&& "${pgDumpPath}" -U ${DB_USER} -h ${DB_HOST} -p ${DB_PORT} -d ${DB_NAME} -F p -f "${backupFile}"`;
 
     return new Promise((resolve, reject) => {
