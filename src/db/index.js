@@ -6,19 +6,10 @@ import { shouldSyncDB, updateLastSync } from './utils/sync-metadata.js';
 import { getUserRoles, saveUserRoles } from './utils/user-roles.js';
 
 export {
-    User,
-    Meta,
-    sequelize,
-    syncDatabase,
-    closeDB,
-    runBackup,
-    shouldBackup,
-    removeUserFromDB,
-    removeMembersFromDB,
-    syncUserToDB,
-    syncMembersToDB,
-    shouldSyncDB,
-    updateLastSync,
-    getUserRoles,
-    saveUserRoles
+    User, Meta, sequelize, syncDatabase, closeDB, // Connection
+    runBackup, shouldBackup, // Backup Database
+    removeUserFromDB, removeMembersFromDB, // Remove Members
+    syncUserToDB, syncMembersToDB, // Sync Members
+    shouldSyncDB, updateLastSync, // Sync Metadata
+    getUserRoles, saveUserRoles // User Roles
 };
