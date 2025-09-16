@@ -1,8 +1,8 @@
 import { CHANNELS } from '../config/index.js';
 import { User } from '../db/index.js';
+import generateWelcomeCard from '../features/welcome/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-manager.js';
-import generateWelcomeCard from '../features/welcome/generate-welcome-card.js';
 
 const sendWithRetry = async (channel, member, card, maxRetries = 3, delayMs = 1000) => {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -27,7 +27,7 @@ const sendWelcomeImage = async (member) => {
     const channel = member.guild.channels.cache.get(CHANNELS.MAIN.channels.TEXT.id);
 
     if (!channel) {
-        log.error('GUILD MEMBER ADD', `❌ Main text channel not found.`);
+        log.error('GUILD MEMBER ADD', `❌ Text channel not found.`);
         return;
     }
 
