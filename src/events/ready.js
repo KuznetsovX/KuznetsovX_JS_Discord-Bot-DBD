@@ -1,5 +1,6 @@
 import { CHANNELS } from '../config/index.js';
 import { shouldBackup, runBackup, syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
+import { startHourlyResync } from '../features/database/hourly-resync-check.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
 import { setBotPresence } from '../utils/misc/set-bot-presence.js';
@@ -36,6 +37,7 @@ export default async function ready(client) {
             await updateLastSync();
             log.action('READY', '✅ Members synced to DB (24h interval check).');
         } else {
+            startHourlyResync(guild);
             log.info('READY', '⏩ DB sync skipped (less than 24h since last sync).');
         }
 
