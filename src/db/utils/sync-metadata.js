@@ -11,6 +11,16 @@ export async function getLastSync(key = 'last_members_sync') {
 }
 
 /**
+ * Get last sync timestamp in milliseconds
+ * @param {string} key
+ * @returns {Promise<number>}
+ */
+export async function getLastSyncMs(key = 'last_members_sync') {
+    const lastSync = await getLastSync(key);
+    return lastSync ? lastSync.getTime() : 0;
+}
+
+/**
  * Update last sync time
  * @param {string} key
  */
