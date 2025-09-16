@@ -1,6 +1,5 @@
 import { CHANNELS } from '../config/index.js';
-import { shouldBackup, runBackup, syncMembersToDB, shouldSyncDB, updateLastSync } from '../db/index.js';
-import { startHourlyResync } from '../features/database/hourly-resync-check.js';
+import { scheduleNextResync } from '../features/database/resync-scheduler.js';
 import log from '../utils/logging/log.js';
 import { setBotPresence } from '../utils/misc/set-bot-presence.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
@@ -27,19 +26,7 @@ export default async function ready(client) {
         await restoreRoles(guild);
         await assignDefaultRole(guild);
         await manageTierRoles(guild);
-
-        if (await shouldSyncDB()) {
-            await syncMembersToDB(guild);
-            if (await shouldBackup()) {
-                await runBackup();
-                log.action('READY', '💾 Database backup created (24h interval check).');
-            }
-            await updateLastSync();
-            log.action('READY', '✅ Members synced to DB (24h interval check).');
-        } else {
-            startHourlyResync(guild);
-            log.info('READY', '⏩ DB sync skipped (less than 24h since last sync).');
-        }
+        await scheduleNextResync(guild);
 
         if (channel) {
             await channel.send(`🔋 All startup tasks have been completed, <@${client.user.id}> is now ready to use.`);
