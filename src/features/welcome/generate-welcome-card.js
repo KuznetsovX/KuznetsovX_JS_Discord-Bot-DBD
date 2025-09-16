@@ -2,6 +2,7 @@ import { createCanvas, loadImage } from 'canvas';
 import { AttachmentBuilder } from 'discord.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import log from '../../utils/logging/log.js';
 
 // __dirname replacement for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +27,7 @@ export default async function generateWelcomeCard(member) {
         const avatarURL = member.user.displayAvatarURL({ extension: 'png', size: 128 });
         avatar = await loadImage(avatarURL);
     } catch (err) {
-        console.error(`Failed to load avatar for ${member.user.tag}`, err);
+        log.error('WELCOME CARD', `Failed to load avatar for ${member.user.tag}`, err);
         // fallback local avatar
         const defaultAvatarPath = path.join(__dirname, '../../../assets/bot/default-avatar.png');
         avatar = await loadImage(defaultAvatarPath);
