@@ -13,6 +13,7 @@ const DB_NAME = process.env.DB_NAME;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const pgDumpPath = process.env.PG_DUMP_PATH;
+const pgDumpPathAlt = process.env.PG_DUMP_PATH_ALT;
 
 // Backup folder
 const backupFolder = path.resolve('./data/.db-backup');
@@ -30,6 +31,28 @@ export async function shouldBackup(key = 'last_db_backup') {
     const lastBackup = await getLastSync(key);
     if (!lastBackup) return true;
     return (new Date() - lastBackup) > 24 * 60 * 60 * 1000; // 24h
+}
+
+/**
+ * Run pg_dump command with given path
+ * @param {string} dumpPath
+ * @param {string} backupFile
+ * @returns {Promise<void>}
+ */
+function execDump(dumpPath, backupFile) {
+    const command = `set PGPASSWORD=${DB_PASSWORD}&& "${dumpPath}" -U ${DB_USER} -h ${DB_HOST} -p ${DB_PORT} -d ${DB_NAME} -F p -f "${backupFile}"`;
+
+    return new Promise((resolve, reject) => {
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                return reject(new Error(error.message));
+            }
+            if (stderr) {
+                log.warn('BACKUP DB', `stderr from ${dumpPath}:`, stderr);
+            }
+            resolve();
+        });
+    });
 }
 
 /**
@@ -55,20 +78,26 @@ export async function runBackup() {
         log.action('BACKUP DB', `🗑️ Deleted old backup file: ${fileToDelete}`);
     }
 
-    // Run pg_dump (plain SQL)
-    const command = `set PGPASSWORD=${DB_PASSWORD}&& "${pgDumpPath}" -U ${DB_USER} -h ${DB_HOST} -p ${DB_PORT} -d ${DB_NAME} -F p -f "${backupFile}"`;
+    // Try main path, fall back to alt
+    let usedPath = null;
 
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                log.error('BACKUP DB', '❌ Backup failed:', error.message);
-                return reject(error);
-            }
-            if (stderr) log.error('BACKUP DB', 'stderr:', stderr);
+    if (pgDumpPath && fs.existsSync(pgDumpPath)) {
+        usedPath = pgDumpPath;
+    } else if (pgDumpPathAlt && fs.existsSync(pgDumpPathAlt)) {
+        log.warn('BACKUP DB', `Main pg_dump not found at ${pgDumpPath}, using alt path.`);
+        usedPath = pgDumpPathAlt;
+    } else {
+        throw new Error('No valid pg_dump path found (main or alt).');
+    }
 
-            log.action('BACKUP DB', `✅ Backup successful, new file created: ${backupFile}`);
-            updateLastSync('last_db_backup'); // mark backup done
-            resolve(backupFile);
-        });
-    });
+    try {
+        await execDump(usedPath, backupFile);
+        log.action('BACKUP DB', `✅ Backup successful with path: ${usedPath}`);
+    } catch (err) {
+        log.error('BACKUP DB', `❌ pg_dump failed at ${usedPath}: ${err.message}`);
+        throw err;
+    }
+
+    await updateLastSync('last_db_backup');
+    return backupFile;
 }
