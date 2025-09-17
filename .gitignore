@@ -11,6 +11,7 @@ archive/
 # DB
 ## Ignore all DB files
 data/*.db-backup
+data/*.db-migration-backup
 ## But keep .gitkeep so the folder can exist in Git
 !data/.gitkeep
 
