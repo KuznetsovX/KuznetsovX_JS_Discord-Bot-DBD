@@ -27,7 +27,7 @@ export default async function generateWelcomeCard(member) {
         const avatarURL = member.user.displayAvatarURL({ extension: 'png', size: 128 });
         avatar = await loadImage(avatarURL);
     } catch (err) {
-        log.error('WELCOME CARD', `Failed to load avatar for ${member.user.tag}`, err);
+        log.error('WELCOME CARD', `❌ Failed to load avatar for ${member.user.tag}`, err);
         // fallback local avatar
         const defaultAvatarPath = path.join(__dirname, '../../../assets/bot/default-avatar.png');
         avatar = await loadImage(defaultAvatarPath);

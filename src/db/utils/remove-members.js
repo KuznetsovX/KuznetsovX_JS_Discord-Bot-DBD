@@ -30,7 +30,7 @@ export async function removeUserFromDB(memberOrId) {
         if (deleted) {
             log.action('REMOVE USER FROM DB', `🗑️ Removed ${tag} (Discord ID: ${userId}) from the database`);
         } else {
-            log.warn('REMOVE USER FROM DB', `⚠️ User ${tag} (Discord ID: ${userId}) not found in database`);
+            log.warn('REMOVE USER FROM DB', `User ${tag} (Discord ID: ${userId}) not found in database`);
         }
     } catch (error) {
         log.error('REMOVE USER FROM DB', `❌ Failed to remove ${tag} (Discord ID: ${userId}): ${error.message}`, error);
@@ -53,8 +53,8 @@ export async function removeMembersFromDB(guild) {
         const deleted = await User.destroy({
             where: { userId: { [Op.in]: memberIds } }
         });
-        log.action('REMOVE ALL USERS FROM DB', `🗑️ Removed ${deleted} members from the database for guild ${guild.name}`);
+        log.action('REMOVE ALL USERS FROM DB', `🗑️ Removed ${deleted} members from the database`);
     } catch (error) {
-        log.error('REMOVE ALL USERS FROM DB', `❌ Failed to remove members for guild ${guild.name}: ${error.message}`, error);
+        log.error('REMOVE ALL USERS FROM DB', `❌ Failed to remove members: ${error.message}`, error);
     }
 }

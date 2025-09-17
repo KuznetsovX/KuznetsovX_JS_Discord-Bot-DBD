@@ -95,9 +95,9 @@ export default function messageCreate(client) {
             }
 
             await match.handler.run(message, args);
-            log.action(`${match.label}`, `${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${commandInput}"`);
+            log.action(`${match.label}`, `✅ ${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${commandInput}"`);
         } catch (error) {
-            log.error(`${match.label}`, `Error in "${usedPrefix}${commandInput}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
+            log.error(`${match.label}`, `❌ Error in "${usedPrefix}${commandInput}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
             await message.reply('❌ An error occurred while executing this command.');
         } finally {
             releaseLock(lockKey);
