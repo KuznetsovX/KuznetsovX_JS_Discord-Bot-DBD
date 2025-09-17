@@ -81,16 +81,22 @@ npm install
 
 3. Create a `.env` file in the project root and add your bot token and any required environment variables:
 
-```
-DISCORD_TOKEN=your-bot-token-here
+```env
+# Discord bot settings
+DISCORD_TOKEN=your-bot-token
 OWNER_ID=your-discord-id
+
+# PostgreSQL database settings
 DB_USER=your-db-username
 DB_PASSWORD=your-db-password
 DB_NAME=your-db-name
 DB_HOST=your-db-hostname
 DB_PORT=your-db-port
 DB_DIALECT=your-db-dialect
-PG_DUMP_PATH=path-to-your-db-dump
+
+## pg_dump paths for backups
+PG_DUMP_PATH=path-to-your-db-dump            # required
+PG_DUMP_PATH_ALT=path-to-alternative-db-dump # optional fallback
 ```
 
 4. Start the bot:
