@@ -14,7 +14,7 @@ export async function scheduleNextResync(guild) {
             // Schedule next sync 24h later
             setTimeout(() => scheduleNextResync(guild), interval);
         } else {
-            log.info('RESYNC SCHEDULER', `⏳ Scheduling next DB sync in ${Math.ceil(timeLeft / 1000 / 60)} minutes.`);
+            log.info('RESYNC SCHEDULER', `⏳ Scheduling next DB sync in ${formatTime(timeLeft)}.`);
             setTimeout(async () => {
                 await runResync(guild);
                 setTimeout(() => scheduleNextResync(guild), interval);
@@ -40,4 +40,27 @@ async function runResync(guild) {
     } catch (err) {
         log.error('RESYNC', '❌ Resync failed', err);
     }
+}
+
+/**
+ * Format ms into more readable time (h, m, s)
+ * @param {number} ms
+ * @returns {string}
+ */
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0 && minutes > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+    if (hours > 0 && minutes === 0) {
+        return `${hours}h`;
+    }
+    if (hours === 0 && minutes > 0) {
+        return `${minutes}m`;
+    }
+    return `${seconds}s`;
 }
