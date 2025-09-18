@@ -5,6 +5,7 @@ import guildMemberAdd from './events/guild-member-add.js';
 import messageCreate from './events/message-create.js';
 import ready from './events/ready.js';
 import log from './utils/logging/log.js';
+import { setBotPresence } from './utils/misc/set-bot-presence.js';
 
 const client = new Client({
     intents: [
@@ -45,14 +46,30 @@ async function startBot() {
     }
 }
 
+async function stopBot(signal) {
+    try {
+        log.warn('SHUTDOWN', `Caught ${signal}, shutting down bot...`);
+
+        // Set bot presence to offline if connected
+        if (client.isReady()) {
+            setBotPresence(client, 'offline');
+        }
+
+        // Close database
+        await closeDB();
+
+        // Destroy Discord client
+        await client.destroy();
+
+        process.exit(0);
+    } catch (error) {
+        log.error('SHUTDOWN', `❌ Error during shutdown: ${error.message}`, error);
+        process.exit(1);
+    }
+}
+
 // Handle termination signals
-process.on('SIGINT', async () => {
-    await closeDB();
-    process.exit(0);
-});
-process.on('SIGTERM', async () => {
-    await closeDB();
-    process.exit(0);
-});
+process.on('SIGINT', () => stopBot('SIGINT'));
+process.on('SIGTERM', () => stopBot('SIGTERM'));
 
 startBot();
