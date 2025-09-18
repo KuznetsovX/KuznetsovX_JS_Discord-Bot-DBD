@@ -26,8 +26,8 @@ const COMMANDS = {
                 file: '../commands/admin/resync-database.js',
                 label: 'Resync Database',
                 description: 'Manually resyncs the database with the current server data.',
-                aliases: ['resyncdb', 'resyncdatabase'],
-                usage: ['resyncdb'],
+                aliases: ['resyncdatabase', 'resyncdb'],
+                usage: ['resyncdatabase'],
                 permissions: [ROLES.ADMIN.id],
                 delete: true,
                 lock: true,
@@ -77,6 +77,16 @@ const COMMANDS = {
                 delete: false,
                 lock: false,
             },
+            showRoleInfo: {
+                file: '../commands/info/show-role-info.js',
+                label: 'Show Role Info',
+                description: 'Shows detailed information about a specific role.',
+                aliases: ['roleinfo', 'role'],
+                usage: ['roleinfo', 'roleinfo @role'],
+                permissions: [],
+                delete: true, // Should always be true to prevent role pings
+                lock: false,
+            },
             showTiles: {
                 file: '../commands/info/show-tiles.js',
                 label: 'Show Tiles',
@@ -94,7 +104,7 @@ const COMMANDS = {
                 aliases: ['avatar', 'icon'],
                 usage: ['avatar', 'avatar @user'],
                 permissions: [],
-                delete: false,
+                delete: true, // Should always be true to prevent user pings
                 lock: false,
             },
             showUserInfo: {
@@ -104,7 +114,7 @@ const COMMANDS = {
                 aliases: ['info', 'userinfo'],
                 usage: ['info', 'info @user'],
                 permissions: [],
-                delete: false,
+                delete: true, // Should always be true to prevent user pings
                 lock: false,
             },
         },
@@ -185,27 +195,27 @@ const COMMANDS = {
                 aliases: ['addrole', 'give'],
                 usage: ['addrole @user @role'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: true, // Should always be true to prevent role/user pings
                 lock: true,
             },
             demoteUser: {
                 file: '../commands/roles/demote-user.js',
                 label: 'Demote User',
                 description: 'Demotes a user to a lower rank.',
-                aliases: ['demote', 'rankdown'],
-                usage: ['demote @user'],
+                aliases: ['rankdown', 'demote'],
+                usage: ['rankdown @user'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: false,
                 lock: true,
             },
             promoteUser: {
                 file: '../commands/roles/promote-user.js',
                 label: 'Promote User',
                 description: 'Promotes a user to a higher rank.',
-                aliases: ['promote', 'rankup'],
-                usage: ['promote @user'],
+                aliases: ['rankup', 'promote'],
+                usage: ['rankup @user'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: false,
                 lock: true,
             },
             removeRole: {
@@ -215,7 +225,7 @@ const COMMANDS = {
                 aliases: ['removerole', 'take'],
                 usage: ['removerole @user @role'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: true, // Should always be true to prevent role/user pings
                 lock: true,
             },
             toggleDuelistRole: {
@@ -240,7 +250,7 @@ const COMMANDS = {
                 aliases: ['clear', 'clean', 'delete'],
                 usage: ['clear <amount>'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: true, // To ensure the command works correctly, keep the value set to true
                 lock: false,
             },
             clearOldMessages: {
@@ -250,7 +260,7 @@ const COMMANDS = {
                 aliases: ['clearold', 'cleanold', 'deleteold'],
                 usage: ['clearold <amount>'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
+                delete: true, // To ensure the command works correctly, keep the value set to true
                 lock: false,
             },
             postMessage: {
