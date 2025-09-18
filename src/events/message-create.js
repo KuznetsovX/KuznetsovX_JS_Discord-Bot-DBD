@@ -94,7 +94,7 @@ export default function messageCreate(client) {
                     });
             }
 
-            await match.handler.run(message, args);
+            await match.handler.run(message, args, match.canonicalName);
             log.action(`${match.label}`, `✅ ${message.author.tag} (${message.author.id}) successfully ran "${usedPrefix}${commandInput}"`);
         } catch (error) {
             log.error(`${match.label}`, `❌ Error in "${usedPrefix}${commandInput}" by ${message.author.tag} (${message.author.id}): ${error.message}`);
