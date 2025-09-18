@@ -5,7 +5,6 @@
  * @property {string} label - Display name of the role (matches Discord role name)
  * @property {string} description - Explanation of what this role means or is used for
  * @property {string} color - Hex color code of the role (for UI/embeds)
- * @property {number} users - Number of users that currently have this role
  * @property {number} [tier] - Tier level (only for tiered roles; higher = stronger)
  */
 
@@ -17,7 +16,6 @@ const ROLES = {
         label: '⚕️ For The People user ⚕️',
         description: 'Server administrator with full access.',
         color: '#a020f0',
-        users: 0,
     },
     BOT: {
         position: 2,
@@ -25,7 +23,6 @@ const ROLES = {
         label: '🐦‍⬛ DBD.exe 🐦‍⬛',
         description: 'Automated bot account.',
         color: '#a020f0',
-        users: 0,
     },
     MODERATOR: {
         position: 3,
@@ -33,7 +30,6 @@ const ROLES = {
         label: '⚠️ U-ban Evader ⚠️',
         description: 'Moderators responsible for keeping order.',
         color: '#e97400',
-        users: 0,
     },
     MUTED: {
         position: 4,
@@ -41,7 +37,6 @@ const ROLES = {
         label: '🔇 Muted 🔇',
         description: 'Users temporarily restricted from chatting.',
         color: '#505050',
-        users: 0,
     },
     TRUSTED: {
         position: 5,
@@ -49,7 +44,6 @@ const ROLES = {
         label: '🔥 Fast vaulting from any angle 🔥',
         description: 'Trusted members of the community.',
         color: '#aa006e',
-        users: 0,
         tier: 3,
     },
     VERIFIED: {
@@ -58,7 +52,6 @@ const ROLES = {
         label: '⚡ Do yens pls ⚡',
         description: 'Verified community members.',
         color: '#ffbb00',
-        users: 0,
         tier: 2,
     },
     DUELIST: {
@@ -67,7 +60,6 @@ const ROLES = {
         label: '⚔️ 1v1 ME, BOT?! ⚔️',
         description: 'Users who want to participate in 1v1 games.',
         color: '#ffffff',
-        users: 0,
     },
     SPY: {
         position: 8,
@@ -75,7 +67,6 @@ const ROLES = {
         label: '🥷 Foreign Spy 🥷',
         description: 'Default role assigned to new users.',
         color: '#757575',
-        users: 0,
         tier: 1,
     }
 };

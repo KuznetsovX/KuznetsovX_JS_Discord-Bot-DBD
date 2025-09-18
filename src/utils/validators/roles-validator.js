@@ -7,7 +7,7 @@
  * @param {Record<string, Role>} roles
  */
 export default function validateRoles(roles) {
-    const required = ["position", "id", "label", "description", "color", "users"];
+    const required = ["position", "id", "label", "description", "color"];
 
     for (const [name, role] of Object.entries(roles)) {
         const missing = required.filter(f => !(f in role));
