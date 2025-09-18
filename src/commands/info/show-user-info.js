@@ -1,7 +1,8 @@
 import { EmbedBuilder } from 'discord.js';
+import setDefaultEmbedFooter from '../../utils/embeds/set-default-embed-footer.js';
 
 export default {
-    run: async (message) => {
+    run: async (message, _args, commandKey) => {
         try {
             // Determine the target user (mentioned member or message author)
             const target = message.mentions.members.first() || message.member;
@@ -24,8 +25,8 @@ export default {
                     { name: '📋 Roles', value: roles, inline: false },
                     { name: '📅 Joined Server', value: `<t:${Math.floor(target.joinedTimestamp / 1000)}:F>`, inline: true },
                     { name: '📆 Account Created', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:F>`, inline: true }
-                )
-                .setFooter({ text: 'User Info', iconURL: message.client.user.displayAvatarURL() });
+                );
+            setDefaultEmbedFooter(embed, message, commandKey);
 
             await message._send({ embeds: [embed] });
         } catch (error) {

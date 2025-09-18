@@ -1,11 +1,12 @@
 import { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from 'discord.js';
 import { PREFIXES, COMMANDS } from '../../config/index.js';
+import setDefaultEmbedFooter from '../../utils/embeds/set-default-embed-footer.js';
 
 // normalize text for matching
 const normalize = (s) => s.toLowerCase().replace(/[\s_\-]/g, '');
 
 export default {
-    run: async (message, args) => {
+    run: async (message, args, commandKey) => {
         try {
             const memberRoles = message.member.roles.cache.map(r => r.id);
             const mainPrefix = PREFIXES[0];
@@ -28,8 +29,8 @@ export default {
                 const embed = new EmbedBuilder()
                     .setTitle('📖 Help Browser')
                     .setDescription(`Select a **category** to view its commands.`)
-                    .setFooter({ text: allPrefixesFooter })
                     .setColor('Purple');
+                setDefaultEmbedFooter(embed, message, commandKey, allPrefixesFooter);
 
                 const msg = await message._send({ embeds: [embed], components: [catRow] });
                 const collector = msg.createMessageComponentCollector({ time: 120_000 });
@@ -80,8 +81,8 @@ export default {
                         const catEmbed = new EmbedBuilder()
                             .setTitle(`📖 ${category.label}`)
                             .setDescription('Select a **command** to see detailed help.')
-                            .setFooter({ text: allPrefixesFooter })
                             .setColor('Purple');
+                        setDefaultEmbedFooter(catEmbed, message, commandKey, allPrefixesFooter);
 
                         return interaction.update({ embeds: [catEmbed], components: [cmdRow, backRow] });
                     }
@@ -117,8 +118,8 @@ export default {
                                         : 'Everyone'
                                 }
                             )
-                            .setFooter({ text: allPrefixesFooter })
                             .setColor('Purple');
+                        setDefaultEmbedFooter(cmdEmbed, message, commandKey, allPrefixesFooter);
 
                         return interaction.update({
                             embeds: [cmdEmbed],
@@ -143,8 +144,8 @@ export default {
                         const embed = new EmbedBuilder()
                             .setTitle('📖 Help Browser')
                             .setDescription(`Select a **category** to view its commands.`)
-                            .setFooter({ text: allPrefixesFooter })
                             .setColor('Purple');
+                        setDefaultEmbedFooter(embed, message, commandKey, allPrefixesFooter);
 
                         return interaction.update({ embeds: [embed], components: [catRow] });
                     }
@@ -202,8 +203,8 @@ export default {
                             : 'Everyone'
                     }
                 )
-                .setFooter({ text: allPrefixesFooter })
                 .setColor('Purple');
+            setDefaultEmbedFooter(embed, message, commandKey, allPrefixesFooter);
 
             return message._send({ embeds: [embed] });
         } catch (error) {

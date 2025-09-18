@@ -2,6 +2,7 @@ import { EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuil
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { TILES, ROLES } from '../../config/index.js';
+import setDefaultEmbedFooter from '../../utils/embeds/set-default-embed-footer.js';
 
 // resolve root for assets
 const __filename = fileURLToPath(import.meta.url);
@@ -44,7 +45,7 @@ const resolveTile = (query) => {
 };
 
 export default {
-    run: async (message, args) => {
+    run: async (message, args, commandKey) => {
         try {
             const member = message.member;
             const isAdmin = member.roles.cache.has(ROLES.ADMIN.id);
@@ -67,6 +68,7 @@ export default {
                     .setTitle('🏚️ Tile Browser')
                     .setDescription('Select a tile from the dropdown below.')
                     .setColor('Purple');
+                setDefaultEmbedFooter(embed, message, commandKey);
 
                 const msg = await message._send({ embeds: [embed], components: [row] });
 
@@ -95,6 +97,7 @@ export default {
                             .setTitle(tile.label)
                             .setImage('attachment://tile.jpg')
                             .setColor('Purple');
+                        setDefaultEmbedFooter(tileEmbed, message, commandKey);
 
                         return interaction.update({
                             embeds: [tileEmbed],
@@ -129,6 +132,7 @@ export default {
                         .setTitle(tile.label)
                         .setImage('attachment://tile.jpg')
                         .setColor('Purple');
+                    setDefaultEmbedFooter(embed, message, commandKey);
 
                     await message._send({ embeds: [embed], files: [file] });
                 }
@@ -150,6 +154,7 @@ export default {
                 .setTitle(tile.label)
                 .setImage('attachment://tile.jpg')
                 .setColor('Purple');
+            setDefaultEmbedFooter(embed, message, commandKey);
 
             return message._send({ embeds: [embed], files: [file] });
         } catch (error) {
