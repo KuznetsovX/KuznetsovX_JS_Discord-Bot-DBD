@@ -8,12 +8,13 @@
 # Archive
 archive/
 
-# DB
-## Ignore all DB files
-data/*.db-backup
-data/*.db-migration-backup
-## But keep .gitkeep so the folder can exist in Git
-!data/.gitkeep
+# Database
+## Ignore all files in the backup folders
+data/.db-backup/*
+data/.db-migration-backup/*
+## But keep the .gitkeep files to ensure the folders are tracked
+!data/.db-backup/.gitkeep
+!data/.db-migration-backup/.gitkeep
 
 # Node modules
 node_modules/
@@ -23,8 +24,9 @@ logs/
 *.log
 npm-debug.log*
 
-# DEV
-discord-dev-portal.html
-github-repo.html
-INFO.md
-TODO.md
+# Secrets
+secret/
+
+# Dev
+dev*
+todo*
