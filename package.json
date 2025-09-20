@@ -19,8 +19,7 @@
   "author": "KuznetsovX",
   "license": "ISC",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "canvas": "^3.1.2",
