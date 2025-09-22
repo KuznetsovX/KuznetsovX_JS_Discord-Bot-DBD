@@ -68,6 +68,13 @@ const ROLES = {
         description: 'Default role assigned to new users.',
         color: '#757575',
         tier: 1,
+    },
+    NOTIFICATIONS: {
+        position: 9,
+        id: '1419704455430934529',
+        label: '🔔 Notifications 🔔',
+        description: 'Users who want to receive notifications about games, updates, guides, etc.',
+        color: '#f1c40f',
     }
 };
 
