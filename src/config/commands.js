@@ -238,6 +238,16 @@ const COMMANDS = {
                 delete: false,
                 lock: true,
             },
+            toggleNotificationsRole: {
+                file: '../commands/roles/toggle-notifications-role.js',
+                label: 'Toggle Notifications Role',
+                description: 'Toggles the notifications role for a user.',
+                aliases: ['notif', 'notifications', 'ping'],
+                usage: ['notifications'],
+                permissions: [],
+                delete: false,
+                lock: true,
+            },
         },
     },
     utility: {
