@@ -13,7 +13,7 @@ export default {
 
         const ROLES_TEXT = [
             "Click emoji below to get a corresponding role **(requires bot to be online)**:",
-            "🔔 - notifications/pings",
+            "🔔 Notifications",
             "",
             "Alternatively, use commands. Type `!help` when the bot is online."
         ].join("\n");
@@ -25,7 +25,7 @@ export default {
             })
             .addFields(
                 { name: "Rules", value: RULES_TEXT },
-                { name: "Notifications & Roles", value: ROLES_TEXT }
+                { name: "Notifications", value: ROLES_TEXT }
             )
             .setColor('Purple')
             .setFooter({
