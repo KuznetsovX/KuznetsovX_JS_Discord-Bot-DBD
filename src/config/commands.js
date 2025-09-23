@@ -81,8 +81,8 @@ const COMMANDS = {
                 file: '../commands/info/show-role-info.js',
                 label: 'Show Role Info',
                 description: 'Shows detailed information about a specific role.',
-                aliases: ['roleinfo', 'role'],
-                usage: ['roleinfo', 'roleinfo @role'],
+                aliases: ['roles', 'roleinfo'],
+                usage: ['roles', 'roles @role'],
                 permissions: [],
                 delete: true, // Should always be true to prevent role pings
                 lock: false,
@@ -188,42 +188,22 @@ const COMMANDS = {
     roles: {
         label: 'Roles',
         commands: {
-            addRole: {
-                file: '../commands/roles/add-role.js',
-                label: 'Add Role',
-                description: 'Adds a role to a user.',
-                aliases: ['addrole', 'give'],
-                usage: ['addrole @user @role'],
+            manageRole: {
+                file: '../commands/roles/manage-role.js',
+                label: 'Manage Role',
+                description: 'Add or remove a role from a user.',
+                aliases: ['role', 'mr'],
+                usage: ['role add @user @role', 'role remove @user @role'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
                 delete: true, // Should always be true to prevent role/user pings
                 lock: true,
             },
-            demoteUser: {
-                file: '../commands/roles/demote-user.js',
-                label: 'Demote User',
-                description: 'Demotes a user to a lower rank.',
-                aliases: ['rankdown', 'demote'],
-                usage: ['rankdown @user'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: false,
-                lock: true,
-            },
-            promoteUser: {
-                file: '../commands/roles/promote-user.js',
-                label: 'Promote User',
-                description: 'Promotes a user to a higher rank.',
-                aliases: ['rankup', 'promote'],
-                usage: ['rankup @user'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: false,
-                lock: true,
-            },
-            removeRole: {
-                file: '../commands/roles/remove-role.js',
-                label: 'Remove Role',
-                description: 'Removes a role from a user.',
-                aliases: ['removerole', 'take'],
-                usage: ['removerole @user @role'],
+            manageTier: {
+                file: '../commands/roles/manage-tier.js',
+                label: 'Manage Tier',
+                description: 'Raise or lower a user\'s role level.',
+                aliases: ['tier', 'mt'],
+                usage: ['tier up @user', 'tier down @user'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
                 delete: true, // Should always be true to prevent role/user pings
                 lock: true,
