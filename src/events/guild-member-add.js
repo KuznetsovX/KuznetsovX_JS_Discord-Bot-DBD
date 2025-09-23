@@ -1,5 +1,5 @@
 import { CHANNELS } from '../config/index.js';
-import { User } from '../db/index.js';
+import { User } from '../database/index.js';
 import generateWelcomeCard from '../features/welcome/generate-welcome-card.js';
 import log from '../utils/logging/log.js';
 import { assignDefaultRole, restoreRoles, saveRoles } from '../utils/roles/role-manager.js';

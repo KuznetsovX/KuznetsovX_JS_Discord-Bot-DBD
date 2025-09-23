@@ -1,4 +1,4 @@
-import { removeUserFromDB } from '../../db/index.js';
+import { removeUserFromDB } from '../../database/index.js';
 
 export default {
     run: async (message) => {

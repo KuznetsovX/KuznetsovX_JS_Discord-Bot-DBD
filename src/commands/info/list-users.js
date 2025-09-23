@@ -1,5 +1,5 @@
 import { fn, col } from 'sequelize';
-import { User } from '../../db/index.js';
+import { User } from '../../database/index.js';
 
 export default {
     run: async (message) => {

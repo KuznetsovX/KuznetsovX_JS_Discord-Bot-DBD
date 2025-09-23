@@ -1,5 +1,5 @@
 import { ROLES, COMMANDS } from '../../config/index.js';
-import { User, removeUserFromDB } from '../../db/index.js';
+import { User, removeUserFromDB } from '../../database/index.js';
 import { saveRoles } from '../../utils/roles/role-manager.js';
 
 export default {

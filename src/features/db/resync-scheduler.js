@@ -1,4 +1,4 @@
-import { shouldBackup, runBackup, syncMembersToDB, getLastSyncMs, updateLastSync } from '../../db/index.js';
+import { shouldBackup, runBackup, syncMembersToDB, getLastSyncMs, updateLastSync } from '../../database/index.js';
 import log from '../../utils/logging/log.js';
 
 export async function scheduleNextResync(guild) {

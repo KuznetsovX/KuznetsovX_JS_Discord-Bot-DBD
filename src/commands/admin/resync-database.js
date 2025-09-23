@@ -1,4 +1,4 @@
-import { runBackup, syncMembersToDB, updateLastSync } from '../../db/index.js';
+import { runBackup, syncMembersToDB, updateLastSync } from '../../database/index.js';
 
 export default {
     run: async (message) => {

@@ -1,5 +1,5 @@
 import { ROLES } from '../../config/index.js';
-import { getUserRoles, syncUserToDB } from '../../db/index.js';
+import { getUserRoles, syncUserToDB } from '../../database/index.js';
 import log from '../logging/log.js';
 
 /**
