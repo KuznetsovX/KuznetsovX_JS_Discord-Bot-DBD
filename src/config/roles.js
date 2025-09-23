@@ -64,7 +64,7 @@ const ROLES = {
         label: '🗿 Running empty loadouts 🗿',
         description: 'Regulars who are solid, dependable, and occasionally go full bare-bones mode.',
         color: '#850059',
-        tier: 4,
+        tier: 5,
     },
     TRUSTED: {
         position: 7,
@@ -72,7 +72,7 @@ const ROLES = {
         label: '🔥 Fast vaulting from any angle 🔥',
         description: 'Trusted members of the community. Can hit any fast vault there is in the game. Only partially true.',
         color: '#aa006e',
-        tier: 5,
+        tier: 4,
     },
     // ------------------------------
     // Verified Users
