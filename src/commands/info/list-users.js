@@ -16,7 +16,8 @@ export default {
 
             const entries = users.map(u => {
                 const roles = u.roles || 'No roles';
-                return `${u.username} (${u.userId}) — Warnings: ${u.warnings || 0} — ${roles}`;
+                const warns = u.warnings > 0 ? ` — Warnings: ${u.warnings}` : '';
+                return `${u.username} (${u.userId})${warns} — ${roles}`;
             });
 
             let chunk = '';
