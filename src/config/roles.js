@@ -50,7 +50,7 @@ const ROLES = {
         position: 6,
         id: '1419967443467501659',
         label: '🗿 Running empty loadouts 🗿',
-        description: '-',
+        description: 'Regulars who are solid, dependable, and occasionally go full bare-bones mode.',
         color: '#3498db',
         tier: 3,
     },
