@@ -38,6 +38,12 @@ const CHANNELS = {
     INFO: {
         label: 'ℹ️ Info & Help',
         channels: {
+            README: {
+                type: 'TEXT',
+                id: '1420065975696363653',
+                label: '📖・readme',
+                description: 'Channel for server rules and convenient access to messages that allow you to enable/disable optional roles.',
+            },
             ANNOUNCEMENTS: {
                 type: 'TEXT',
                 id: '1372166730402496553',
