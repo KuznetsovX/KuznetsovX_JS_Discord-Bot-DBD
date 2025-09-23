@@ -46,7 +46,7 @@ export async function assignDefaultRole(target) {
             try {
                 await member.roles.add(spyRole);
                 await syncUserToDB(member);
-                log.action('ROLE MANAGER', `✅ Assigned default role to ${member.user.tag}`);
+                log.action_db('ROLE MANAGER', `✅ Assigned default role to ${member.user.tag}`);
             } catch (err) {
                 log.error('ROLE MANAGER', `❌ Failed to assign default role to ${member.user.tag}: ${err}`);
             }
@@ -72,7 +72,7 @@ export async function manageTierRoles(target) {
             try {
                 await member.roles.remove(remove);
                 await syncUserToDB(member);
-                log.action('ROLE MANAGER', `✅ Cleaned up tier roles for ${member.user.tag} (kept: ${keep.name})`);
+                log.action_db('ROLE MANAGER', `✅ Cleaned up tier roles for ${member.user.tag} (kept: ${keep.name})`);
             } catch (err) {
                 log.error('ROLE MANAGER', `❌ Failed to clean tier roles for ${member.user.tag}: ${err}`);
             }
@@ -108,7 +108,7 @@ export async function restoreRoles(target) {
 
             await member.roles.add(validRoles);
             await syncUserToDB(member);
-            log.action('ROLE MANAGER', `✅ Restored roles for ${member.user.tag}`);
+            log.action_db('ROLE MANAGER', `✅ Restored roles for ${member.user.tag}`);
         } catch (err) {
             log.error('ROLE MANAGER', `❌ Failed to restore roles for ${member.user.tag}: ${err}`);
         }
@@ -117,5 +117,5 @@ export async function restoreRoles(target) {
 
 export async function saveRoles(member) {
     await syncUserToDB(member);
-    log.action('ROLE MANAGER', `✅ Saved roles for ${member.user.tag}`);
+    log.action_db('ROLE MANAGER', `✅ Saved roles for ${member.user.tag}`);
 }

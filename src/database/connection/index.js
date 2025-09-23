@@ -27,7 +27,7 @@ export const Meta = MetaModel(sequelize, DataTypes);
 export async function syncDatabase() {
     try {
         await sequelize.sync({ alter: true });
-        log.action('DATABASE', '✅ Database schema synchronized successfully.');
+        log.action_db('DATABASE', '✅ Database schema synchronized successfully.');
     } catch (error) {
         log.error('DATABASE', `❌ Error synchronizing database schema: ${error.message}`, error);
     }
@@ -37,7 +37,7 @@ export async function syncDatabase() {
 export const closeDB = async () => {
     try {
         await sequelize.close();
-        log.action('DATABASE', '✅ Database connection closed.');
+        log.action_db('DATABASE', '✅ Database connection closed.');
     } catch (error) {
         log.error('DATABASE', `❌ Error closing database connection: ${error.message}`, error);
     }

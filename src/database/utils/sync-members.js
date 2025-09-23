@@ -23,7 +23,7 @@ export async function syncUserToDB(member) {
             roleIds: roleIds.length ? roleIds.join(',') : '',
             roles: roleNames.length ? roleNames.join(', ') : 'No roles',
         });
-        log.action('SYNC USER TO DB', `🔄 Synced DB for ${member.user.tag}`);
+        log.action_db('SYNC USER TO DB', `🔄 Synced DB for ${member.user.tag}`);
     } catch (error) {
         log.error('SYNC USER TO DB', `❌ Failed to sync DB for ${member.user.tag}: ${error.message}`, error);
     }
@@ -41,5 +41,5 @@ export async function syncMembersToDB(guild) {
         await syncUserToDB(member);
     }
 
-    log.action('SYNC MEMBERS TO DB', `✅ Synced ${members.size} members to the database`);
+    log.action_db('SYNC MEMBERS TO DB', `✅ Synced ${members.size} members to the database`);
 }

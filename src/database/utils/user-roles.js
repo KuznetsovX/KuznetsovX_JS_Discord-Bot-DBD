@@ -28,7 +28,7 @@ export async function saveUserRoles(userId, roleIds) {
             userId,
             roleIds: roleIds.join(',')
         });
-        log.action('DATABASE', `💾 Saved role IDs for userId ${userId}: ${roleIds.join(', ')}`);
+        log.action_db('DATABASE', `💾 Saved role IDs for userId ${userId}: ${roleIds.join(', ')}`);
     } catch (error) {
         log.error('DATABASE', `❌ Failed to save roles for userId ${userId}: ${error.message}`, error);
     }

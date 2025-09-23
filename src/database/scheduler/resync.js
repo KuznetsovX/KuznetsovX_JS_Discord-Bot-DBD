@@ -32,11 +32,11 @@ async function runResync(guild) {
 
         if (await shouldBackup()) {
             await runBackup();
-            log.action('RESYNC', '💾 Database backup created (24h interval check).');
+            log.action_db('RESYNC', '💾 Database backup created (24h interval check).');
         }
 
         await updateLastSync();
-        log.action('RESYNC', '✅ Members synced to DB.');
+        log.action_db('RESYNC', '✅ Members synced to DB.');
     } catch (err) {
         log.error('RESYNC', '❌ Resync failed', err);
     }

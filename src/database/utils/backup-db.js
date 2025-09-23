@@ -75,7 +75,7 @@ export async function runBackup() {
     while (files.length >= keepBackups) {
         const fileToDelete = path.join(backupFolder, files.shift());
         fs.unlinkSync(fileToDelete);
-        log.action('BACKUP DB', `🗑️ Deleted old backup file: ${fileToDelete}`);
+        log.action_db('BACKUP DB', `🗑️ Deleted old backup file: ${fileToDelete}`);
     }
 
     // Try main path, fall back to alt
@@ -92,7 +92,7 @@ export async function runBackup() {
 
     try {
         await execDump(usedPath, backupFile);
-        log.action('BACKUP DB', `✅ Backup successful with path: ${usedPath}`);
+        log.action_db('BACKUP DB', `✅ Backup successful with path: ${usedPath}`);
     } catch (err) {
         log.error('BACKUP DB', `❌ pg_dump failed at ${usedPath}: ${err.message}`);
         throw err;
