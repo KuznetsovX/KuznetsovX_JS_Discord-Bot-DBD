@@ -243,16 +243,6 @@ const COMMANDS = {
                 delete: true, // To ensure the command works correctly, keep the value set to true
                 lock: false,
             },
-            clearOldMessages: {
-                file: '../commands/utility/clear-old-messages.js',
-                label: 'Clear Old Messages',
-                description: 'Clears old messages (above 14 days).',
-                aliases: ['clearold', 'cleanold', 'deleteold'],
-                usage: ['clearold <amount>'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true, // To ensure the command works correctly, keep the value set to true
-                lock: false,
-            },
             postMessage: {
                 file: '../commands/utility/post-message.js',
                 label: 'Post Message',
