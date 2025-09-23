@@ -1,8 +1,9 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import { DISCORD_BOT_TOKEN } from './config/index.js';
 import { syncDatabase, closeDB } from './database/index.js';
 import guildMemberAdd from './events/guild-member-add.js';
 import messageCreate from './events/message-create.js';
+import reactionRolesHandler from './events/reaction-roles.js';
 import ready from './events/ready.js';
 import log from './utils/logging/log.js';
 import { setBotPresence } from './utils/misc/set-bot-presence.js';
@@ -12,8 +13,14 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildVoiceStates
+    ],
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction
     ]
 });
 
@@ -36,6 +43,9 @@ async function startBot() {
 
         // Handle incoming messages
         messageCreate(client);
+
+        // Handle reactions
+        reactionRolesHandler(client);
 
         // Login to Discord
         await client.login(DISCORD_BOT_TOKEN);
