@@ -1,5 +1,5 @@
 import { CHANNELS } from '../config/index.js';
-import { scheduleNextResync } from '../features/db/resync-scheduler.js';
+import { scheduleNextResync } from '../database/scheduler/resync.js';
 import log from '../utils/logging/log.js';
 import { setBotPresence } from '../utils/misc/set-bot-presence.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
