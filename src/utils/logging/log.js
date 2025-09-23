@@ -18,6 +18,7 @@ const colors = {
     red: "\x1b[31m",
     magenta: "\x1b[35m",
     gray: "\x1b[90m",
+    gold: "\x1b[93m",
 };
 
 // Centralized log utility
@@ -27,6 +28,8 @@ const log = {
         switch (level.toLowerCase()) {
             case 'action':
                 color = colors.magenta; icon = '⚡'; break;
+            case 'action_db':
+                color = colors.gold; icon = '💾'; break;
             case 'info':
                 color = colors.blue; icon = '❕'; break;
             case 'warn':
@@ -43,6 +46,7 @@ const log = {
 
         switch (level.toLowerCase()) {
             case 'action': console.log(message); break;
+            case 'action_db': console.log(message); break;
             case 'info': console.log(message); break;
             case 'warn': console.warn(message); break;
             case 'error': console.error(message); if (err) console.error(err); break;
@@ -51,6 +55,7 @@ const log = {
     },
 
     action: (label, msg) => log._log('action', label, msg),
+    action_db: (label, msg) => log._log('action_db', label, msg),
     info: (label, msg) => log._log('info', label, msg),
     warn: (label, msg) => log._log('warn', label, msg),
     error: (label, msg, err) => log._log('error', label, msg, err),
