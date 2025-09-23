@@ -1,10 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { Sequelize, DataTypes } from 'sequelize';
 import MetaModel from '../models/meta-model.js';
 import UserModel from '../models/user-model.js';
 import log from '../../utils/logging/log.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 // Connect to PostgreSQL
 export const sequelize = new Sequelize(
