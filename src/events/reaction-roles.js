@@ -1,7 +1,7 @@
-import { getReadmeMessage } from '../database/index.js';
 import { ROLES } from '../config/index.js';
-import { saveRoles } from '../utils/roles/role-manager.js';
+import { getReadmeMessage } from '../database/index.js';
 import log from '../utils/logging/log.js';
+import { saveRoles } from '../utils/roles/role-manager.js';
 
 export default function reactionRoleHandler(client) {
     client.on('messageReactionAdd', async (reaction, user) => {
@@ -20,7 +20,7 @@ export default function reactionRoleHandler(client) {
         if (reaction.emoji.name === '🔔' && !member.roles.cache.has(ROLES.NOTIFICATIONS.id)) {
             await member.roles.add(ROLES.NOTIFICATIONS.id).catch(() => null);
             changed = true;
-            log.action('REACTION_ROLE', `🔔 Notifications role added to ${member.user.tag} (${member.id})`);
+            log.action('REACTION ROLE', `🔔 Notifications role added to ${member.user.tag} (${member.id})`);
         }
 
         if (changed) {
@@ -44,7 +44,7 @@ export default function reactionRoleHandler(client) {
         if (reaction.emoji.name === '🔔' && member.roles.cache.has(ROLES.NOTIFICATIONS.id)) {
             await member.roles.remove(ROLES.NOTIFICATIONS.id).catch(() => null);
             changed = true;
-            log.action('REACTION_ROLE', `🔔 Notifications role removed from ${member.user.tag} (${member.id})`);
+            log.action('REACTION ROLE', `🔔 Notifications role removed from ${member.user.tag} (${member.id})`);
         }
 
         if (changed) {
