@@ -253,6 +253,16 @@ const COMMANDS = {
                 delete: true,
                 lock: false,
             },
+            postReadme: {
+                file: '../commands/utility/post-readme-message.js',
+                label: 'Post Readme Message',
+                description: 'Posts a readme message to the readme channel.',
+                aliases: ['readme', 'postreadme'],
+                usage: ['readme'],
+                permissions: [ROLES.ADMIN.id],
+                delete: true,
+                lock: false,
+            },
         },
     },
 };
