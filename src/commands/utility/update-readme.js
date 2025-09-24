@@ -1,0 +1,41 @@
+import { saveReadmeMessage, getReadmeMessage } from '../../database/index.js';
+import { getReadmeEmbed, CHANNELS } from '../../config/index.js';
+
+async function updateReadmeMessage(message) {
+    const channel = message.guild.channels.cache.get(CHANNELS.INFO.channels.README.id);
+    if (!channel) throw new Error('Readme channel not found.');
+
+    const embed = getReadmeEmbed(message.client);
+
+    const readmeMessageId = await getReadmeMessage();
+
+    if (readmeMessageId) {
+        // Try to fetch existing message
+        const sentMessage = await channel.messages.fetch(readmeMessageId).catch(() => null);
+        if (sentMessage) {
+            await sentMessage.edit({ embeds: [embed] });
+            return 'updated';
+        }
+        // If fetch failed, we'll just post a new message
+    }
+
+    // Post a new Readme message
+    const sentMessage = await channel.send({ embeds: [embed] });
+    await saveReadmeMessage(sentMessage.id);
+    await sentMessage.react('🔔');
+    return 'posted';
+}
+
+export default {
+    run: async (message) => {
+        try {
+            const result = await updateReadmeMessage(message);
+
+            if (result === 'posted') return message._send('✅ Readme message posted!');
+            if (result === 'updated') return message._send('✅ Readme message updated!');
+        } catch (err) {
+            console.error(err);
+            return message._send('❌ An unexpected error occurred while updating the Readme message.');
+        }
+    }
+};
