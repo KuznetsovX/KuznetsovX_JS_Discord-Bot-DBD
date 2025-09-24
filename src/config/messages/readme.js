@@ -1,10 +1,5 @@
-/**
- * @typedef {Object} Readme
- * @property {string[]} RULES_TEXT - List of server rules
- * @property {string[]} ROLES_TEXT - Instructions and roles text
- */
+import { EmbedBuilder } from 'discord.js';
 
-/** @type {Readme} */
 const README = {
     RULES_TEXT: [
         "• Treat everyone with respect.",
@@ -19,4 +14,30 @@ const README = {
     ]
 };
 
-export default README;
+/**
+ * Returns a prebuilt Readme embed.
+ * @param {import('discord.js').Client} client - Discord client instance
+ * @returns {EmbedBuilder}
+ */
+function getReadmeEmbed(client) {
+    const RULES_TEXT = README.RULES_TEXT.join("\n");
+    const ROLES_TEXT = README.ROLES_TEXT.join("\n");
+
+    return new EmbedBuilder()
+        .setAuthor({
+            name: "DBD.exe",
+            url: "https://discord.com/invite/VRR5X8ZdXB",
+        })
+        .addFields(
+            { name: "Rules", value: RULES_TEXT },
+            { name: "Notifications", value: ROLES_TEXT }
+        )
+        .setColor('Purple')
+        .setFooter({
+            text: "Readme",
+            iconURL: client.user?.displayAvatarURL() || undefined
+        });
+}
+
+export default getReadmeEmbed;
+export { README };
