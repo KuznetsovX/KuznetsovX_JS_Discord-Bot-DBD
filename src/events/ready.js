@@ -3,6 +3,7 @@ import { scheduleNextResync } from '../database/scheduler/resync.js';
 import log from '../utils/logging/log.js';
 import { setBotPresence } from '../utils/misc/set-bot-presence.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
+import { initReadme } from '../utils/readme/initialize-readme.js';
 
 export default async function ready(client) {
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);
@@ -27,15 +28,15 @@ export default async function ready(client) {
         await assignDefaultRole(guild);
         await manageTierRoles(guild);
         await scheduleNextResync(guild);
+        await initReadme(client, guild);
 
         if (channel) {
             await channel.send(`🔋 All startup tasks have been completed, <@${client.user.id}> is now ready to use.`);
             client.isInitialized = true;
         }
 
-        log.info('READY', '✅ All startup tasks completed successfully.');
-
         setBotPresence(client, 'default');
+        log.info('READY', '✅ All startup tasks completed successfully.');
     } catch (err) {
         log.error('READY', '❌ Error during bot startup', err);
 
