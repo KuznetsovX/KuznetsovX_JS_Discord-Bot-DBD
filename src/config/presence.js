@@ -1,5 +1,18 @@
 import { ActivityType } from 'discord.js';
 
+/**
+ * @typedef {Object} PresenceActivity
+ * @property {ActivityType} type - Type of activity (Listening, Watching, Custom, etc.)
+ * @property {string} name - Name of the activity
+ */
+
+/**
+ * @typedef {Object} Presence
+ * @property {'online' | 'idle' | 'dnd' | 'invisible'} status - Discord status
+ * @property {PresenceActivity|null} activity - Activity object or null if none
+ */
+
+/** @type {Record<string, Presence>} */
 const PRESENCES = {
     default: {
         status: 'online',
