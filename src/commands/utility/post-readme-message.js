@@ -1,22 +1,11 @@
 import { EmbedBuilder } from 'discord.js';
 import { saveReadmeMessage } from '../../database/index.js';
-import { CHANNELS } from '../../config/index.js';
+import { CHANNELS, README } from '../../config/index.js';
 
 export default {
     run: async (message) => {
-
-        const RULES_TEXT = [
-            "• Treat everyone with respect.",
-            "• No spam or self-promotion without staff permission.",
-            "• No age-restricted or obscene content (text, images, or links)."
-        ].join("\n");
-
-        const ROLES_TEXT = [
-            "Click emoji below to get a corresponding role **(requires bot to be online)**:",
-            "🔔 Notifications",
-            "",
-            "Alternatively, use commands. Type `!help` when the bot is online."
-        ].join("\n");
+        const RULES_TEXT = README.RULES_TEXT.join("\n");
+        const ROLES_TEXT = README.ROLES_TEXT.join("\n");
 
         const embed = new EmbedBuilder()
             .setAuthor({
