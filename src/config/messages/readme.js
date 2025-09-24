@@ -36,7 +36,8 @@ function getReadmeEmbed(client) {
         .setFooter({
             text: "Readme",
             iconURL: client.user?.displayAvatarURL() || undefined
-        });
+        })
+        .setTimestamp;
 }
 
 export default getReadmeEmbed;
