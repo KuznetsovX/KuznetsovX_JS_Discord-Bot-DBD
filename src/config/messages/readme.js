@@ -13,10 +13,12 @@ function getReadmeEmbed(client) {
             "• No age-restricted or obscene content (text, images, or links)."
         ],
         ROLES_TEXT: [
-            "Click emoji below to get a corresponding role **(requires bot to be online)**:",
+            "Click an emoji below to get the corresponding role.",
+            "The role will be added immediately if the bot is online,",
+            "or it will be automatically synced once the bot starts if you react while it's offline.",
             "🔔 Notifications",
             "",
-            "Alternatively, use commands. Type `!help` when the bot is online."
+            "Alternatively, you can use commands. Type `!help` when the bot is online to get more information."
         ]
     };
 
