@@ -64,6 +64,22 @@ GRANT ALL PRIVILEGES ON DATABASE dbd_bot TO dbd_user;
 
 ---
 
+## Important Note About Configuration
+
+This bot is currently **customized for a specific server** and will not work out-of-the-box for other servers.
+
+All roles, channels, emojis, and reaction-role mappings are configured for the original server.
+If you want to run this bot on your own server, you must:
+  1. Clear the current configuration in `src/config/` (roles, channels, emoji mappings, etc.)
+  2. Redefine the configuration to match your server’s roles, channels, and preferences.
+Failing to do so may result in errors or unexpected behavior.
+
+Alternatively you can mimic original server setup, but you still would need to update ID's inside the config files
+
+> In short: you can use the bot code, but your server needs a **full configuration setup** to match your own roles and channels.
+
+---
+
 ## Installation
 
 1. Clone the repository:
