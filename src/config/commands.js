@@ -119,6 +119,31 @@ const COMMANDS = {
             },
         },
     },
+    messages: {
+        label: 'Messages',
+        commands: {
+            updateInviteMessage: {
+                file: '../commands/messages/update-invite-message.js',
+                label: 'Update Invite Message',
+                description: 'Posts or updates an invite message in readme channel.',
+                aliases: ['invite', 'postinvite', 'updinvite'],
+                usage: ['invite'],
+                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
+                delete: true,
+                lock: false,
+            },
+            updateReadmeMessage: {
+                file: '../commands/messages/update-readme-message.js',
+                label: 'Update Readme Message',
+                description: 'Posts or updates a readme message in readme channel.',
+                aliases: ['readme', 'postreadme', 'updreadme'],
+                usage: ['readme'],
+                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
+                delete: true,
+                lock: false,
+            },
+        }
+    },
     moderation: {
         label: 'Moderation',
         commands: {
@@ -240,26 +265,6 @@ const COMMANDS = {
                 aliases: ['post'],
                 usage: ['post #channel <text>'],
                 permissions: [ROLES.ADMIN.id],
-                delete: true,
-                lock: false,
-            },
-            updateInviteMessage: {
-                file: '../commands/utility/update-invite-message.js',
-                label: 'Update Invite Message',
-                description: 'Posts or updates an invite message in readme channel.',
-                aliases: ['invite', 'postinvite', 'updinvite'],
-                usage: ['invite'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true,
-                lock: false,
-            },
-            updateReadmeMessage: {
-                file: '../commands/utility/update-readme-message.js',
-                label: 'Update Readme Message',
-                description: 'Posts or updates a readme message in readme channel.',
-                aliases: ['readme', 'postreadme', 'updreadme'],
-                usage: ['readme'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
                 delete: true,
                 lock: false,
             },
