@@ -112,14 +112,14 @@ const ROLES = {
     DUELIST: {
         position: 11,
         id: '1368236287865262172',
-        label: '⚔️',
+        label: '⚔️ 1v1 ⚔️',
         description: 'Users who want to participate in 1v1 games.',
         color: '#ffffff',
     },
     NOTIFICATIONS: {
         position: 12,
         id: '1419704455430934529',
-        label: '🔔',
+        label: '🔔 alerts 🔔',
         description: 'Users who want to receive notifications about games, updates, guides, etc.',
         color: '#ffffff',
     }
