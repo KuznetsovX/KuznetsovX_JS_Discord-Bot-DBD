@@ -1,6 +1,7 @@
 /**
  * @typedef {import('../../config/roles.js').Role} Role
  */
+import ROLE_CATEGORIES from '../../config/role-categories.js';
 
 /**
  * Validate role objects
@@ -8,7 +9,7 @@
  */
 export default function validateRoles(roles) {
     const required = ["position", "id", "label", "description", "color"];
-    const ALLOWED_CATEGORIES = ["Staff", "Restricted", "Trusted", "Verified", "Default", "Special"];
+    const ALLOWED_CATEGORIES = Object.values(ROLE_CATEGORIES);
 
     for (const [name, role] of Object.entries(roles)) {
         const missing = required.filter(f => !(f in role));

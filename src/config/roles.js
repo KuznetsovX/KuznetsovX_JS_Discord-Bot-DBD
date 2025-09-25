@@ -1,3 +1,5 @@
+import ROLE_CATEGORIES from './role-categories.js';
+
 /**
  * @typedef {Object} Role
  * @property {number} position - Role position in the server hierarchy
@@ -21,7 +23,7 @@ const ROLES = {
         label: '⚕️ For The People user ⚕️',
         description: 'Server administrator. Has full access.',
         color: '#7517c1',
-        category: "Staff",
+        category: ROLE_CATEGORIES.STAFF,
     },
     BOT: {
         position: 2,
@@ -29,7 +31,7 @@ const ROLES = {
         label: '🐦‍⬛ DBD.exe 🐦‍⬛',
         description: 'Automated bot account. Can do whatever it\'s designed to do. Sometimes more.',
         color: '#a020f0',
-        category: "Staff",
+        category: ROLE_CATEGORIES.STAFF,
     },
     MODERATOR: {
         position: 3,
@@ -37,7 +39,7 @@ const ROLES = {
         label: '⚠️ U-ban Evader ⚠️',
         description: 'Moderator. Responsible for keeping order.',
         color: '#b84df5',
-        category: "Staff",
+        category: ROLE_CATEGORIES.STAFF,
     },
     // ------------------------------
     // Restricted Users
@@ -49,6 +51,7 @@ const ROLES = {
         label: '🔇 Muted 🔇',
         description: 'Users temporarily restricted from chatting.',
         color: '#505050',
+        category: ROLE_CATEGORIES.RESTRICTED,
     },
     // ------------------------------
     // Trusted & High-Tier Community Members
@@ -61,7 +64,7 @@ const ROLES = {
         description: 'Ultimate Juicers. Unique users who only have seven seconds to play with you.',
         color: '#6d0046',
         tier: 6,
-        category: "Trusted",
+        category: ROLE_CATEGORIES.TRUSTED,
     },
     BARE_BONES: {
         position: 6,
@@ -70,7 +73,7 @@ const ROLES = {
         description: 'Regulars who are solid, dependable, and occasionally go full bare-bones mode.',
         color: '#850059',
         tier: 5,
-        category: "Trusted",
+        category: ROLE_CATEGORIES.TRUSTED,
     },
     TRUSTED: {
         position: 7,
@@ -79,7 +82,7 @@ const ROLES = {
         description: 'Trusted members of the community. Can hit any fast vault there is in the game. Only partially true.',
         color: '#aa006e',
         tier: 4,
-        category: "Trusted",
+        category: ROLE_CATEGORIES.TRUSTED,
     },
     // ------------------------------
     // Verified Users
@@ -92,7 +95,7 @@ const ROLES = {
         description: 'No game will be left with totems in it. Main objective isn\'t escaping.',
         color: '#d4a017',
         tier: 3,
-        category: "Verified",
+        category: ROLE_CATEGORIES.VERIFIED,
     },
     VERIFIED: {
         position: 9,
@@ -101,7 +104,7 @@ const ROLES = {
         description: 'Verified community members. Not used to doing gens, hence losing easy games.',
         color: '#f1c232',
         tier: 2,
-        category: "Verified",
+        category: ROLE_CATEGORIES.VERIFIED,
     },
     // ------------------------------
     // Default Role for New Members
@@ -113,7 +116,7 @@ const ROLES = {
         description: 'Default role assigned to new users.',
         color: '#757575',
         tier: 1,
-        category: "Default",
+        category: ROLE_CATEGORIES.DEFAULT,
     },
     // ------------------------------
     // Special & Optional Roles
@@ -125,7 +128,7 @@ const ROLES = {
         label: '⚔️ 1v1 ⚔️',
         description: 'Users who want to participate in 1v1 games.',
         color: '#ffffff',
-        category: "Special",
+        category: ROLE_CATEGORIES.SPECIAL,
     },
     NOTIFICATIONS: {
         position: 12,
@@ -133,7 +136,7 @@ const ROLES = {
         label: '🔔 alerts 🔔',
         description: 'Users who want to receive notifications about games, updates, guides, etc.',
         color: '#ffffff',
-        category: "Special",
+        category: ROLE_CATEGORIES.SPECIAL,
     }
 };
 
