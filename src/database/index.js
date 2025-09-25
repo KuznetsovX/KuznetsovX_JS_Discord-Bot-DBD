@@ -4,7 +4,7 @@ import { saveReadmeMessage, getReadmeMessage } from './utils/readme-message-meta
 import { removeUserFromDB, removeMembersFromDB } from './utils/remove-members.js';
 import { syncUserToDB, syncMembersToDB } from './utils/sync-members.js';
 import { shouldSyncDB, updateLastSync, getLastSyncMs } from './utils/sync-metadata.js';
-import { getUserRoles, saveUserRoles } from './utils/user-roles.js';
+import { getUserRoles, saveUserRoles, removeUserRoles } from './utils/user-roles.js';
 
 export {
     User, Meta, sequelize, syncDatabase, closeDB, // Connection
@@ -13,5 +13,5 @@ export {
     removeUserFromDB, removeMembersFromDB, // Remove Members
     syncUserToDB, syncMembersToDB, // Sync Members
     shouldSyncDB, updateLastSync, getLastSyncMs, // Sync Metadata
-    getUserRoles, saveUserRoles // User Roles
+    getUserRoles, saveUserRoles, removeUserRoles // User Roles
 };
