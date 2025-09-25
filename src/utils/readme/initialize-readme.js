@@ -18,7 +18,7 @@ export async function initReadme(client, guild) {
 
     if (!message) {
         message = await channel.send({ embeds: [getReadmeEmbed(client)] });
-        await message.react('🔔');
+        await ensureReactions(message);
         await saveReadmeMessage(message.id);
         log.info('INITIALIZE README', 'Posted new Readme message.');
     }
@@ -26,24 +26,27 @@ export async function initReadme(client, guild) {
     // Store the message in the client for live reaction tracking
     client.readmeMessage = message;
 
-    // Only sync reactions if the message already existed
-    if (messageId) {
-        log.info('INITIALIZE README', 'Starting to sync user roles based on Readme message reactions...');
-        await syncReactionsToRoles(client, guild, message);
-        log.action('INITIALIZE README', 'Finished syncing user roles from Readme reactions.');
+    // Only sync reactions if the message already existed or we just posted it
+    log.info('INITIALIZE README', 'Starting to sync user roles based on Readme message reactions...');
+    await syncReactionsToRoles(guild, message);
+    log.action('INITIALIZE README', 'Finished syncing user roles from Readme reactions.');
+}
+
+// Ensure all pre-defined reactions exist on a message
+async function ensureReactions(message) {
+    for (const emoji of Object.keys(ROLE_EMOJIS)) {
+        if (!message.reactions.cache.has(emoji)) {
+            await message.react(emoji).catch(() => null);
+        }
     }
 }
 
-async function syncReactionsToRoles(_client, guild, message) {
+async function syncReactionsToRoles(guild, message) {
     await message.fetch();
-
     const allMembers = await guild.members.fetch();
 
-    // Loop through all mapped emojis
     for (const [emoji, roleId] of Object.entries(ROLE_EMOJIS)) {
         const reaction = message.reactions.cache.get(emoji);
-
-        // Users who reacted
         const reactedUsers = reaction ? await reaction.users.fetch({ force: true }) : new Map();
 
         // Add roles for users who reacted but don’t have the role
@@ -56,8 +59,7 @@ async function syncReactionsToRoles(_client, guild, message) {
                 await member.roles.add(roleId).catch(() => null);
                 const roleLabel = Object.values(ROLES).find(r => r.id === roleId)?.label || roleId;
                 log.action('INITIALIZE README', `Added role ${roleLabel} to ${member.user.tag} based on ${emoji} reaction`);
-                const updatedMember = await guild.members.fetch(member.id);
-                await saveRoles(updatedMember);
+                await saveRoles(member);
             }
         }
 
@@ -71,8 +73,7 @@ async function syncReactionsToRoles(_client, guild, message) {
                 await member.roles.remove(roleId).catch(() => null);
                 const roleLabel = Object.values(ROLES).find(r => r.id === roleId)?.label || roleId;
                 log.action('INITIALIZE README', `Removed role ${roleLabel} from ${member.user.tag} because they removed ${emoji} reaction`);
-                const updatedMember = await guild.members.fetch(member.id);
-                await saveRoles(updatedMember);
+                await saveRoles(member);
             }
         }
     }

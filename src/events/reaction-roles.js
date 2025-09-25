@@ -4,6 +4,11 @@ import log from '../utils/logging/log.js';
 import { saveRoles } from '../utils/roles/role-manager.js';
 
 export default function reactionRoleHandler(client) {
+    const emojiRoleMap = {
+        '🔔': ROLES.NOTIFICATIONS.id,
+        '⚔️': ROLES.DUELIST.id,
+    };
+
     client.on('messageReactionAdd', async (reaction, user) => {
         if (user.bot) return;
         if (reaction.partial) await reaction.fetch();
@@ -15,15 +20,12 @@ export default function reactionRoleHandler(client) {
         const member = await guild.members.fetch(user.id).catch(() => null);
         if (!member) return;
 
-        let changed = false;
+        const roleId = emojiRoleMap[reaction.emoji.name];
+        if (!roleId) return;
 
-        if (reaction.emoji.name === '🔔' && !member.roles.cache.has(ROLES.NOTIFICATIONS.id)) {
-            await member.roles.add(ROLES.NOTIFICATIONS.id).catch(() => null);
-            changed = true;
-            log.action('REACTION ROLE', `🔔 Notifications role added to ${member.user.tag} (${member.id})`);
-        }
-
-        if (changed) {
+        if (!member.roles.cache.has(roleId)) {
+            await member.roles.add(roleId).catch(() => null);
+            log.action('REACTION ROLE', `${reaction.emoji.name} role added to ${member.user.tag} (${member.id})`);
             await saveRoles(member);
         }
     });
@@ -39,15 +41,12 @@ export default function reactionRoleHandler(client) {
         const member = await guild.members.fetch(user.id).catch(() => null);
         if (!member) return;
 
-        let changed = false;
+        const roleId = emojiRoleMap[reaction.emoji.name];
+        if (!roleId) return;
 
-        if (reaction.emoji.name === '🔔' && member.roles.cache.has(ROLES.NOTIFICATIONS.id)) {
-            await member.roles.remove(ROLES.NOTIFICATIONS.id).catch(() => null);
-            changed = true;
-            log.action('REACTION ROLE', `🔔 Notifications role removed from ${member.user.tag} (${member.id})`);
-        }
-
-        if (changed) {
+        if (member.roles.cache.has(roleId)) {
+            await member.roles.remove(roleId).catch(() => null);
+            log.action('REACTION ROLE', `${reaction.emoji.name} role removed from ${member.user.tag} (${member.id})`);
             await saveRoles(member);
         }
     });

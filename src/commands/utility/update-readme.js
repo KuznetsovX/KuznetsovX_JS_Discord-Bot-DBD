@@ -14,6 +14,7 @@ async function updateReadmeMessage(message) {
         const sentMessage = await channel.messages.fetch(readmeMessageId).catch(() => null);
         if (sentMessage) {
             await sentMessage.edit({ embeds: [embed] });
+            await ensureReactions(sentMessage);
             return 'updated';
         }
         // If fetch failed, we'll just post a new message
@@ -22,9 +23,19 @@ async function updateReadmeMessage(message) {
     // Post a new Readme message
     const sentMessage = await channel.send({ embeds: [embed] });
     await saveReadmeMessage(sentMessage.id);
-    await sentMessage.react('🔔');
+    await ensureReactions(sentMessage);
     return 'posted';
 }
+
+async function ensureReactions(message) {
+    const emojis = ['🔔', '⚔️'];
+    for (const emoji of emojis) {
+        if (!message.reactions.cache.has(emoji)) {
+            await message.react(emoji);
+        }
+    }
+}
+
 
 export default {
     run: async (message) => {

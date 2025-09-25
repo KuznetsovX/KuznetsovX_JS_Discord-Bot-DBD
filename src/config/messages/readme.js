@@ -16,7 +16,9 @@ function getReadmeEmbed(client) {
             "Click an emoji below to get the corresponding role.",
             "The role will be added immediately if the bot is online,",
             "or it will be automatically synced once the bot starts if you react while it's offline.",
-            "🔔 Notifications",
+            "",
+            "🔔 : notify me",
+            "⚔️ : 1v1 enjoyer",
             "",
             "Alternatively, you can use commands. Type `!help` when the bot is online to get more information."
         ]
@@ -32,7 +34,7 @@ function getReadmeEmbed(client) {
         })
         .addFields(
             { name: "Rules", value: RULES_TEXT },
-            { name: "Notifications", value: ROLES_TEXT }
+            { name: "Roles", value: ROLES_TEXT }
         )
         .setColor('Purple')
         .setFooter({
