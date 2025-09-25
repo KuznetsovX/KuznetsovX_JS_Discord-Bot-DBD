@@ -208,26 +208,6 @@ const COMMANDS = {
                 delete: true, // Should always be true to prevent role/user pings
                 lock: true,
             },
-            toggleDuelistRole: {
-                file: '../commands/roles/toggle-duelist-role.js',
-                label: 'Toggle Duelist Role',
-                description: 'Toggles the duelist role for a user.',
-                aliases: ['1v1', 'duel', 'duelistrole'],
-                usage: ['1v1'],
-                permissions: [],
-                delete: false,
-                lock: true,
-            },
-            toggleNotificationsRole: {
-                file: '../commands/roles/toggle-notifications-role.js',
-                label: 'Toggle Notifications Role',
-                description: 'Toggles the notifications role for a user.',
-                aliases: ['notif', 'notifications', 'ping'],
-                usage: ['notifications'],
-                permissions: [],
-                delete: false,
-                lock: true,
-            },
         },
     },
     utility: {

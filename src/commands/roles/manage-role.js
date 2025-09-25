@@ -1,4 +1,4 @@
-import { ROLES } from '../../config/index.js';
+import { ROLES, ROLE_EMOJIS } from '../../config/index.js';
 import { saveRoles, manageTierRoles, assignDefaultRole } from '../../utils/roles/role-manager.js';
 
 const ACTION_ALIASES = {
@@ -33,6 +33,11 @@ export default {
             const mentionedRole = message.mentions.roles.first();
             if (!mentionedRole) {
                 return message._send(`❌ Please mention a role.`);
+            }
+
+            const isReactionRole = Object.values(ROLE_EMOJIS).includes(mentionedRole.id);
+            if (isReactionRole) {
+                return message._send(`⚠️ The role is managed by reactions-roles, you cannot add or remove it manually.`);
             }
 
             if (mentionedRole.position >= author.roles.highest.position) {
