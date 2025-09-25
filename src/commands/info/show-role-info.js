@@ -67,7 +67,8 @@ export default {
                                     value: memberList.join('\n') + (memberCount > memberList.length ? `\n…and ${memberCount - memberList.length} more` : ''),
                                     inline: false
                                 }]
-                                : [{ name: '👤 Members', value: 'None', inline: false }])
+                                : [{ name: '👤 Members', value: 'None', inline: false }]),
+                            ...(roleEntry.category ? [{ name: '🗂️ Category', value: String(roleEntry.category), inline: true }] : []),
                         )
                         .setColor('Purple');
 
@@ -116,7 +117,8 @@ export default {
                         value: memberList.join('\n') + (memberCount > memberList.length ? `\n…and ${memberCount - memberList.length} more` : ''),
                         inline: false
                     }]
-                    : [{ name: '👤 Members', value: 'None', inline: false }])
+                    : [{ name: '👤 Members', value: 'None', inline: false }]),
+                ...(roleEntry.category ? [{ name: '🗂️ Category', value: String(roleEntry.category), inline: true }] : []),
             )
             .setColor('Purple');
 
