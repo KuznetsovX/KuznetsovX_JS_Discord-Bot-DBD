@@ -4,6 +4,7 @@ export default (sequelize, DataTypes) => {
         username: { type: DataTypes.STRING },
         roleIds: { type: DataTypes.STRING },
         roles: { type: DataTypes.STRING },
-        warnings: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
+        warnings: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
+        preventAutoPromotions: { type: DataTypes.JSON, defaultValue: [] },
     }, { timestamps: true, freezeTableName: false });
 };

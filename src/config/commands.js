@@ -188,6 +188,16 @@ const COMMANDS = {
     roles: {
         label: 'Roles',
         commands: {
+            preventAutoPromotion: {
+                file: '../commands/roles/manage-promotion-blocks.js',
+                label: 'Manage Promotion Blocks',
+                description: 'Blocks a user from being automatically promoted to a given role category.',
+                aliases: ['promoblock', 'mpb'],
+                usage: ['promoblock add @user <category>', 'promoblock remove @user <category>'],
+                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
+                delete: true, // Should always be true to prevent role/user pings
+                lock: true,
+            },
             manageRole: {
                 file: '../commands/roles/manage-role.js',
                 label: 'Manage Role',
