@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import getInviteEmbed from './messages/invite.js';
 import getReadmeEmbed from './messages/readme.js';
 import CHANNELS from './channels.js';
 import COMMANDS from './commands.js';
@@ -29,4 +30,4 @@ export const PREFIXES = ['!', '?'];
 export const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN?.trim();
 export const OWNER_ID = process.env.OWNER_ID?.trim();
 
-export { getReadmeEmbed, CHANNELS, COMMANDS, MAPS, PRESENCES, ROLE_CATEGORIES, ROLE_EMOJIS, ROLES, TILES };
+export { getInviteEmbed, getReadmeEmbed, CHANNELS, COMMANDS, MAPS, PRESENCES, ROLE_CATEGORIES, ROLE_EMOJIS, ROLES, TILES };

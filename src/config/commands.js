@@ -243,10 +243,20 @@ const COMMANDS = {
                 delete: true,
                 lock: false,
             },
-            updateReadme: {
-                file: '../commands/utility/update-readme.js',
+            updateInviteMessage: {
+                file: '../commands/utility/update-invite-message.js',
+                label: 'Update Invite Message',
+                description: 'Posts or updates an invite message in readme channel.',
+                aliases: ['invite', 'postinvite', 'updinvite'],
+                usage: ['invite'],
+                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
+                delete: true,
+                lock: false,
+            },
+            updateReadmeMessage: {
+                file: '../commands/utility/update-readme-message.js',
                 label: 'Update Readme Message',
-                description: 'Posts or updated a readme message in readme channel.',
+                description: 'Posts or updates a readme message in readme channel.',
                 aliases: ['readme', 'postreadme', 'updreadme'],
                 usage: ['readme'],
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
