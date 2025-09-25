@@ -7,35 +7,34 @@ import { EmbedBuilder } from 'discord.js';
  */
 function getReadmeEmbed(client) {
     const README = {
-        RULES_TEXT: [
-            "• Treat everyone with respect.",
-            "• No spam or self-promotion without staff permission.",
-            "• No age-restricted or obscene content (text, images, or links)."
-        ],
-        ROLES_TEXT: [
-            "Click an emoji below to get the corresponding role.",
-            "The role will be added immediately if the bot is online,",
-            "or it will be automatically synced once the bot starts if you react while it's offline.",
-            "",
-            "🔔 : notify me",
-            "⚔️ : 1v1 enjoyer",
-            "",
-            "Alternatively, you can use commands. Type `!help` when the bot is online to get more information."
-        ]
+        RULES: {
+            name: "**📜 Rules**",
+            value: [
+                "• 🤝 Treat everyone with respect.",
+                "• 📢 No spam or self-promotion without staff permission.",
+                "• 🔞 No age-restricted or obscene content (text, images, or links).",
+            ].join("\n"),
+        },
+        ROLES: {
+            name: "**🎭 Roles**",
+            value: [
+                "• Click an emoji below to get the corresponding role.",
+                "🔔 **: notify me**",
+                "⚔️ **: 1v1 enjoyer**",
+                "• The role will be added immediately if the bot is online,",
+                "or it will be automatically synced once the bot starts if you react while it's offline.",
+            ].join("\n"),
+        },
+        INFORMATION: {
+            name: "**ℹ️ Information**",
+            value: [
+                "• You can also use commands! Type `!help` when the bot is online for more details.",
+            ].join("\n"),
+        },
     };
 
-    const RULES_TEXT = README.RULES_TEXT.join("\n");
-    const ROLES_TEXT = README.ROLES_TEXT.join("\n");
-
     return new EmbedBuilder()
-        .setAuthor({
-            name: "DBD.exe",
-            url: "https://discord.com/invite/VRR5X8ZdXB",
-        })
-        .addFields(
-            { name: "Rules", value: RULES_TEXT },
-            { name: "Roles", value: ROLES_TEXT }
-        )
+        .addFields(README.RULES, README.ROLES, README.INFORMATION)
         .setColor('Purple')
         .setFooter({
             text: "Readme",
