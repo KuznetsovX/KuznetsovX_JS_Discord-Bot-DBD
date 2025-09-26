@@ -1,12 +1,13 @@
 # VS Code settings
 .vscode/
 
-# Environment variables
-.env
-*.env
-
 # Archive
 archive/
+
+# Ignore all message config files
+src/config/messages/*
+## But keep the example templates
+!src/config/messages/*.example.js
 
 # Database
 ## Ignore all files in the backup folders
@@ -19,13 +20,17 @@ data/.db-migration-backup/*
 # Node modules
 node_modules/
 
+# Secrets
+secret/
+
 # Logs
 logs/
 *.log
 npm-debug.log*
 
-# Secrets
-secret/
+# Environment variables
+.env
+*.env
 
 # Dev
 dev*
