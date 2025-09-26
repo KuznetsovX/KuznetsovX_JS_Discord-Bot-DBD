@@ -3,7 +3,7 @@ import { scheduleNextResync } from '../database/scheduler/resync.js';
 import log from '../utils/logging/log.js';
 import { setBotPresence } from '../utils/misc/set-bot-presence.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../utils/roles/role-manager.js';
-import { initReadme } from '../utils/readme/initialize-readme.js';
+import { initReadme } from '../utils/readme/sync-reaction-roles.js';
 
 export default async function ready(client) {
     log.info('READY', `🤖 Logged in as ${client.user.tag}`);

@@ -6,7 +6,7 @@ import { saveRoles } from '../roles/role-manager.js';
 export async function initReadme(client, guild) {
     const channel = guild.channels.cache.get(CHANNELS.INFO.channels.README.id);
     if (!channel) {
-        return log.warn('INITIALIZE README', 'Readme channel not found.');
+        return log.warn('SYNC REACTION ROLES', 'Readme channel not found.');
     }
 
     let messageId = await getReadmeMessage();
@@ -20,16 +20,16 @@ export async function initReadme(client, guild) {
         message = await channel.send({ embeds: [getReadmeEmbed(client)] });
         await ensureReactions(message);
         await saveReadmeMessage(message.id);
-        log.info('INITIALIZE README', 'Posted new Readme message.');
+        log.info('SYNC REACTION ROLES', 'Posted new Readme message.');
     }
 
     // Store the message in the client for live reaction tracking
     client.readmeMessage = message;
 
     // Only sync reactions if the message already existed or we just posted it
-    log.info('INITIALIZE README', 'Starting to sync user roles based on Readme message reactions...');
+    log.info('SYNC REACTION ROLES', 'Starting to sync user roles based on Readme message reactions...');
     await syncReactionsToRoles(guild, message);
-    log.action('INITIALIZE README', 'Finished syncing user roles from Readme reactions.');
+    log.action('SYNC REACTION ROLES', 'Finished syncing user roles from Readme reactions.');
 }
 
 // Ensure all pre-defined reactions exist on a message
@@ -58,7 +58,7 @@ async function syncReactionsToRoles(guild, message) {
             if (!member.roles.cache.has(roleId)) {
                 await member.roles.add(roleId).catch(() => null);
                 const roleLabel = Object.values(ROLES).find(r => r.id === roleId)?.label || roleId;
-                log.action('INITIALIZE README', `Added role ${roleLabel} to ${member.user.tag} based on ${emoji} reaction`);
+                log.action('SYNC REACTION ROLES', `Added role ${roleLabel} to ${member.user.tag} based on ${emoji} reaction`);
                 await saveRoles(member);
             }
         }
@@ -72,7 +72,7 @@ async function syncReactionsToRoles(guild, message) {
             if (hasRole && !reacted) {
                 await member.roles.remove(roleId).catch(() => null);
                 const roleLabel = Object.values(ROLES).find(r => r.id === roleId)?.label || roleId;
-                log.action('INITIALIZE README', `Removed role ${roleLabel} from ${member.user.tag} because they removed ${emoji} reaction`);
+                log.action('SYNC REACTION ROLES', `Removed role ${roleLabel} from ${member.user.tag} because they removed ${emoji} reaction`);
                 await saveRoles(member);
             }
         }
