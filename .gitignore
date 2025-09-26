@@ -7,7 +7,7 @@ archive/
 # Ignore all message config files
 src/config/messages/*
 ## But keep the example templates
-!src/config/messages/*.example.js
+!src/config/messages/examples/*
 
 # Database
 ## Ignore all files in the backup folders
