@@ -1,6 +1,6 @@
-import { getReadmeEmbed, CHANNELS, ROLE_EMOJIS } from '../../config/index.js';
-import { getReadmeMessage, saveReadmeMessage } from '../../database/index.js';
-import log from '../logging/log.js';
+import { getReadmeEmbed, CHANNELS, ROLE_EMOJIS } from '../../../config/index.js';
+import { getReadmeMessage, saveReadmeMessage } from '../../../database/index.js';
+import log from '../../logging/log.js';
 import { ensureReactions, syncReactionsToRoles } from './reaction-utils.js';
 
 /**

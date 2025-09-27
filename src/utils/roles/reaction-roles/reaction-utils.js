@@ -1,6 +1,6 @@
-import { ROLES } from '../../config/index.js';
-import log from '../logging/log.js';
-import { saveRoles } from '../roles/role-manager.js';
+import { ROLES } from '../../../config/index.js';
+import log from '../../logging/log.js';
+import { saveRoles } from '../../roles/role-manager.js';
 
 /**
  * Ensure all specified reactions exist on a message
