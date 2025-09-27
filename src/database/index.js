@@ -1,19 +1,15 @@
 import { User, Meta, sequelize, syncDatabase, closeDB } from './connection/index.js';
 import { runBackup, shouldBackup } from './utils/backup-db.js';
-import { saveInviteMessage, getInviteMessage } from './utils/invite-message-metadata.js';
-import { saveReadmeMessage, getReadmeMessage } from './utils/readme-message-metadata.js';
-import { removeUserFromDB, removeMembersFromDB } from './utils/remove-members.js';
-import { syncUserToDB, syncMembersToDB } from './utils/sync-members.js';
+import { syncUserToDB, syncMembersToDB, removeUserFromDB, removeMembersFromDB } from './utils/members-db.js';
+import { saveMessageMetadata, getMessageMetadata, saveInviteMessage, getInviteMessage, saveReadmeMessage, getReadmeMessage } from './utils/message-metadata.js';
 import { shouldSyncDB, updateLastSync, getLastSyncMs } from './utils/sync-metadata.js';
 import { getUserRoles, saveUserRoles, removeUserRoles } from './utils/user-roles.js';
 
 export {
     User, Meta, sequelize, syncDatabase, closeDB, // Connection
     runBackup, shouldBackup, // Backup Database
-    saveInviteMessage, getInviteMessage, // Invite Message
-    saveReadmeMessage, getReadmeMessage, // Readme Message
-    removeUserFromDB, removeMembersFromDB, // Remove Members
-    syncUserToDB, syncMembersToDB, // Sync Members
+    syncUserToDB, syncMembersToDB, removeUserFromDB, removeMembersFromDB, // Members Database
+    saveMessageMetadata, getMessageMetadata, saveInviteMessage, getInviteMessage, saveReadmeMessage, getReadmeMessage, // Message Metadata
     shouldSyncDB, updateLastSync, getLastSyncMs, // Sync Metadata
     getUserRoles, saveUserRoles, removeUserRoles // User Roles
 };
