@@ -122,6 +122,16 @@ const COMMANDS = {
     messages: {
         label: 'Messages',
         commands: {
+            postMessage: {
+                file: '../commands/messages/post-message.js',
+                label: 'Post Message',
+                description: 'Posts a message to the specified channel.',
+                aliases: ['post'],
+                usage: ['post #channel <text>'],
+                permissions: [ROLES.ADMIN.id],
+                delete: true,
+                lock: false,
+            },
             updateInviteMessage: {
                 file: '../commands/messages/update-invite-message.js',
                 label: 'Update Invite Message',
@@ -156,6 +166,16 @@ const COMMANDS = {
                 permissions: [ROLES.ADMIN.id],
                 delete: false,
                 lock: true,
+            },
+            clearMessages: {
+                file: '../commands/moderation/clear-messages.js',
+                label: 'Clear Messages',
+                description: 'Clears recent messages (under 14 days).',
+                aliases: ['clear', 'clean', 'delete'],
+                usage: ['clear <amount>'],
+                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
+                delete: true, // To ensure the command works correctly, keep the value set to true
+                lock: false,
             },
             kickUser: {
                 file: '../commands/moderation/kick-user.js',
@@ -242,31 +262,6 @@ const COMMANDS = {
                 permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
                 delete: true, // Should always be true to prevent role/user pings
                 lock: true,
-            },
-        },
-    },
-    utility: {
-        label: 'Utility',
-        commands: {
-            clearMessages: {
-                file: '../commands/utility/clear-messages.js',
-                label: 'Clear Messages',
-                description: 'Clears recent messages (under 14 days).',
-                aliases: ['clear', 'clean', 'delete'],
-                usage: ['clear <amount>'],
-                permissions: [ROLES.ADMIN.id, ROLES.MODERATOR.id],
-                delete: true, // To ensure the command works correctly, keep the value set to true
-                lock: false,
-            },
-            postMessage: {
-                file: '../commands/utility/post-message.js',
-                label: 'Post Message',
-                description: 'Posts a message to the specified channel.',
-                aliases: ['post'],
-                usage: ['post #channel <text>'],
-                permissions: [ROLES.ADMIN.id],
-                delete: true,
-                lock: false,
             },
         },
     },
