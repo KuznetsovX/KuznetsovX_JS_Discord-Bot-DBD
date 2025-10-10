@@ -248,7 +248,7 @@ const MAPS = {
                 alts: ['coalTowerDBDL'],
             },
             coalTowerDBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_COAL_TOWER_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_COAL_TOWER_1_4K_1.png',
                 label: 'Coal Tower DBDL',
                 aliases: ['CT_DBDL'],
                 alt: true,
@@ -272,7 +272,7 @@ const MAPS = {
                 alts: ['groaningStorehouseDBDL'],
             },
             groaningStorehouseDBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_GROANING_STOREHOUSE_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_GROANING_STOREHOUSE_1_4K.png',
                 label: 'Groaning Storehouse DBDL',
                 aliases: ['GS_DBDL'],
                 alt: true,
@@ -284,7 +284,7 @@ const MAPS = {
                 alts: ['ironworksOfMisery2DBDL'],
             },
             ironworksOfMisery2DBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_1_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_2_4K.png',
                 label: 'Ironworks Of Misery II DBDL',
                 aliases: ['IOM2_DBDL', 'IM2_DBDL'],
                 alt: true,
@@ -296,7 +296,7 @@ const MAPS = {
                 alts: ['ironworksOfMiseryDBDL'],
             },
             ironworksOfMiseryDBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_1_4K.png',
                 label: 'Ironworks Of Misery DBDL',
                 aliases: ['IOM_DBDL', 'IM_DBDL'],
                 alt: true,
@@ -320,7 +320,7 @@ const MAPS = {
                 alts: ['shelterWoodsDBDL'],
             },
             shelterWoodsDBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SHELTER_WOODS_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SHELTER_WOODS_1_4K.png',
                 label: 'Shelter Woods DBDL',
                 aliases: ['SW_DBDL'],
                 alt: true,
@@ -344,7 +344,7 @@ const MAPS = {
                 alts: ['suffocationPitDBDL'],
             },
             suffocationPitDBDL: {
-                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SUFFOCATION_PIT_4K.png',
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SUFFOCATION_PIT_1_4K.png',
                 label: 'Suffocation Pit DBDL',
                 aliases: ['SP_DBDL'],
                 alt: true,
