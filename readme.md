@@ -185,7 +185,7 @@ This project is licensed under the MIT License.
 
 ## Credits
 
-- Map images taken from [Hens333](https://hens333.com/callouts)
+- Map images taken from [Hens333](https://hens333.com/callouts) and from [DBDL](https://discord.gg/dbdleague)
 - Tile images taken from [EagerFace](https://steamcommunity.com/sharedfiles/filedetails/?id=2904838739)
 
 > Thanks for creating such awesome content! These assets are used only for this personal-use Discord bot.
