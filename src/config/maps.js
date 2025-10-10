@@ -3,6 +3,8 @@
  * @property {string} image - Path to the image file
  * @property {string} label - Display name of the map
  * @property {string[]} aliases - List of alternative triggers
+ * @property {string[]} [alts] - Optional list of alternative map keys for this map
+ * @property {boolean} [alt=false] - Whether this map is an alternate/DBDL version
  */
 
 /**
@@ -23,21 +25,49 @@ const MAPS = {
                 image: '../../assets/maps/autohaven-wreckers/Blood Lodge.png',
                 label: 'Blood Lodge',
                 aliases: ['BL'],
+                alts: ['bloodLodgeDBDL'],
+            },
+            bloodLodgeDBDL: {
+                image: '../../assets/maps/autohaven-wreckers/DBDLEAGUE_BLOOD_LODGE_4K.png',
+                label: 'Blood Lodge DBDL',
+                aliases: ['BL_DBDL'],
+                alt: true,
             },
             gasHeaven: {
                 image: '../../assets/maps/autohaven-wreckers/Gas Heaven.png',
                 label: 'Gas Heaven',
                 aliases: ['GH'],
+                alts: ['gasHeavenDBDL'],
+            },
+            gasHeavenDBDL: {
+                image: '../../assets/maps/autohaven-wreckers/DBDLEAGUE_GAS_HEAVEN_4K.png',
+                label: 'Gas Heaven DBDL',
+                aliases: ['GH_DBDL'],
+                alt: true,
             },
             wreckersYard: {
                 image: '../../assets/maps/autohaven-wreckers/Wreckers.png',
                 label: 'Wreckers\' Yard',
                 aliases: ['WY'],
+                alts: ['wreckersYardDBDL'],
+            },
+            wreckersYardDBDL: {
+                image: '../../assets/maps/autohaven-wreckers/DBDLEAGUE_WRECKERS_YARD_4K.png',
+                label: 'Wreckers\' Yard DBDL',
+                aliases: ['WY_DBDL'],
+                alt: true,
             },
             wretchedShop: {
                 image: '../../assets/maps/autohaven-wreckers/Wretched Shop.png',
                 label: 'Wretched Shop',
                 aliases: ['WS'],
+                alts: ['wretchedShopDBDL'],
+            },
+            wretchedShopDBDL: {
+                image: '../../assets/maps/autohaven-wreckers/DBDLEAGUE_WRETCHED_SHOP_4K.png',
+                label: 'Wretched Shop DBDL',
+                aliases: ['WS_DBDL'],
+                alt: true,
             },
         },
     },
@@ -203,51 +233,121 @@ const MAPS = {
                 image: '../../assets/maps/macmillan-estate/Coal Tower II.png',
                 label: 'Coal Tower II',
                 aliases: ['CT2'],
+                alts: ['coalTower2DBDL'],
+            },
+            coalTower2DBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_COAL_TOWER_2_4K.png',
+                label: 'Coal Tower II DBDL',
+                aliases: ['CT2_DBDL'],
+                alt: true,
             },
             coalTower: {
                 image: '../../assets/maps/macmillan-estate/Coal Tower.png',
                 label: 'Coal Tower',
                 aliases: ['CT'],
+                alts: ['coalTowerDBDL'],
+            },
+            coalTowerDBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_COAL_TOWER_4K.png',
+                label: 'Coal Tower DBDL',
+                aliases: ['CT_DBDL'],
+                alt: true,
             },
             groaningStorehouse2: {
                 image: '../../assets/maps/macmillan-estate/Groaning Storehouse II.png',
                 label: 'Groaning Storehouse II',
                 aliases: ['GS2'],
+                alts: ['groaningStorehouse2DBDL'],
+            },
+            groaningStorehouse2DBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_GROANING_STOREHOUSE_2_4K.png',
+                label: 'Groaning Storehouse II DBDL',
+                aliases: ['GS2_DBDL'],
+                alt: true,
             },
             groaningStorehouse: {
                 image: '../../assets/maps/macmillan-estate/Groaning Storehouse.png',
                 label: 'Groaning Storehouse',
                 aliases: ['GS'],
+                alts: ['groaningStorehouseDBDL'],
+            },
+            groaningStorehouseDBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_GROANING_STOREHOUSE_4K.png',
+                label: 'Groaning Storehouse DBDL',
+                aliases: ['GS_DBDL'],
+                alt: true,
             },
             ironworksOfMisery2: {
                 image: '../../assets/maps/macmillan-estate/Ironworks Of Misery II.png',
                 label: 'Ironworks Of Misery II',
                 aliases: ['IOM2', 'IM2'],
+                alts: ['ironworksOfMisery2DBDL'],
+            },
+            ironworksOfMisery2DBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_1_4K.png',
+                label: 'Ironworks Of Misery II DBDL',
+                aliases: ['IOM2_DBDL', 'IM2_DBDL'],
+                alt: true,
             },
             ironworksOfMisery: {
                 image: '../../assets/maps/macmillan-estate/Ironworks Of Misery.png',
                 label: 'Ironworks Of Misery',
                 aliases: ['IOM', 'IM'],
+                alts: ['ironworksOfMiseryDBDL'],
+            },
+            ironworksOfMiseryDBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_IRONWORKS_OF_MISERY_4K.png',
+                label: 'Ironworks Of Misery DBDL',
+                aliases: ['IOM_DBDL', 'IM_DBDL'],
+                alt: true,
             },
             shelterWoods2: {
                 image: '../../assets/maps/macmillan-estate/Shelter Woods II.png',
                 label: 'Shelter Woods II',
                 aliases: ['SW2'],
+                alts: ['shelterWoods2DBDL'],
+            },
+            shelterWoods2DBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SHELTER_WOODS_2_4K.png',
+                label: 'Shelter Woods II DBDL',
+                aliases: ['SW2_DBDL'],
+                alt: true,
             },
             shelterWoods: {
                 image: '../../assets/maps/macmillan-estate/Shelter Woods.png',
                 label: 'Shelter Woods',
                 aliases: ['SW'],
+                alts: ['shelterWoodsDBDL'],
+            },
+            shelterWoodsDBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SHELTER_WOODS_4K.png',
+                label: 'Shelter Woods DBDL',
+                aliases: ['SW_DBDL'],
+                alt: true,
             },
             suffocationPit2: {
                 image: '../../assets/maps/macmillan-estate/Suffocation Pit II.png',
                 label: 'Suffocation Pit II',
                 aliases: ['SP2'],
+                alts: ['suffocationPit2DBDL'],
+            },
+            suffocationPit2DBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SUFFOCATION_PIT_2_4K.png',
+                label: 'Suffocation Pit II DBDL',
+                aliases: ['SP2_DBDL'],
+                alt: true,
             },
             suffocationPit: {
                 image: '../../assets/maps/macmillan-estate/Suffocation Pit.png',
                 label: 'Suffocation Pit',
                 aliases: ['SP'],
+                alts: ['suffocationPitDBDL'],
+            },
+            suffocationPitDBDL: {
+                image: '../../assets/maps/macmillan-estate/DBDLEAGUE_SUFFOCATION_PIT_4K.png',
+                label: 'Suffocation Pit DBDL',
+                aliases: ['SP_DBDL'],
+                alt: true,
             },
         },
     },
