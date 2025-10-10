@@ -1,16 +1,16 @@
 import { scheduleNextResync } from '../../database/scheduler/resync.js';
 import log from '../logging/log.js';
-//import { assignDefaultRole, manageTierRoles, restoreRoles } from '../roles/role-manager.js';
-//import { initReadme } from '../roles/reaction-roles/index.js';
+import { assignDefaultRole, manageTierRoles, restoreRoles } from '../roles/role-manager.js';
+import { initReadme } from '../roles/reaction-roles/index.js';
 
 export async function runStartupTasks(client, guild, channel) {
     const tasks = [
         { name: 'Fetching members', action: async () => guild.members.fetch() },
-        //{ name: 'Restoring roles', action: async () => restoreRoles(guild) },
-        //{ name: 'Assigning default role', action: async () => assignDefaultRole(guild) },
-        //{ name: 'Managing tier roles', action: async () => manageTierRoles(guild) },
+        { name: 'Restoring roles', action: async () => restoreRoles(guild) },
+        { name: 'Assigning default role', action: async () => assignDefaultRole(guild) },
+        { name: 'Managing tier roles', action: async () => manageTierRoles(guild) },
         { name: 'Scheduling next resync', action: async () => scheduleNextResync(guild) },
-        //{ name: 'Initializing readme', action: async () => initReadme(client, guild) },
+        { name: 'Initializing readme', action: async () => initReadme(client, guild) },
     ];
 
     let progressMessage = null;
