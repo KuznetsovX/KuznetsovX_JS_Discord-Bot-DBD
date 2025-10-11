@@ -12,6 +12,45 @@ const projectRoot = path.resolve(__dirname, '../../..');
 // normalize text for matching
 const normalize = (s) => s.toLowerCase().replace(/[\s_\-]/g, '');
 
+// helper: safe file loading with timeout & fallback
+const safeLoadImage = async (filePath, timeoutMs = 7000) => {
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('Timeout')), timeoutMs);
+        import('fs').then(fs => {
+            fs.access(filePath, fs.constants.F_OK, (err) => {
+                clearTimeout(timer);
+                if (err) return reject(new Error('File not found'));
+                resolve(new AttachmentBuilder(filePath, { name: 'map.jpg' }));
+            });
+        });
+    });
+};
+
+// helper: graceful failure handler
+const showLoadError = async (interaction, message, commandKey, text = '⚠️ Failed to load image.') => {
+    const errorEmbed = new EmbedBuilder()
+        .setTitle('Error')
+        .setDescription(text)
+        .setColor('Red');
+    setDefaultEmbedFooter(errorEmbed, message, commandKey);
+
+    try {
+        await interaction.update({ embeds: [errorEmbed], files: [], components: [] });
+    } catch (err) {
+        if (err.code === 10062) {
+            // interaction expired -> followUp fallback
+            await interaction.followUp({
+                embeds: [errorEmbed],
+                flags: MessageFlags.Ephemeral
+            }).catch(() => { });
+        } else {
+            try {
+                await interaction.reply({ embeds: [errorEmbed], flags: MessageFlags.Ephemeral });
+            } catch (_) { }
+        }
+    }
+};
+
 // find a tile by label, key, or aliases
 const resolveMap = (query) => {
     const q = normalize(query);
@@ -88,225 +127,244 @@ export default {
                         });
                     }
 
-                    // ----- Realm selected -----
-                    if (interaction.isStringSelectMenu() && interaction.customId === 'realm_select') {
-                        const realmKey = interaction.values[0];
-                        const realm = MAPS[realmKey];
-                        if (!realm) return interaction.reply({ content: '❌ Realm not found.', flags: MessageFlags.Ephemeral });
+                    try {
+                        // Immediately defer to prevent "Unknown interaction"
+                        await interaction.deferUpdate().catch(() => { });
 
-                        const mapSelect = new StringSelectMenuBuilder()
-                            .setCustomId(`map_select:${realmKey}`)
-                            .setPlaceholder(`Choose a map from ${realm.label}...`)
-                            .addOptions(
-                                Object.entries(realm.maps)
-                                    .filter(([_, m]) => !m.alt) // hide alt maps in dropdown
-                                    .map(([mapKey, map]) => ({ label: map.label, value: mapKey }))
-                            );
+                        // ----- Realm selected -----
+                        if (interaction.isStringSelectMenu() && interaction.customId === 'realm_select') {
+                            const realmKey = interaction.values[0];
+                            const realm = MAPS[realmKey];
+                            if (!realm) return;
 
-                        const mapRow = new ActionRowBuilder().addComponents(mapSelect);
-                        const backRow = new ActionRowBuilder().addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('back_realms')
-                                .setLabel('↩ Back to Realms')
-                                .setStyle(ButtonStyle.Secondary)
-                        );
-
-                        const realmEmbed = new EmbedBuilder()
-                            .setTitle(`🗺️ ${realm.label}`)
-                            .setDescription('Now select a **map** from the dropdown below.')
-                            .setColor('Purple');
-                        setDefaultEmbedFooter(realmEmbed, message, commandKey);
-
-                        return interaction.update({ embeds: [realmEmbed], components: [mapRow, backRow] });
-                    }
-
-                    // ----- Map selected -----
-                    if (interaction.isStringSelectMenu() && interaction.customId.startsWith('map_select:')) {
-                        const [, realmKey] = interaction.customId.split(':');
-                        const realm = MAPS[realmKey];
-                        if (!realm) return;
-
-                        const mapKey = interaction.values[0];
-                        const map = realm.maps[mapKey];
-                        if (!map) return;
-
-                        // build file + embed for base map
-                        const filePath = path.join(projectRoot, map.image.replace('../../', ''));
-                        const file = new AttachmentBuilder(filePath, { name: 'map.jpg' });
-
-                        const mapEmbed = new EmbedBuilder()
-                            .setTitle(`${map.label} (${realm.label})`)
-                            .setImage('attachment://map.jpg')
-                            .setColor('Purple');
-                        setDefaultEmbedFooter(mapEmbed, message, commandKey);
-
-                        // dropdown to choose other normal maps (non-alt)
-                        const mapSelectRow = new ActionRowBuilder().addComponents(
-                            new StringSelectMenuBuilder()
+                            const mapSelect = new StringSelectMenuBuilder()
                                 .setCustomId(`map_select:${realmKey}`)
-                                .setPlaceholder(`Choose another map from ${realm.label}...`)
+                                .setPlaceholder(`Choose a map from ${realm.label}...`)
                                 .addOptions(
                                     Object.entries(realm.maps)
                                         .filter(([_, m]) => !m.alt)
-                                        .map(([mKey, m]) => ({ label: m.label, value: mKey }))
-                                )
-                        );
+                                        .map(([mapKey, map]) => ({ label: map.label, value: mapKey }))
+                                );
 
-                        // toggle-alt button (secondary style, as you requested)
-                        const rows = [mapSelectRow];
-
-                        if (Array.isArray(map.alts) && map.alts.length > 0) {
-                            const toggleAltRow = new ActionRowBuilder().addComponents(
+                            const mapRow = new ActionRowBuilder().addComponents(mapSelect);
+                            const backRow = new ActionRowBuilder().addComponents(
                                 new ButtonBuilder()
-                                    .setCustomId(`toggle_alt:${realmKey}:${mapKey}`)
-                                    .setLabel('Show alternate version')
-                                    .setStyle(ButtonStyle.Secondary) // use Secondary — not Primary
+                                    .setCustomId('back_realms')
+                                    .setLabel('↩ Back to Realms')
+                                    .setStyle(ButtonStyle.Secondary)
                             );
-                            rows.push(toggleAltRow);
+
+                            const realmEmbed = new EmbedBuilder()
+                                .setTitle(`🗺️ ${realm.label}`)
+                                .setDescription('Now select a **map** from the dropdown below.')
+                                .setColor('Purple');
+                            setDefaultEmbedFooter(realmEmbed, message, commandKey);
+
+                            return interaction.editReply({ embeds: [realmEmbed], components: [mapRow, backRow] });
                         }
 
-                        // back to realms (always present)
-                        const backRow = new ActionRowBuilder().addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('back_realms')
-                                .setLabel('↩ Back to Realms')
-                                .setStyle(ButtonStyle.Secondary)
-                        );
-                        rows.push(backRow);
+                        // ----- Map selected -----
+                        if (interaction.isStringSelectMenu() && interaction.customId.startsWith('map_select:')) {
+                            const [, realmKey] = interaction.customId.split(':');
+                            const realm = MAPS[realmKey];
+                            if (!realm) return;
 
-                        return interaction.update({ embeds: [mapEmbed], files: [file], components: rows });
-                    }
+                            const mapKey = interaction.values[0];
+                            const map = realm.maps[mapKey];
+                            if (!map) return;
 
-                    // ----- Toggle alt (show first alt) -----
-                    if (interaction.isButton() && interaction.customId.startsWith('toggle_alt:')) {
-                        const [, realmKey, baseMapKey] = interaction.customId.split(':');
-                        const realm = MAPS[realmKey];
-                        if (!realm) return;
-                        const baseMap = realm.maps[baseMapKey];
-                        if (!baseMap || !baseMap.alts?.length) return;
+                            const filePath = path.join(projectRoot, map.image.replace('../../', ''));
+                            let file;
+                            try {
+                                file = await safeLoadImage(filePath);
+                            } catch (err) {
+                                console.warn(`[MapLoader] Failed to load image: ${filePath} | ${err.message}`);
+                                return showLoadError(interaction, message, commandKey);
+                            }
 
-                        // pick the first alt for now
-                        const altKey = baseMap.alts[0];
-                        const altMap = realm.maps[altKey];
-                        if (!altMap) return;
+                            const mapEmbed = new EmbedBuilder()
+                                .setTitle(`${map.label} (${realm.label})`)
+                                .setImage('attachment://map.jpg')
+                                .setColor('Purple');
+                            setDefaultEmbedFooter(mapEmbed, message, commandKey);
 
-                        const filePath = path.join(projectRoot, altMap.image.replace('../../', ''));
-                        const file = new AttachmentBuilder(filePath, { name: 'map.jpg' });
+                            const mapSelectRow = new ActionRowBuilder().addComponents(
+                                new StringSelectMenuBuilder()
+                                    .setCustomId(`map_select:${realmKey}`)
+                                    .setPlaceholder(`Choose another map from ${realm.label}...`)
+                                    .addOptions(
+                                        Object.entries(realm.maps)
+                                            .filter(([_, m]) => !m.alt)
+                                            .map(([mKey, m]) => ({ label: m.label, value: mKey }))
+                                    )
+                            );
 
-                        const altEmbed = new EmbedBuilder()
-                            .setTitle(`${altMap.label} (${realm.label})`)
-                            .setImage('attachment://map.jpg')
-                            .setColor('Purple');
-                        setDefaultEmbedFooter(altEmbed, message, commandKey);
+                            const rows = [mapSelectRow];
 
-                        // keep dropdown so user can switch maps, include "Back to original map" and "Back to Realms"
-                        const mapSelectRow = new ActionRowBuilder().addComponents(
-                            new StringSelectMenuBuilder()
-                                .setCustomId(`map_select:${realmKey}`)
-                                .setPlaceholder(`Choose another map from ${realm.label}...`)
-                                .addOptions(
-                                    Object.entries(realm.maps)
-                                        .filter(([_, m]) => !m.alt)
-                                        .map(([mKey, m]) => ({ label: m.label, value: mKey }))
-                                )
-                        );
+                            if (Array.isArray(map.alts) && map.alts.length > 0) {
+                                const toggleAltRow = new ActionRowBuilder().addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(`toggle_alt:${realmKey}:${mapKey}`)
+                                        .setLabel('Show alternate version')
+                                        .setStyle(ButtonStyle.Secondary)
+                                );
+                                rows.push(toggleAltRow);
+                            }
 
-                        const toggleBackRow = new ActionRowBuilder().addComponents(
-                            new ButtonBuilder()
-                                .setCustomId(`toggle_back:${realmKey}:${baseMapKey}`)
-                                .setLabel('Back to original map')
-                                .setStyle(ButtonStyle.Secondary) // keep Secondary
-                        );
+                            const backRow = new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setCustomId('back_realms')
+                                    .setLabel('↩ Back to Realms')
+                                    .setStyle(ButtonStyle.Secondary)
+                            );
+                            rows.push(backRow);
 
-                        const backRealmsRow = new ActionRowBuilder().addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('back_realms')
-                                .setLabel('↩ Back to Realms')
-                                .setStyle(ButtonStyle.Secondary)
-                        );
+                            return interaction.editReply({ embeds: [mapEmbed], files: [file], components: rows });
+                        }
 
-                        return interaction.update({
-                            embeds: [altEmbed],
-                            files: [file],
-                            components: [mapSelectRow, toggleBackRow, backRealmsRow]
-                        });
-                    }
+                        // ----- Toggle alt (show first alt) -----
+                        if (interaction.isButton() && interaction.customId.startsWith('toggle_alt:')) {
+                            const [, realmKey, baseMapKey] = interaction.customId.split(':');
+                            const realm = MAPS[realmKey];
+                            if (!realm) return;
+                            const baseMap = realm.maps[baseMapKey];
+                            if (!baseMap || !baseMap.alts?.length) return;
 
-                    // ----- Toggle back to original -----
-                    if (interaction.isButton() && interaction.customId.startsWith('toggle_back:')) {
-                        const [, realmKey, baseMapKey] = interaction.customId.split(':');
-                        const realm = MAPS[realmKey];
-                        if (!realm) return;
-                        const map = realm.maps[baseMapKey];
-                        if (!map) return;
+                            const altKey = baseMap.alts[0];
+                            const altMap = realm.maps[altKey];
+                            if (!altMap) return;
 
-                        const filePath = path.join(projectRoot, map.image.replace('../../', ''));
-                        const file = new AttachmentBuilder(filePath, { name: 'map.jpg' });
+                            const filePath = path.join(projectRoot, altMap.image.replace('../../', ''));
+                            let file;
+                            try {
+                                file = await safeLoadImage(filePath);
+                            } catch (err) {
+                                console.warn(`[MapLoader] Failed to load alt image: ${filePath} | ${err.message}`);
+                                return showLoadError(interaction, message, commandKey);
+                            }
 
-                        const mapEmbed = new EmbedBuilder()
-                            .setTitle(`${map.label} (${realm.label})`)
-                            .setImage('attachment://map.jpg')
-                            .setColor('Purple');
-                        setDefaultEmbedFooter(mapEmbed, message, commandKey);
+                            const altEmbed = new EmbedBuilder()
+                                .setTitle(`${altMap.label} (${realm.label})`)
+                                .setImage('attachment://map.jpg')
+                                .setColor('Purple');
+                            setDefaultEmbedFooter(altEmbed, message, commandKey);
 
-                        // dropdown + show-alternate + back to realms (same layout as map select state)
-                        const mapSelectRow = new ActionRowBuilder().addComponents(
-                            new StringSelectMenuBuilder()
-                                .setCustomId(`map_select:${realmKey}`)
-                                .setPlaceholder(`Choose another map from ${realm.label}...`)
-                                .addOptions(
-                                    Object.entries(realm.maps)
-                                        .filter(([_, m]) => !m.alt)
-                                        .map(([mKey, m]) => ({ label: m.label, value: mKey }))
-                                )
-                        );
+                            const mapSelectRow = new ActionRowBuilder().addComponents(
+                                new StringSelectMenuBuilder()
+                                    .setCustomId(`map_select:${realmKey}`)
+                                    .setPlaceholder(`Choose another map from ${realm.label}...`)
+                                    .addOptions(
+                                        Object.entries(realm.maps)
+                                            .filter(([_, m]) => !m.alt)
+                                            .map(([mKey, m]) => ({ label: m.label, value: mKey }))
+                                    )
+                            );
 
-                        const rows = [mapSelectRow];
+                            const toggleBackRow = new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setCustomId(`toggle_back:${realmKey}:${baseMapKey}`)
+                                    .setLabel('Back to original map')
+                                    .setStyle(ButtonStyle.Secondary)
+                            );
 
-                        if (Array.isArray(map.alts) && map.alts.length > 0) {
+                            const backRealmsRow = new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setCustomId('back_realms')
+                                    .setLabel('↩ Back to Realms')
+                                    .setStyle(ButtonStyle.Secondary)
+                            );
+
+                            return interaction.editReply({
+                                embeds: [altEmbed],
+                                files: [file],
+                                components: [mapSelectRow, toggleBackRow, backRealmsRow]
+                            });
+                        }
+
+                        // ----- Toggle back to original -----
+                        if (interaction.isButton() && interaction.customId.startsWith('toggle_back:')) {
+                            const [, realmKey, baseMapKey] = interaction.customId.split(':');
+                            const realm = MAPS[realmKey];
+                            if (!realm) return;
+                            const map = realm.maps[baseMapKey];
+                            if (!map) return;
+
+                            const filePath = path.join(projectRoot, map.image.replace('../../', ''));
+                            let file;
+                            try {
+                                file = await safeLoadImage(filePath);
+                            } catch (err) {
+                                console.warn(`[MapLoader] Failed to load original image: ${filePath} | ${err.message}`);
+                                return showLoadError(interaction, message, commandKey);
+                            }
+
+                            const mapEmbed = new EmbedBuilder()
+                                .setTitle(`${map.label} (${realm.label})`)
+                                .setImage('attachment://map.jpg')
+                                .setColor('Purple');
+                            setDefaultEmbedFooter(mapEmbed, message, commandKey);
+
+                            const mapSelectRow = new ActionRowBuilder().addComponents(
+                                new StringSelectMenuBuilder()
+                                    .setCustomId(`map_select:${realmKey}`)
+                                    .setPlaceholder(`Choose another map from ${realm.label}...`)
+                                    .addOptions(
+                                        Object.entries(realm.maps)
+                                            .filter(([_, m]) => !m.alt)
+                                            .map(([mKey, m]) => ({ label: m.label, value: mKey }))
+                                    )
+                            );
+
+                            const rows = [mapSelectRow];
+
+                            if (Array.isArray(map.alts) && map.alts.length > 0) {
+                                rows.push(new ActionRowBuilder().addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(`toggle_alt:${realmKey}:${baseMapKey}`)
+                                        .setLabel('Show alternate version')
+                                        .setStyle(ButtonStyle.Secondary)
+                                ));
+                            }
+
                             rows.push(new ActionRowBuilder().addComponents(
                                 new ButtonBuilder()
-                                    .setCustomId(`toggle_alt:${realmKey}:${baseMapKey}`)
-                                    .setLabel('Show alternate version')
+                                    .setCustomId('back_realms')
+                                    .setLabel('↩ Back to Realms')
                                     .setStyle(ButtonStyle.Secondary)
                             ));
+
+                            return interaction.editReply({
+                                embeds: [mapEmbed],
+                                files: [file],
+                                components: rows
+                            });
                         }
 
-                        rows.push(new ActionRowBuilder().addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('back_realms')
-                                .setLabel('↩ Back to Realms')
-                                .setStyle(ButtonStyle.Secondary)
-                        ));
+                        // ----- Back to realms -----
+                        if (interaction.isButton() && interaction.customId === 'back_realms') {
+                            const realmSelect = new StringSelectMenuBuilder()
+                                .setCustomId('realm_select')
+                                .setPlaceholder('Choose a realm...')
+                                .addOptions(
+                                    Object.entries(MAPS).map(([realmKey, realm]) => ({
+                                        label: realm.label,
+                                        value: realmKey
+                                    }))
+                                );
 
-                        return interaction.update({
-                            embeds: [mapEmbed],
-                            files: [file],
-                            components: rows
-                        });
-                    }
+                            const realmRow = new ActionRowBuilder().addComponents(realmSelect);
 
-                    // ----- Back to realms -----
-                    if (interaction.isButton() && interaction.customId === 'back_realms') {
-                        const realmSelect = new StringSelectMenuBuilder()
-                            .setCustomId('realm_select')
-                            .setPlaceholder('Choose a realm...')
-                            .addOptions(
-                                Object.entries(MAPS).map(([realmKey, realm]) => ({
-                                    label: realm.label,
-                                    value: realmKey
-                                }))
-                            );
+                            const embed = new EmbedBuilder()
+                                .setTitle('🗺️ Map Browser')
+                                .setDescription('Select a **realm** from the dropdown below.')
+                                .setColor('Purple');
+                            setDefaultEmbedFooter(embed, message, commandKey);
 
-                        const realmRow = new ActionRowBuilder().addComponents(realmSelect);
-
-                        const embed = new EmbedBuilder()
-                            .setTitle('🗺️ Map Browser')
-                            .setDescription('Select a **realm** from the dropdown below.')
-                            .setColor('Purple');
-                        setDefaultEmbedFooter(embed, message, commandKey);
-
-                        return interaction.update({ embeds: [embed], files: [], components: [realmRow] });
+                            return interaction.editReply({ embeds: [embed], files: [], components: [realmRow] });
+                        }
+                    } catch (err) {
+                        console.error(`[InteractionError] ${err.message}`);
+                        await showLoadError(interaction, message, commandKey, '⚠️ Something went wrong with this interaction.');
                     }
                 });
 
@@ -339,7 +397,13 @@ export default {
                 for (const [realmKey, realm] of Object.entries(MAPS)) {
                     for (const map of Object.values(realm.maps)) {
                         const filePath = path.join(projectRoot, map.image.replace('../../', ''));
-                        const file = new AttachmentBuilder(filePath, { name: 'map.jpg' });
+                        let file;
+                        try {
+                            file = await safeLoadImage(filePath);
+                        } catch (err) {
+                            console.warn(`[MapLoader] Failed to load (all mode): ${filePath} | ${err.message}`);
+                            continue;
+                        }
 
                         const embed = new EmbedBuilder()
                             .setTitle(`${map.label} (${realm.label})`)
@@ -363,7 +427,13 @@ export default {
 
             const { map, realm } = hit;
             const filePath = path.join(projectRoot, map.image.replace('../../', ''));
-            const file = new AttachmentBuilder(filePath, { name: 'map.jpg' });
+            let file;
+            try {
+                file = await safeLoadImage(filePath);
+            } catch (err) {
+                console.warn(`[MapLoader] Failed to load direct lookup: ${filePath} | ${err.message}`);
+                return message._send('⚠️ Failed to load the requested map image.');
+            }
 
             const embed = new EmbedBuilder()
                 .setTitle(`${map.label} (${realm.label})`)

@@ -3,8 +3,8 @@
  * @property {string} image - Path to the image file
  * @property {string} label - Display name of the map
  * @property {string[]} aliases - List of alternative triggers
- * @property {string[]} [alts] - Optional list of alternative map keys for this map
- * @property {boolean} [alt=false] - Whether this map is an alternate/DBDL version
+ * @property {string[]} [alts] - List of alternative map keys for this map
+ * @property {boolean} [alt=false] - Whether this map is an alternate version
  */
 
 /**
