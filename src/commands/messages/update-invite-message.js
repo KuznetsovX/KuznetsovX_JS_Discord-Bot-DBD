@@ -8,10 +8,13 @@ async function updateInviteMessage(message) {
 
     const embed = getInviteEmbed(message.client);
 
+    const inviteLink = process.env.INVITE_LINK;
+    if (!inviteLink) throw new Error('Missing INVITE_LINK in .env file.');
+
     const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setLabel('Join Server')
-            .setURL('https://discord.com/invite/VRR5X8ZdXB')
+            .setURL(inviteLink)
             .setStyle(ButtonStyle.Link)
     );
 
@@ -24,7 +27,7 @@ async function updateInviteMessage(message) {
             await sentMessage.edit({ embeds: [embed], components: [row] });
             return 'updated';
         }
-        // If fetch failed, we'll just post a new message
+        // If fetch failed, post a new message
     }
 
     // Post a new Invite message

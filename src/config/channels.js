@@ -81,6 +81,18 @@ const CHANNELS = {
                 id: '1338208487720751260',
                 label: '💬・wannabe-comp-players',
             },
+            CINEMA: {
+                type: 'TEXT',
+                id: '1427269706921938986',
+                label: '🎥・absolute-cinema',
+                description: 'Channel for clips and videos of any sorts.'
+            },
+            BOT: {
+                type: 'TEXT',
+                id: '1427280787492962354',
+                label: '🦾・beef-with-bot',
+                description: 'Channel for bot commands and interactions.',
+            },
             VOICE: {
                 type: 'VOICE',
                 id: '1340350676466925588',

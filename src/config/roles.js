@@ -91,8 +91,8 @@ const ROLES = {
     TOTEM_CLEANER: {
         position: 8,
         id: '1420025122021969920',
-        label: '🧹 Cleansing dull totems 🧹',
-        description: 'No game will be left with totems in it. Main objective isn\'t escaping.',
+        label: '🎫 50/50 winner 🎫',
+        description: 'Wins all the 50/50s, yet can lose at the safe tiles. Absolute gigachad.',
         color: '#d4a017',
         tier: 3,
         category: ROLE_CATEGORIES.VERIFIED,
@@ -100,7 +100,7 @@ const ROLES = {
     VERIFIED: {
         position: 9,
         id: '1338216499445371062',
-        label: '⚡ Do yens pls ⚡',
+        label: '⚡ Certified genrusher ⚡',
         description: 'Verified community members. Not used to doing gens, hence losing easy games.',
         color: '#f1c232',
         tier: 2,
@@ -135,6 +135,14 @@ const ROLES = {
         id: '1419704455430934529',
         label: '🔔 alerts 🔔',
         description: 'Users who want to receive notifications about games, updates, guides, etc.',
+        color: '#ffffff',
+        category: ROLE_CATEGORIES.SPECIAL,
+    },
+    TEAM: {
+        position: 13,
+        id: '1433850320471195698',
+        label: '🫵 Team 🫵',
+        description: 'Team for an escape streak challenge.',
         color: '#ffffff',
         category: ROLE_CATEGORIES.SPECIAL,
     }

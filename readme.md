@@ -10,7 +10,7 @@ This project is **under development**.
 ## Invite
 
 This bot is intended for use exclusively on this server:
-[Discord Server Invite](https://discord.com/invite/VRR5X8ZdXB)
+[Discord Server Invite](https://discord.gg/JZJxjtFXag)
 
 ---
 
@@ -101,6 +101,7 @@ npm install
 # Discord bot settings
 DISCORD_TOKEN=your-bot-token
 OWNER_ID=your-discord-id
+INVITE_LINK=your-server-invite-link
 
 # PostgreSQL database settings
 DB_USER=your-db-username
