@@ -3,6 +3,15 @@ import log from '../logging/log.js';
 import { assignDefaultRole, manageTierRoles, restoreRoles } from '../roles/role-manager.js';
 import { initReadme } from '../roles/reaction-roles/index.js';
 
+function withTimeout(promise, ms, taskName) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`Timeout: ${taskName} took longer than ${ms / 1000}s`)), ms)
+        ),
+    ]);
+}
+
 export async function runStartupTasks(client, guild, channel) {
     const tasks = [
         { name: 'Fetching members', action: async () => guild.members.fetch() },
@@ -21,7 +30,7 @@ export async function runStartupTasks(client, guild, channel) {
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
         try {
-            await task.action();
+            await withTimeout(task.action(), 10000, task.name);
             log.info('READY', `✅ Completed: ${task.name}`);
 
             if (progressMessage) {
@@ -29,14 +38,16 @@ export async function runStartupTasks(client, guild, channel) {
                 await progressMessage.edit(`Progress: [${progressBar}] ${task.name}`);
             }
         } catch (err) {
-            log.error('READY', `❌ Task failed: ${task.name}`, err);
-            if (progressMessage) await progressMessage.edit(`⚠️ Startup failed at task: \`${task.name}\``);
-            throw err; // stop startup on first failure
+            log.warn('READY', `⚠️ Skipped or timed out: ${task.name}`, err);
+            if (progressMessage) {
+                await progressMessage.edit(`⚠️ Skipped: \`${task.name}\` (reason: ${err.message})`);
+            }
+            // continue to next task instead of throwing
         }
     }
 
     if (progressMessage) {
-        log.action('READY', `✅ Completed all tasks.`);
+        log.action('READY', `✅ Completed all startup tasks (with time limits).`);
         await progressMessage.edit(`✅ Startup complete! ${client.user.tag} is ready to use.`);
     }
 }
