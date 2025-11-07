@@ -61,9 +61,9 @@ function execDump(dumpPath, backupFile) {
  */
 export async function runBackup() {
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB').replace(/\//g, '-') +
-        '_' + now.toTimeString().slice(0, 8).replace(/:/g, '-');
-    const backupFile = path.join(backupFolder, `backup-${dateStr}.sql`);
+    const dateStr = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
+    const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+    const backupFile = path.join(backupFolder, `backup-${dateStr}_${timeStr}.sql`);
 
     log.info('BACKUP DB', `💾 Starting backup: ${backupFile}`);
 
