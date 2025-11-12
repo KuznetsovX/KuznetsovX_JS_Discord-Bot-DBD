@@ -44,9 +44,8 @@ export default {
 
             if (result === 'posted') return message._send('✅ Readme message posted!');
             if (result === 'updated') return message._send('✅ Readme message updated!');
-        } catch (err) {
-            console.error(err);
-            return message._send('❌ An unexpected error occurred while updating the Readme message.');
+        } catch (error) {
+            throw new Error(`❌ Failed to update readme message: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

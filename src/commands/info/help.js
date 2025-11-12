@@ -208,7 +208,7 @@ export default {
 
             return message._send({ embeds: [embed] });
         } catch (error) {
-            throw new Error(`Failed to display help: ${error.message}`);
+            throw new Error(`❌ Failed to display help: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

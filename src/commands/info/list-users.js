@@ -1,6 +1,5 @@
-import { fn, col } from 'sequelize';
-import { ROLES } from '../../config/index.js';
 import { User } from '../../database/index.js';
+import { ROLES } from '../../config/index.js';
 
 // Lookup table by role ID
 const ROLES_BY_ID = Object.values(ROLES).reduce((acc, role) => {
@@ -35,36 +34,82 @@ async function sendChunks(channel, lines, chunkSize = 1900) {
     let chunk = '';
     for (const line of lines) {
         if ((chunk + line + '\n').length > chunkSize) {
-            await channel.send(`\`\`\`\n${chunk}\n\`\`\``);
+            await channel.send(`\`\`\`\n${chunk.trim()}\n\`\`\``);
             chunk = '';
         }
-        chunk += line + '\n';
+        chunk += `${line}\n`;
     }
-    if (chunk.length) await channel.send(`\`\`\`\n${chunk}\n\`\`\``);
+    if (chunk) await channel.send(`\`\`\`\n${chunk.trim()}\n\`\`\``);
 }
 
 export default {
     run: async (message) => {
         try {
-            const users = await User.findAll({ order: [[fn('LOWER', col('username')), 'ASC']] });
+            const users = await User.findAll();
 
             if (!users.length) return message._send('📭 No users found in the database.');
 
-            await message._send('📜 Full list of users:');
+            // Ask user how to sort
+            const sortPrompt = await message._send('How would you like to sort the user list? 🪪 — by **name**, 👑 — by **role**');
+            await sortPrompt.react('🪪');
+            await sortPrompt.react('👑');
 
+            const filter = (reaction, user) => ['🪪', '👑'].includes(reaction.emoji.name) && user.id === message.author.id;
+
+            const collected = await sortPrompt
+                .awaitReactions({
+                    filter,
+                    max: 1,
+                    time: 10_000,
+                    errors: ['time'],
+                })
+                .catch(() => null);
+
+            // Handle timeout
+            if (!collected?.size) {
+                await sortPrompt.delete().catch(() => { });
+                await message._send('⌛ Timed out — please use the command again.');
+                return;
+            }
+
+            const chosen = collected.first().emoji.name;
+            const sortMode = chosen === '🪪' ? 'name' : 'role';
+
+            // Cleanup — remove reactions & delete prompt
+            await sortPrompt.reactions.removeAll().catch(() => { });
+            await sortPrompt.delete().catch(() => { });
+
+            // Prepare data
             const entries = users.map(u => {
-                const roleIds = parseRoleIds(u.roleIds);
-                const roles = mapRoles(roleIds);
-                const rolesDisplay = roles.length ? roles.map(r => r.label).join(', ') : 'No roles';
+                const roles = mapRoles(parseRoleIds(u.roleIds));
+                const topRole = roles[0];
                 const warns = u.warnings > 0 ? ` — Warnings: ${u.warnings}` : '';
-                return `${u.username} (${u.userId})${warns} — ${rolesDisplay}`;
+                return {
+                    username: u.username,
+                    userId: u.userId,
+                    warns,
+                    rolesDisplay: roles.length ? roles.map(r => r.label).join(', ') : 'No roles',
+                    topRolePosition: topRole ? topRole.position : 9999,
+                };
             });
 
-            await sendChunks(message.channel, entries);
+            // Sort based on chosen mode
+            entries.sort((a, b) => {
+                if (sortMode === 'role')
+                    return a.topRolePosition - b.topRolePosition;
+                return a.username.localeCompare(b.username, undefined, { sensitivity: 'base' });
+            });
+
+            await message._send(`📜 Full list of users (sorted by **${sortMode}**):`);
+
+            const lines = entries.map(
+                e => `${e.username} (${e.userId})${e.warns} — ${e.rolesDisplay}`
+            );
+
+            await sendChunks(message.channel, lines);
 
         } catch (error) {
-            await message._send('❌ Something went wrong while listing users.');
-            throw new Error(`Failed to list users: ${error.message}`);
+            throw new Error(`❌ Failed to list users: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

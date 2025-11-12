@@ -30,7 +30,7 @@ export default {
 
             await message._send({ embeds: [embed] });
         } catch (error) {
-            throw new Error(`Failed to show user info: ${error.message}`);
+            throw new Error(`❌ Failed to show user info: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

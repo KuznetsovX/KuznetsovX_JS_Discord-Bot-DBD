@@ -41,7 +41,7 @@ export default {
 
             return message._send(`🔇 User has been muted.`);
         } catch (error) {
-            throw new Error(`Failed to mute user: ${error.message}`);
+            throw new Error(`❌ Failed to mute user: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

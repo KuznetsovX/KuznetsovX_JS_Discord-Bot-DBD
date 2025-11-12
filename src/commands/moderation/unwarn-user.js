@@ -39,7 +39,7 @@ export default {
 
             return message._send(`✅ Removed a warning from user. Total warnings: ${user.warnings}`);
         } catch (error) {
-            throw new Error(`Failed to remove a warning: ${error.message}`);
+            throw new Error(`❌ Failed to remove a warning: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

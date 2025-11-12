@@ -86,9 +86,7 @@ export default {
                 return message._send(`✅ Role was successfully removed from the user.`);
             }
         } catch (error) {
-            throw new Error(
-                `Failed to manage role ${message.mentions.roles.first()?.name || 'unknown'} for ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`
-            );
+            throw new Error(`❌ Failed to manage role: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

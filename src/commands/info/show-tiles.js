@@ -158,7 +158,7 @@ export default {
 
             return message._send({ embeds: [embed], files: [file] });
         } catch (error) {
-            throw new Error(`Failed to display tiles: ${error.message}`);
+            throw new Error(`❌ Failed to display tiles: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

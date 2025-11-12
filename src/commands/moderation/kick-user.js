@@ -14,7 +14,7 @@ export default {
             await mentioned.kick({ reason: `Kicked by ${message.author.tag}` });
             return message._send(`🚪 User was kicked from the server.`);
         } catch (error) {
-            throw new Error(`Failed to kick user: ${error.message}`);
+            throw new Error(`❌ Failed to kick user: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

@@ -43,9 +43,8 @@ export default {
 
             if (result === 'posted') return message._send('✅ Invite message posted!');
             if (result === 'updated') return message._send('✅ Invite message updated!');
-        } catch (err) {
-            console.error(err);
-            return message._send('❌ An unexpected error occurred while updating the Invite message.');
+        } catch (error) {
+            throw new Error(`❌ Failed to update invite message: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

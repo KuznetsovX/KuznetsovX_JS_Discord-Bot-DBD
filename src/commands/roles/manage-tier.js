@@ -51,9 +51,7 @@ export default {
             const verb = action === 'up' ? 'raised' : 'lowered';
             return message._send(`${arrow} User\'s tier role was successfully ${verb}.`);
         } catch (error) {
-            throw new Error(
-                `Failed to modify tier for ${message.mentions.members.first()?.user.tag || 'unknown'}: ${error.message}`
-            );
+            throw new Error(`❌ Failed to modify tier: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

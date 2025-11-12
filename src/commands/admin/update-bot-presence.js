@@ -14,9 +14,8 @@ export default {
         try {
             setBotPresence(message.client, key);
             await message._send(`✅ Presence set to **${key}**`);
-        } catch (err) {
-            console.error(err);
-            await message._send('❌ Failed to update presence. Check logs for details.');
+        } catch (error) {
+            throw new Error(`❌ Failed to update presence: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

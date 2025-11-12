@@ -71,8 +71,7 @@ export default {
             }
 
         } catch (error) {
-            console.error(error);
-            return message._send("❌ Failed to manage auto-promotion restrictions.");
+            throw new Error(`❌ Failed to manage promotion blocks: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

@@ -80,7 +80,7 @@ export default {
             setTimeout(() => confirmation.delete().catch(() => { }), 5000);
 
         } catch (error) {
-            throw new Error(`Failed to delete messages: ${error.message}`);
+            throw new Error(`❌ Failed to clear messages: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

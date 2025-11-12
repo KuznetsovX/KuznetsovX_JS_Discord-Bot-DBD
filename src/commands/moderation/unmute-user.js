@@ -37,7 +37,7 @@ export default {
 
             return message._send(`🔊 User has been unmuted.`);
         } catch (error) {
-            throw new Error(`Failed to unmute user: ${error.message}`);
+            throw new Error(`❌ Failed to unmute user: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

@@ -61,7 +61,7 @@ export default {
 
             return message._send(`⚠️ User has been warned. Total warnings: ${user.warnings}`);
         } catch (error) {
-            throw new Error(`Failed to warn ${mentioned?.user?.tag || 'unknown'}: ${error.message}`);
+            throw new Error(`❌ Failed to warn user: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

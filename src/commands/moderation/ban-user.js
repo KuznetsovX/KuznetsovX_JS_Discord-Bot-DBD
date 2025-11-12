@@ -27,7 +27,7 @@ export default {
 
             return message._send('❌ Please mention a user or provide a valid numeric user ID to ban.');
         } catch (error) {
-            throw new Error(`Failed to ban user: ${error.message}`);
+            throw new Error(`❌ Failed to ban user: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

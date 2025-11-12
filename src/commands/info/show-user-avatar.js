@@ -19,7 +19,7 @@ export default {
 
             await message._send({ embeds: [embed] });
         } catch (error) {
-            throw new Error(`Failed to show avatar: ${error.message}`);
+            throw new Error(`❌ Failed to show avatar: ${error instanceof Error ? error.message : error}`);
         }
     }
 };

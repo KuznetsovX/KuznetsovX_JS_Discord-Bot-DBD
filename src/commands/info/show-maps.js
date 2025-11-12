@@ -459,7 +459,7 @@ export default {
             });
 
         } catch (error) {
-            throw new Error(`Failed to display maps: ${error.message}`);
+            throw new Error(`❌ Failed to display maps: ${error instanceof Error ? error.message : error}`);
         }
     }
 };
