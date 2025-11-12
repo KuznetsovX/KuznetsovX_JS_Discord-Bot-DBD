@@ -9,8 +9,11 @@ This project is **under development**.
 
 ## Invite
 
-This bot is intended for use exclusively on this server:
+This bot is currently configured for one specific Discord server (the one linked below):
 [Discord Server Invite](https://discord.gg/JZJxjtFXag)
+
+The repository is public for transparency and learning purposes — feel free to fork it and adapt it for your own community.
+Just note that all IDs, roles, and channel setups are tied to my server, so you’ll need to reconfigure those before running it elsewhere (see "Important Note About Configuration").
 
 ---
 
@@ -74,9 +77,14 @@ If you want to run this bot on your own server, you must:
   2. Redefine the configuration to match your server’s roles, channels, and preferences.
 Failing to do so may result in errors or unexpected behavior.
 
-Alternatively you can mimic original server setup, but you still would need to update ID's inside the config files
+Alternatively, you can mimic the original server setup, but you’ll still need to update IDs inside the config files.
 
 > In short: you can use the bot code, but your server needs a **full configuration setup** to match your own roles and channels.
+
+### Future Plans
+
+In the future, a **dynamic configuration system** may be implemented — so you won’t have to go through “rewriting hell” in the config files.
+This would allow the bot to automatically adapt to different servers by dynamically detecting or generating roles, channels, and other settings instead of relying on hardcoded IDs.
 
 ---
 
