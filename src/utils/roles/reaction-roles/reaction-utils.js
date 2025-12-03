@@ -23,7 +23,7 @@ export async function ensureReactions(message, roleEmojis) {
  */
 export async function syncReactionsToRoles(guild, message, roleEmojis) {
     await message.fetch();
-    if (guild.members.cache.size === 0) {
+    if (guild.members.cache.size !== guild.memberCount) {
         await guild.members.fetch();
     }
     const allMembers = guild.members.cache;

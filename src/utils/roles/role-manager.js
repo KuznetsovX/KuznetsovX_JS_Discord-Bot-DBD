@@ -21,7 +21,7 @@ async function runForTarget(target, fn, options = { skipBots: false, skipAdmins:
 
     if (target?.members) {
         // target is guild
-        if (target.members.cache.size === 0) {
+        if (target.members.cache.size !== target.memberCount) {
             await target.members.fetch();
         }
         for (const member of target.members.cache.values()) {
